@@ -1,0 +1,329 @@
+﻿@page "/Drivers"
+
+<style>
+    .drivers-body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #0b0b0b;
+        color: white;
+        margin: 0;
+        padding-top: 80px; /* Hogy a fix menü ne takarja ki a címet */
+        min-height: 100vh;
+    }
+
+    /* Navigáció - a korábbi stílus alapján */
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #2d2d2d;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .logo {
+        position: absolute;
+        left: 2rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e10600;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .nav-links a:hover {
+                color: #e10600;
+            }
+
+    h1 {
+        text-align: center;
+        margin-top: 40px;
+        font-size: 48px;
+    }
+
+    .drivers-grid {
+        max-width: 1100px;
+        margin: 40px auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .driver-card {
+        background: #111;
+        border: 1px solid #222;
+        border-radius: 10px;
+        padding: 25px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    /* Csapatonkénti hover effektek */
+    .redbull:hover {
+        transform: translateY(-5px);
+        border-color: darkblue;
+        box-shadow: 0 0 15px #0801cf66;
+    }
+
+    .ferrari:hover {
+        transform: translateY(-5px);
+        border-color: #dc0000;
+        box-shadow: 0 0 15px #dc000066;
+    }
+
+    .mclaren:hover {
+        transform: translateY(-5px);
+        border-color: #ff8700;
+        box-shadow: 0 0 15px #ff870066;
+    }
+
+    .mercedes:hover {
+        transform: translateY(-5px);
+        border-color: #00d2be;
+        box-shadow: 0 0 15px #00d2be66;
+    }
+
+    .haas:hover {
+        transform: translateY(-5px);
+        border-color: #a0a1af;
+        box-shadow: 0 0 15px #a0a1af;
+    }
+
+    .racingbulls:hover {
+        transform: translateY(-5px);
+        border-color: rgb(0, 140, 255);
+        box-shadow: 0 0 15px rgb(3, 100, 179);
+    }
+
+    .alpine:hover {
+        transform: translateY(-5px);
+        border-color: rgb(52, 110, 148);
+        box-shadow: 0 0 15px rgb(38, 89, 122);
+    }
+
+    .audi:hover {
+        transform: translateY(-5px);
+        border-color: rgb(248, 4, 4);
+        box-shadow: 0 0 15px rgb(145, 10, 10);
+    }
+
+    .astonmartin:hover {
+        transform: translateY(-5px);
+        border-color: rgb(33, 102, 50);
+        box-shadow: 0 0 15px rgb(24, 82, 19);
+    }
+
+    .driver-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .driver-name {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .team {
+        color: #999;
+        font-size: 14px;
+    }
+
+    footer {
+        background: #0a0a0a;
+        border-top: 1px solid #2d2d2d;
+        padding: 3rem 2rem;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+        .footer-links a {
+            color: #999;
+            text-decoration: none;
+        }
+</style>
+
+<div class="drivers-body">
+    <nav>
+        <a href="/f1" class="logo">F1 RACING HUB</a>
+        <ul class="nav-links">
+            <li><a href="/f1">Home</a></li>
+            <li><a href="/tracks">Tracks</a></li>
+            <li><a href="/drivers">Drivers</a></li>
+            <li><a href="/schedule">Schedule</a></li>
+            <li><a href="/news">News</a></li>
+        </ul>
+    </nav>
+
+    <h1>Piloták</h1>
+
+    <div class="drivers-grid">
+        @* Red Bull *@
+        <div class="driver-card redbull" @onclick='() => OpenDriver("verstappen")'>
+            <img src="max.jpg">
+            <div class="driver-name">Max Verstappen</div>
+            <div class="team">Red Bull Racing</div>
+        </div>
+
+        <div class="driver-card redbull" @onclick='() => OpenDriver("hadjar")'>
+            <img src="isack.jpg">
+            <div class="driver-name">Isack Hadjar</div>
+            <div class="team">Red Bull Racing</div>
+        </div>
+
+        @* Ferrari *@
+        <div class="driver-card ferrari" @onclick='() => OpenDriver("leclerc")'>
+            <img src="leclerc.jpg">
+            <div class="driver-name">Charles Leclerc</div>
+            <div class="team">Ferrari</div>
+        </div>
+
+        <div class="driver-card ferrari" @onclick='() => OpenDriver("hamilton")'>
+            <img src="lewis.jpg">
+            <div class="driver-name">Lewis Hamilton</div>
+            <div class="team">Ferrari</div>
+        </div>
+
+        @* Haas - Itt is kijavítva @onclick-re *@
+        <div class="driver-card haas" @onclick='() => OpenDriver("ocon")'>
+            <img src="ocon.jpg">
+            <div class="driver-name">Esteban Ocon</div>
+            <div class="team">Haas</div>
+        </div>
+
+        <div class="driver-card haas" @onclick='() => OpenDriver("bearman")'>
+            <img src="bearman.jpg">
+            <div class="driver-name">Oliver Bearman</div>
+            <div class="team">Haas</div>
+        </div>
+
+        @* Racing Bulls *@
+        <div class="driver-card racingbulls" @onclick='() => OpenDriver("lawson")'>
+            <img src="liam.jpg">
+            <div class="driver-name">Liam Lawson</div>
+            <div class="team">Racing Bulls</div>
+        </div>
+
+        <div class="driver-card racingbulls" @onclick='() => OpenDriver("lindblad")'>
+            <img src="arvid.jpg">
+            <div class="driver-name">Arvid Lindblad</div>
+            <div class="team">Racing Bulls</div>
+        </div>
+
+        @* Audi *@
+        <div class="driver-card audi" @onclick='() => OpenDriver("hulkenberg")'>
+            <img src="hulk.jpg">
+            <div class="driver-name">Nico Hulkenberg</div>
+            <div class="team">Audi</div>
+        </div>
+
+        <div class="driver-card audi" @onclick='() => OpenDriver("bortoleto")'>
+            <img src="bortoleto.jpg">
+            <div class="driver-name">Gabriel Bortoleto</div>
+            <div class="team">Audi</div>
+        </div>
+
+        @* Alpine *@
+        <div class="driver-card alpine" @onclick='() => OpenDriver("gasly")'>
+            <img src="gasly.jpg">
+            <div class="driver-name">Pierre Gasly</div>
+            <div class="team">Alpine</div>
+        </div>
+
+        <div class="driver-card alpine" @onclick='() => OpenDriver("colapinto")'>
+            <img src="franco.jpg">
+            <div class="driver-name">Franco Colapinto</div>
+            <div class="team">Alpine</div>
+        </div>
+
+        @* Williams - Kijavítva a CSS osztály és az eseménykezelő *@
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("sainz")'>
+            <img src="hulk.jpg"> @* Itt érdemes lesz majd a sainz.jpg-re cserélni *@
+            <div class="driver-name">Carlos Sainz</div>
+            <div class="team">Williams</div>
+        </div>
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("albon")'>
+            <img src="bortoleto.jpg">
+            <div class="driver-name">Alexander Albon</div>
+            <div class="team">Williams</div>
+        </div>
+
+        @* Cadillac (vagy Haas alapú színekkel) *@
+        <div class="driver-card haas" @onclick='() => OpenDriver("perez")'>
+            <img src="gasly.jpg">
+            <div class="driver-name">Sergio Perez</div>
+            <div class="team">Cadillac</div>
+        </div>
+
+        <div class="driver-card haas" @onclick='() => OpenDriver("bottas")'>
+            <img src="franco.jpg">
+            <div class="driver-name">Valtteri Bottas</div>
+            <div class="team">Cadillac</div>
+        </div>
+
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("alonso")'>
+            <img src="alonso.jpg">
+            <div class="driver-name">Fernando Alonso</div>
+            <div class="team">Aston Martin</div>
+        </div>
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("stroll")'>
+            <img src="franco.jpg">
+            <div class="driver-name">Lance Stroll</div>
+            <div class="team">Aston Martin</div>
+        </div>
+
+    </div> @* teljes grid vege *@
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy Policy</a>
+        </div>
+        <p class="footer-copyright">© 2026 F1 Racing Hub. All rights reserved.</p>
+    </footer>
+</div>
+
+@code {
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    private void OpenDriver(string driverName)
+    {
+        // Blazorban így navigálunk a JS window.location helyett:
+        NavManager.NavigateTo($"driver?name={driverName}");
+    }
+}

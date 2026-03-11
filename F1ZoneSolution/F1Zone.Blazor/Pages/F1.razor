@@ -1,0 +1,293 @@
+﻿@page "/"
+
+<style>
+
+    .f1-body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #fafafa;
+        line-height: 1.6;
+        margin: 0;
+        min-height: 100vh;
+    }
+
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(18, 18, 18, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #2d2d2d;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .logo {
+        position: absolute;
+        left: 2rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #e10600;
+        text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+            .nav-links a:hover {
+                color: #e10600;
+            }
+
+    .login-btn {
+        position: absolute;
+        right: 2rem;
+        background: #e10600;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 8rem 2rem 4rem;
+        text-align: center;
+        background: linear-gradient(135deg, #1a1a1a 0%, #121212 50%, #1a0a0a 100%);
+        border-bottom: 1px solid #2d2d2d;
+    }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, #e10600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #999;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+    .hero-btn {
+        background: #e10600;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .hero-btn:hover {
+            background: #b80500;
+            transform: translateY(-2px);
+        }
+
+
+    .tracks-section {
+        padding: 4rem 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+    .tracks-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .track-card {
+        background: #1a1a1a;
+        border: 1px solid #2d2d2d;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.3s;
+    }
+
+        .track-card:hover {
+            border-color: #e10600;
+            transform: translateY(-4px);
+        }
+
+    .track-image img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .track-content {
+        padding: 1.5rem;
+    }
+
+    .track-country {
+        color: #e10600;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+
+    .track-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .track-stats {
+        display: flex;
+        gap: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid #2d2d2d;
+    }
+
+    .stat-value {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #e10600;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        color: #666;
+        text-transform: uppercase;
+    }
+
+    footer {
+        background: #0a0a0a;
+        border-top: 1px solid #2d2d2d;
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+
+    .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+        .footer-links a {
+            color: #999;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 768px) {
+        .nav-links {
+            display: none;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+<div class="f1-body">
+    <nav>
+        <a href="/f1" class="logo">F1 RACING HUB</a>
+        <ul class="nav-links">
+            <li><a href="/f1">Kezdőlap</a></li>
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers">Versenyzők</a></li>
+            <li><a href="/schedule">Versenynaptár</a></li>
+            <li><a href="/news">Hírek</a></li>
+            <li><a href="/regulation_changes">Szabályváltozások</a></li>
+        </ul>
+        <button class="login-btn">Bejelentkezés</button>
+    </nav>
+
+    <section class="hero">
+        <h1>Éld át az F1 izgalmát</h1>
+        <p>Fedezd fel a világ leglegendásabb versenypályáit, Monaco utcáitól a silverstone-i nagysebességű kanyarokig.</p>
+        <button class="hero-btn">Pályák felfedezése</button>
+    </section>
+
+    <section class="tracks-section">
+        <div class="section-header">
+            <h2>Legendás versenypályák</h2>
+            <p>Fedezd fel az ikonikus pályákat, amelyek meghatározzák a Forma-1-es versenyzést</p>
+        </div>
+
+        <div class="tracks-grid">
+            <article class="track-card">
+                <div class="track-image">
+                    <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&h=400&fit=crop" alt="Monaco">
+                </div>
+                <div class="track-content">
+                    <div class="track-country">Monaco</div>
+                    <h3 class="track-name">Circuit de Monaco</h3>
+                    <p>Az F1 koronaékszere, Monaco szűk utcai pályája precizitást és bátorságot követel.</p>
+                    <div class="track-stats">
+                        <div class="stat"><div class="stat-value">3.337 km</div><div class="stat-label">Hossz</div></div>
+                        <div class="stat"><div class="stat-value">78</div><div class="stat-label">Körök</div></div>
+                        <div class="stat"><div class="stat-value">19</div><div class="stat-label">Kanyarok</div></div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="track-card">
+                <div class="track-image">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop" alt="Silverstone">
+                </div>
+                <div class="track-content">
+                    <div class="track-country">Egyesült Királyság</div>
+                    <h3 class="track-name">Silverstone Circuit</h3>
+                    <p>A brit autósport otthona, olyan legendás kanyarokkal, mint a Maggots és a Becketts.</p>
+                    <div class="track-stats">
+                        <div class="stat"><div class="stat-value">5.891 km</div><div class="stat-label">Hossz</div></div>
+                        <div class="stat"><div class="stat-value">52</div><div class="stat-label">Körök</div></div>
+                        <div class="stat"><div class="stat-value">18</div><div class="stat-label">Kanyarok</div></div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Rólunk</a>
+            <a href="#">Kapcsolat</a>
+            <a href="#">Adatvédelem</a>
+        </div>
+        <p class="footer-copyright">© 2026 F1 Racing Hub. Minden jog fenntartva.</p>
+    </footer>
+</div>
+
+@code {
+
+}
