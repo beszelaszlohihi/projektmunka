@@ -16,5 +16,6 @@ namespace F1ZoneLibrary.MODEL
         public string country { get; set; }
         public decimal length_km { get; set; }
         public int turns { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }
