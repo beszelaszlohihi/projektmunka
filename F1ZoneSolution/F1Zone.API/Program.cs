@@ -16,6 +16,14 @@ builder.Services.AddDbContext<F1ZoneDbContext>(o => o.UseSqlServer(builder.Confi
 
 builder.Services.AddScoped(typeof(IGenericF1ZoneService<>), typeof(GenericF1ZoneService<>));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazor",
+        policy => policy.WithOrigins("https://localhost:7190") // Ide pontosan a Blazor címed kerül!
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazor");
 
 app.UseAuthorization();
 
