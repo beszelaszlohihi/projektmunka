@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Microsoft.AspNetCore.Authorization/8.0.20": {
+      "Microsoft.AspNetCore.Authorization/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Metadata": "8.0.20",
+          "Microsoft.AspNetCore.Metadata": "8.0.23",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
           "Microsoft.Extensions.Options": "8.0.2"
         },
@@ -20,11 +20,11 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components/8.0.20": {
+      "Microsoft.AspNetCore.Components/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Authorization": "8.0.20",
-          "Microsoft.AspNetCore.Components.Analyzers": "8.0.20"
+          "Microsoft.AspNetCore.Authorization": "8.0.23",
+          "Microsoft.AspNetCore.Components.Analyzers": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.dll": {
@@ -37,16 +37,16 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Analyzers/8.0.20": {
+      "Microsoft.AspNetCore.Components.Analyzers/8.0.23": {
         "type": "package",
         "build": {
           "buildTransitive/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets": {}
         }
       },
-      "Microsoft.AspNetCore.Components.Forms/8.0.20": {
+      "Microsoft.AspNetCore.Components.Forms/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components": "8.0.20"
+          "Microsoft.AspNetCore.Components": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.Forms.dll": {
@@ -59,14 +59,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Web/8.0.20": {
+      "Microsoft.AspNetCore.Components.Web/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components": "8.0.20",
-          "Microsoft.AspNetCore.Components.Forms": "8.0.20",
+          "Microsoft.AspNetCore.Components": "8.0.23",
+          "Microsoft.AspNetCore.Components.Forms": "8.0.23",
           "Microsoft.Extensions.DependencyInjection": "8.0.1",
           "Microsoft.Extensions.Primitives": "8.0.0",
-          "Microsoft.JSInterop": "8.0.20",
+          "Microsoft.JSInterop": "8.0.23",
           "System.IO.Pipelines": "8.0.0"
         },
         "compile": {
@@ -80,14 +80,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.WebAssembly/8.0.20": {
+      "Microsoft.AspNetCore.Components.WebAssembly/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components.Web": "8.0.20",
+          "Microsoft.AspNetCore.Components.Web": "8.0.23",
           "Microsoft.Extensions.Configuration.Binder": "8.0.2",
           "Microsoft.Extensions.Configuration.Json": "8.0.1",
           "Microsoft.Extensions.Logging": "8.0.1",
-          "Microsoft.JSInterop.WebAssembly": "8.0.20"
+          "Microsoft.JSInterop.WebAssembly": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.dll": {
@@ -103,13 +103,13 @@
           "build/net8.0/Microsoft.AspNetCore.Components.WebAssembly.props": {}
         }
       },
-      "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.20": {
+      "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.23": {
         "type": "package",
         "build": {
           "build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets": {}
         }
       },
-      "Microsoft.AspNetCore.Metadata/8.0.20": {
+      "Microsoft.AspNetCore.Metadata/8.0.23": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Metadata.dll": {
@@ -392,7 +392,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.JSInterop/8.0.20": {
+      "Microsoft.JSInterop/8.0.23": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.JSInterop.dll": {
@@ -405,10 +405,10 @@
           }
         }
       },
-      "Microsoft.JSInterop.WebAssembly/8.0.20": {
+      "Microsoft.JSInterop.WebAssembly/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.JSInterop": "8.0.20"
+          "Microsoft.JSInterop": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.JSInterop.WebAssembly.dll": {
@@ -421,13 +421,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.20": {
+      "Microsoft.NET.ILLink.Tasks/8.0.24": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/10.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -452,10 +452,10 @@
       }
     },
     "net8.0/browser-wasm": {
-      "Microsoft.AspNetCore.Authorization/8.0.20": {
+      "Microsoft.AspNetCore.Authorization/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Metadata": "8.0.20",
+          "Microsoft.AspNetCore.Metadata": "8.0.23",
           "Microsoft.Extensions.Logging.Abstractions": "8.0.3",
           "Microsoft.Extensions.Options": "8.0.2"
         },
@@ -470,11 +470,11 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components/8.0.20": {
+      "Microsoft.AspNetCore.Components/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Authorization": "8.0.20",
-          "Microsoft.AspNetCore.Components.Analyzers": "8.0.20"
+          "Microsoft.AspNetCore.Authorization": "8.0.23",
+          "Microsoft.AspNetCore.Components.Analyzers": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.dll": {
@@ -487,16 +487,16 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Analyzers/8.0.20": {
+      "Microsoft.AspNetCore.Components.Analyzers/8.0.23": {
         "type": "package",
         "build": {
           "buildTransitive/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets": {}
         }
       },
-      "Microsoft.AspNetCore.Components.Forms/8.0.20": {
+      "Microsoft.AspNetCore.Components.Forms/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components": "8.0.20"
+          "Microsoft.AspNetCore.Components": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.Forms.dll": {
@@ -509,14 +509,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Web/8.0.20": {
+      "Microsoft.AspNetCore.Components.Web/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components": "8.0.20",
-          "Microsoft.AspNetCore.Components.Forms": "8.0.20",
+          "Microsoft.AspNetCore.Components": "8.0.23",
+          "Microsoft.AspNetCore.Components.Forms": "8.0.23",
           "Microsoft.Extensions.DependencyInjection": "8.0.1",
           "Microsoft.Extensions.Primitives": "8.0.0",
-          "Microsoft.JSInterop": "8.0.20",
+          "Microsoft.JSInterop": "8.0.23",
           "System.IO.Pipelines": "8.0.0"
         },
         "compile": {
@@ -530,14 +530,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.WebAssembly/8.0.20": {
+      "Microsoft.AspNetCore.Components.WebAssembly/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components.Web": "8.0.20",
+          "Microsoft.AspNetCore.Components.Web": "8.0.23",
           "Microsoft.Extensions.Configuration.Binder": "8.0.2",
           "Microsoft.Extensions.Configuration.Json": "8.0.1",
           "Microsoft.Extensions.Logging": "8.0.1",
-          "Microsoft.JSInterop.WebAssembly": "8.0.20"
+          "Microsoft.JSInterop.WebAssembly": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.dll": {
@@ -553,13 +553,13 @@
           "build/net8.0/Microsoft.AspNetCore.Components.WebAssembly.props": {}
         }
       },
-      "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.20": {
+      "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.23": {
         "type": "package",
         "build": {
           "build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets": {}
         }
       },
-      "Microsoft.AspNetCore.Metadata/8.0.20": {
+      "Microsoft.AspNetCore.Metadata/8.0.23": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.AspNetCore.Metadata.dll": {
@@ -842,7 +842,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.JSInterop/8.0.20": {
+      "Microsoft.JSInterop/8.0.23": {
         "type": "package",
         "compile": {
           "lib/net8.0/Microsoft.JSInterop.dll": {
@@ -855,10 +855,10 @@
           }
         }
       },
-      "Microsoft.JSInterop.WebAssembly/8.0.20": {
+      "Microsoft.JSInterop.WebAssembly/8.0.23": {
         "type": "package",
         "dependencies": {
-          "Microsoft.JSInterop": "8.0.20"
+          "Microsoft.JSInterop": "8.0.23"
         },
         "compile": {
           "lib/net8.0/Microsoft.JSInterop.WebAssembly.dll": {
@@ -871,13 +871,13 @@
           }
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.20": {
+      "Microsoft.NET.ILLink.Tasks/8.0.24": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
-      "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
+      "Microsoft.NET.Sdk.WebAssembly.Pack/10.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.Sdk.WebAssembly.Pack.props": {},
@@ -903,10 +903,10 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.Authorization/8.0.20": {
-      "sha512": "295bKuC0id+di1sGf/flQHLvnlwD+9yuvd43Eq2ITEMtqfb5SxvcVA0xcXvNo/Zd3uS/VRXQGJ3CHIMlPgDwtw==",
+    "Microsoft.AspNetCore.Authorization/8.0.23": {
+      "sha512": "U01NoHXo3BqNwrHictnqkfntNAYCRsovNF6g4knJu0kDztTJLYY7N+p75uK69cvnUeysFlDY2A/LQ0p/HBrn5w==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authorization/8.0.20",
+      "path": "microsoft.aspnetcore.authorization/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -918,14 +918,14 @@
         "lib/net8.0/Microsoft.AspNetCore.Authorization.xml",
         "lib/netstandard2.0/Microsoft.AspNetCore.Authorization.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Authorization.xml",
-        "microsoft.aspnetcore.authorization.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.authorization.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.authorization.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components/8.0.20": {
-      "sha512": "ZSgRdT6bUeq2h4jR8g3nGMy/k8e/9uQAIok8YNesgn+MiTt6szdNLCyBwKyvkUOkxtPFSiquN8Lq43WUHF86xw==",
+    "Microsoft.AspNetCore.Components/8.0.23": {
+      "sha512": "/aTnL/6+KFFenhdoaYc2K7iMyG+2cRFD6DFlbQzUQWseY2brQgHbRC0tlTOdjFEWUGoYPiJCv52NrRYsArKMDQ==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components/8.0.20",
+      "path": "microsoft.aspnetcore.components/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -933,14 +933,14 @@
         "THIRD-PARTY-NOTICES.txt",
         "lib/net8.0/Microsoft.AspNetCore.Components.dll",
         "lib/net8.0/Microsoft.AspNetCore.Components.xml",
-        "microsoft.aspnetcore.components.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.Analyzers/8.0.20": {
-      "sha512": "n3GLOh3bLTQqxs2gDXXg+6QFF9rMtR51mS0lXbe0YtqxXtWEfj+Jdm+SOuZV2l3kZGuxxjzo6MU/LwmNA4dngw==",
+    "Microsoft.AspNetCore.Components.Analyzers/8.0.23": {
+      "sha512": "7gv+AADq27t81E6a0FTCcN+fa9vcsuCH2Ek9MMlk51CrHqROoVphLGzErMyD4Lo5jhaU1VXGQZmfbeQG+x+New==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.analyzers/8.0.20",
+      "path": "microsoft.aspnetcore.components.analyzers/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -949,14 +949,14 @@
         "analyzers/dotnet/cs/Microsoft.AspNetCore.Components.Analyzers.dll",
         "build/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets",
         "buildTransitive/netstandard2.0/Microsoft.AspNetCore.Components.Analyzers.targets",
-        "microsoft.aspnetcore.components.analyzers.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.analyzers.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.analyzers.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.Forms/8.0.20": {
-      "sha512": "b2Xj7WgiNFHxVW9lk59T9Q4xkKg1JJwgHc3O/drzfDxYs9aMOY7TRnc4rqb0a56u+4daHcEym806gO2MSQRFDg==",
+    "Microsoft.AspNetCore.Components.Forms/8.0.23": {
+      "sha512": "e9Uj+2pzbVwMFDt6EQ8VOYXZ3e3MwyYkyfRH9RTZKhVGxhzMHI5AOAAWMu5wCBnOToD9dPu545H2N/1m7/UspQ==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.forms/8.0.20",
+      "path": "microsoft.aspnetcore.components.forms/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -964,14 +964,14 @@
         "THIRD-PARTY-NOTICES.txt",
         "lib/net8.0/Microsoft.AspNetCore.Components.Forms.dll",
         "lib/net8.0/Microsoft.AspNetCore.Components.Forms.xml",
-        "microsoft.aspnetcore.components.forms.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.forms.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.forms.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.Web/8.0.20": {
-      "sha512": "I4gboA+JSe1cJgohZvsZYz8uZ2LAh0d68A7tY7If8h+H+QJg3aEQJd0HDtF/cD1C9QzLZCDhD0lXbi+DSvTcGA==",
+    "Microsoft.AspNetCore.Components.Web/8.0.23": {
+      "sha512": "PGnax6TgJr01HHTPoPQDpRLaJaF8+8gp5PiGWEDDTayfsR7mbQpySTzTB9K0jvhPoz9tGHe6C+IQWHhvnS9v2g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.web/8.0.20",
+      "path": "microsoft.aspnetcore.components.web/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -979,14 +979,14 @@
         "THIRD-PARTY-NOTICES.txt",
         "lib/net8.0/Microsoft.AspNetCore.Components.Web.dll",
         "lib/net8.0/Microsoft.AspNetCore.Components.Web.xml",
-        "microsoft.aspnetcore.components.web.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.web.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.web.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.WebAssembly/8.0.20": {
-      "sha512": "57JM6RaOVkZgE6l+B7xzyVcHuX9N1331NBuSqTLAU/k6EMV50SZiP/h6gKO/Ck5O+CScI7sHz6XTWhzXAaqmvg==",
+    "Microsoft.AspNetCore.Components.WebAssembly/8.0.23": {
+      "sha512": "xIkW2B81V6+ps603ZThyDU7rsP3tprFrmTcSfIZh4QBdlJFFnUZ9i5ZgN4ELluW0lOc7T5L8eCDffdqL2j8tng==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.webassembly/8.0.20",
+      "path": "microsoft.aspnetcore.components.webassembly/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -996,14 +996,14 @@
         "build/net8.0/blazor.webassembly.js",
         "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.dll",
         "lib/net8.0/Microsoft.AspNetCore.Components.WebAssembly.xml",
-        "microsoft.aspnetcore.components.webassembly.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.webassembly.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.webassembly.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.20": {
-      "sha512": "LDozfCFr9GQGUhgtSxW0ViGwxco+NuxLu2vvn/fgCOYt40LvyCoNNRMeGY99PP2X82N1X0gF0RSR+Xen6UA19A==",
+    "Microsoft.AspNetCore.Components.WebAssembly.DevServer/8.0.23": {
+      "sha512": "M7/IoGuTPPoGstaOH9XJZPrMGjYIrLrsxVgjRxfJwUr64Di9yptvYfCWioyZtfXNUn/izZOIkPyCFgnH5ZygaQ==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.webassembly.devserver/8.0.20",
+      "path": "microsoft.aspnetcore.components.webassembly.devserver/8.0.23",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1011,7 +1011,7 @@
         "Icon.png",
         "THIRD-PARTY-NOTICES.txt",
         "build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets",
-        "microsoft.aspnetcore.components.webassembly.devserver.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.components.webassembly.devserver.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.components.webassembly.devserver.nuspec",
         "tools/ARM64/aspnetcorev2_inprocess.dll",
         "tools/BlazorDebugProxy/BrowserDebugHost.dll",
@@ -1167,10 +1167,10 @@
         "tools/x86/aspnetcorev2_inprocess.dll"
       ]
     },
-    "Microsoft.AspNetCore.Metadata/8.0.20": {
-      "sha512": "0tULF+2scqnCEDbvd6w6+wU12O3KJgTle3UsrsglJElhXI1w5otkOrfyAKk4UyWhexKUXl99ttXzScP3X3+7gA==",
+    "Microsoft.AspNetCore.Metadata/8.0.23": {
+      "sha512": "fQ4Xe9LdshopDxYjV7LBOsEfJ8LxzxPYbsoSljqUHGYlJq8IHG98bTo8IjDKfGpSUmNLpSAXdOwwTvms7MX7qQ==",
       "type": "package",
-      "path": "microsoft.aspnetcore.metadata/8.0.20",
+      "path": "microsoft.aspnetcore.metadata/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1182,7 +1182,7 @@
         "lib/net8.0/Microsoft.AspNetCore.Metadata.xml",
         "lib/netstandard2.0/Microsoft.AspNetCore.Metadata.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Metadata.xml",
-        "microsoft.aspnetcore.metadata.8.0.20.nupkg.sha512",
+        "microsoft.aspnetcore.metadata.8.0.23.nupkg.sha512",
         "microsoft.aspnetcore.metadata.nuspec"
       ]
     },
@@ -1683,10 +1683,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.JSInterop/8.0.20": {
-      "sha512": "0jdxTuYqGKmPVuiMMzz0G3k0X/hcrXWm8H1kPFzQQHoN72DDZJ+os/i2yM7CWznnvAdRkSNfCKnYJt7Q7Qhr0g==",
+    "Microsoft.JSInterop/8.0.23": {
+      "sha512": "LDy/j0Ug6K2GvZuLhst1Kndd9gWi2p6MXnP1dNO4CIvQGQ7ESLvVnY4pg+TwLCNT5nosS+2yFNIq30jS+dvg5g==",
       "type": "package",
-      "path": "microsoft.jsinterop/8.0.20",
+      "path": "microsoft.jsinterop/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1694,14 +1694,14 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net8.0/Microsoft.JSInterop.dll",
         "lib/net8.0/Microsoft.JSInterop.xml",
-        "microsoft.jsinterop.8.0.20.nupkg.sha512",
+        "microsoft.jsinterop.8.0.23.nupkg.sha512",
         "microsoft.jsinterop.nuspec"
       ]
     },
-    "Microsoft.JSInterop.WebAssembly/8.0.20": {
-      "sha512": "MP/3NQ7b6gsHiDO0BpV1QbKffXNaE4RfAy9gBSep9GZ8+Ao2fifkHRXZqzoq3Ns1o2QVz8dukPNWrqefjibpzA==",
+    "Microsoft.JSInterop.WebAssembly/8.0.23": {
+      "sha512": "O59jHGSU9OhwOgSC7kfcypoy9Z7jIbyRXxQiytRYWplX7wNLx6MGqX/VC5njkZbSqktVKyd8+OqOVLf3zmJ4tw==",
       "type": "package",
-      "path": "microsoft.jsinterop.webassembly/8.0.20",
+      "path": "microsoft.jsinterop.webassembly/8.0.23",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1709,14 +1709,14 @@
         "THIRD-PARTY-NOTICES.txt",
         "lib/net8.0/Microsoft.JSInterop.WebAssembly.dll",
         "lib/net8.0/Microsoft.JSInterop.WebAssembly.xml",
-        "microsoft.jsinterop.webassembly.8.0.20.nupkg.sha512",
+        "microsoft.jsinterop.webassembly.8.0.23.nupkg.sha512",
         "microsoft.jsinterop.webassembly.nuspec"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/8.0.20": {
-      "sha512": "Rhcto2AjGvTO62+/VTmBpumBOmqIGp7nYEbTbmEXkCq4yPGxV8whju3/HsIA/bKyo2+DggaYk5+/8sxb1AbPTw==",
+    "Microsoft.NET.ILLink.Tasks/8.0.24": {
+      "sha512": "1gnadp//+DoGJvV4AFdzPqYPxkypaWYjYMCr7KAacV0iadsHz1nU+rrkoxBCna4FCmeKH49CisEwa7g94/MbEg==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/8.0.20",
+      "path": "microsoft.net.illink.tasks/8.0.24",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -1730,7 +1730,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.8.0.20.nupkg.sha512",
+        "microsoft.net.illink.tasks.8.0.24.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -1764,16 +1764,15 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.NET.Sdk.WebAssembly.Pack/9.0.9": {
-      "sha512": "Nx4yF/l8YyzwHM+xBRFOSGv77mjBZP0XkImzLMdrSBGYPB32nEZNXTSwhH9viDhxMhGij+fVUjJj5iAtUdMBww==",
+    "Microsoft.NET.Sdk.WebAssembly.Pack/10.0.3": {
+      "sha512": "Wv9ugg75HxuYeBxJSoK2UPN6lpqsASkyZwd90bdRyVKOtaXZFaKg7R+dYqbZSHJXAIxC1HOcYR0imuIcKpI1yw==",
       "type": "package",
-      "path": "microsoft.net.sdk.webassembly.pack/9.0.9",
+      "path": "microsoft.net.sdk.webassembly.pack/10.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
-        "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
         "WasmAppHost/BrowserDebugHost.deps.json",
         "WasmAppHost/BrowserDebugHost.dll",
@@ -1798,12 +1797,12 @@
         "build/Microsoft.NET.Sdk.WebAssembly.Pack.targets",
         "build/Wasm.web.config",
         "build/browser.runtimeconfig.template.json",
-        "microsoft.net.sdk.webassembly.pack.9.0.9.nupkg.sha512",
+        "microsoft.net.sdk.webassembly.pack.10.0.3.nupkg.sha512",
         "microsoft.net.sdk.webassembly.pack.nuspec",
+        "tools/net10.0/Microsoft.NET.Sdk.WebAssembly.Pack.Tasks.dll",
+        "tools/net10.0/Microsoft.NET.WebAssembly.Webcil.dll",
         "tools/net472/Microsoft.NET.Sdk.WebAssembly.Pack.Tasks.dll",
-        "tools/net472/Microsoft.NET.WebAssembly.Webcil.dll",
-        "tools/net9.0/Microsoft.NET.Sdk.WebAssembly.Pack.Tasks.dll",
-        "tools/net9.0/Microsoft.NET.WebAssembly.Webcil.dll"
+        "tools/net472/Microsoft.NET.WebAssembly.Webcil.dll"
       ]
     },
     "System.IO.Pipelines/8.0.0": {
@@ -1838,30 +1837,30 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Microsoft.AspNetCore.Components.WebAssembly >= 8.0.20",
-      "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 8.0.20",
-      "Microsoft.NET.ILLink.Tasks >= 8.0.20",
-      "Microsoft.NET.Sdk.WebAssembly.Pack >= 9.0.9"
+      "Microsoft.AspNetCore.Components.WebAssembly >= 8.0.23",
+      "Microsoft.AspNetCore.Components.WebAssembly.DevServer >= 8.0.23",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.24",
+      "Microsoft.NET.Sdk.WebAssembly.Pack >= 10.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\RYZEN\\.nuget\\packages\\": {},
+    "C:\\Users\\bartf\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
-      "projectName": "F1Zone.Blazor",
-      "projectPath": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
-      "packagesPath": "C:\\Users\\RYZEN\\.nuget\\packages\\",
-      "outputPath": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\obj\\",
+      "projectUniqueName": "C:\\Users\\bartf\\OneDrive\\Desktop\\levi\\F1ZoneSolution\\f1_Zone.Blazor\\f1_Zone.Blazor.csproj",
+      "projectName": "f1_Zone.Blazor",
+      "projectPath": "C:\\Users\\bartf\\OneDrive\\Desktop\\levi\\F1ZoneSolution\\f1_Zone.Blazor\\f1_Zone.Blazor.csproj",
+      "packagesPath": "C:\\Users\\bartf\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bartf\\OneDrive\\Desktop\\levi\\F1ZoneSolution\\f1_Zone.Blazor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\RYZEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\bartf\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1870,7 +1869,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1889,7 +1887,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -1897,23 +1895,23 @@
         "dependencies": {
           "Microsoft.AspNetCore.Components.WebAssembly": {
             "target": "Package",
-            "version": "[8.0.20, )"
+            "version": "[8.0.23, )"
           },
           "Microsoft.AspNetCore.Components.WebAssembly.DevServer": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.20, )"
+            "version": "[8.0.23, )"
           },
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.20, )",
+            "version": "[8.0.24, )",
             "autoReferenced": true
           },
           "Microsoft.NET.Sdk.WebAssembly.Pack": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[9.0.9, )",
+            "version": "[10.0.3, )",
             "autoReferenced": true
           }
         },
@@ -1930,8 +1928,20 @@
         "warn": true,
         "downloadDependencies": [
           {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
             "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-            "version": "[8.0.20, 8.0.20]"
+            "version": "[8.0.24, 8.0.24]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.24, 8.0.24]"
           }
         ],
         "frameworkReferences": {
@@ -1939,7 +1949,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

@@ -1,4 +1,4 @@
-using F1Zone.Blazor;
+using f1_Zone.Blazor;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
