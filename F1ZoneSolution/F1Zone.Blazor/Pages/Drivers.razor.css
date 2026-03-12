@@ -1,0 +1,158 @@
+﻿
+.drivers-body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0b0b0b;
+    color: white;
+    margin: 0;
+    padding-top: 80px;
+    min-height: 100vh;
+}
+
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #2d2d2d;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    position: absolute;
+    left: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #e10600;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .nav-links a {
+        color: #999;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .nav-links a:hover {
+            color: #e10600;
+        }
+
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 48px;
+}
+
+.drivers-grid {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
+
+.driver-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.redbull:hover {
+    transform: translateY(-5px);
+    border-color: darkblue;
+    box-shadow: 0 0 15px #0801cf66;
+}
+
+.ferrari:hover {
+    transform: translateY(-5px);
+    border-color: #dc0000;
+    box-shadow: 0 0 15px #dc000066;
+}
+
+.mclaren:hover {
+    transform: translateY(-5px);
+    border-color: #ff8700;
+    box-shadow: 0 0 15px #ff870066;
+}
+
+.mercedes:hover {
+    transform: translateY(-5px);
+    border-color: #00d2be;
+    box-shadow: 0 0 15px #00d2be66;
+}
+
+.haas:hover {
+    transform: translateY(-5px);
+    border-color: #a0a1af;
+    box-shadow: 0 0 15px #a0a1af;
+}
+
+.racingbulls:hover {
+    transform: translateY(-5px);
+    border-color: rgb(0, 140, 255);
+    box-shadow: 0 0 15px rgb(3, 100, 179);
+}
+
+.alpine:hover {
+    transform: translateY(-5px);
+    border-color: rgb(52, 110, 148);
+    box-shadow: 0 0 15px rgb(38, 89, 122);
+}
+
+.audi:hover {
+    transform: translateY(-5px);
+    border-color: rgb(248, 4, 4);
+    box-shadow: 0 0 15px rgb(145, 10, 10);
+}
+
+.astonmartin:hover {
+    transform: translateY(-5px);
+    border-color: rgb(33, 102, 50);
+    box-shadow: 0 0 15px rgb(24, 82, 19);
+}
+
+.driver-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.driver-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.team {
+    color: #999;
+    font-size: 14px;
+}
+
+footer {
+    background: #0a0a0a;
+    border-top: 1px solid #2d2d2d;
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-top: 40px;
+}
+

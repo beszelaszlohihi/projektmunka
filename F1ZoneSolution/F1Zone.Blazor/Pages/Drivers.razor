@@ -1,187 +1,17 @@
 ﻿@page "/Drivers"
 
-<style>
-    .drivers-body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #0b0b0b;
-        color: white;
-        margin: 0;
-        padding-top: 80px; /* Hogy a fix menü ne takarja ki a címet */
-        min-height: 100vh;
-    }
 
-    /* Navigáció - a korábbi stílus alapján */
-    nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: rgba(18, 18, 18, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid #2d2d2d;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .logo {
-        position: absolute;
-        left: 2rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #e10600;
-        text-decoration: none;
-    }
-
-    .nav-links {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-        .nav-links a {
-            color: #999;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-            .nav-links a:hover {
-                color: #e10600;
-            }
-
-    h1 {
-        text-align: center;
-        margin-top: 40px;
-        font-size: 48px;
-    }
-
-    .drivers-grid {
-        max-width: 1100px;
-        margin: 40px auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 30px;
-        padding: 20px;
-    }
-
-    .driver-card {
-        background: #111;
-        border: 1px solid #222;
-        border-radius: 10px;
-        padding: 25px;
-        text-align: center;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    /* Csapatonkénti hover effektek */
-    .redbull:hover {
-        transform: translateY(-5px);
-        border-color: darkblue;
-        box-shadow: 0 0 15px #0801cf66;
-    }
-
-    .ferrari:hover {
-        transform: translateY(-5px);
-        border-color: #dc0000;
-        box-shadow: 0 0 15px #dc000066;
-    }
-
-    .mclaren:hover {
-        transform: translateY(-5px);
-        border-color: #ff8700;
-        box-shadow: 0 0 15px #ff870066;
-    }
-
-    .mercedes:hover {
-        transform: translateY(-5px);
-        border-color: #00d2be;
-        box-shadow: 0 0 15px #00d2be66;
-    }
-
-    .haas:hover {
-        transform: translateY(-5px);
-        border-color: #a0a1af;
-        box-shadow: 0 0 15px #a0a1af;
-    }
-
-    .racingbulls:hover {
-        transform: translateY(-5px);
-        border-color: rgb(0, 140, 255);
-        box-shadow: 0 0 15px rgb(3, 100, 179);
-    }
-
-    .alpine:hover {
-        transform: translateY(-5px);
-        border-color: rgb(52, 110, 148);
-        box-shadow: 0 0 15px rgb(38, 89, 122);
-    }
-
-    .audi:hover {
-        transform: translateY(-5px);
-        border-color: rgb(248, 4, 4);
-        box-shadow: 0 0 15px rgb(145, 10, 10);
-    }
-
-    .astonmartin:hover {
-        transform: translateY(-5px);
-        border-color: rgb(33, 102, 50);
-        box-shadow: 0 0 15px rgb(24, 82, 19);
-    }
-
-    .driver-card img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 10px;
-    }
-
-    .driver-name {
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .team {
-        color: #999;
-        font-size: 14px;
-    }
-
-    footer {
-        background: #0a0a0a;
-        border-top: 1px solid #2d2d2d;
-        padding: 3rem 2rem;
-        text-align: center;
-        margin-top: 40px;
-    }
-
-    .footer-links {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-    }
-
-        .footer-links a {
-            color: #999;
-            text-decoration: none;
-        }
-</style>
 
 <div class="drivers-body">
     <nav>
         <a href="/f1" class="logo">F1 RACING HUB</a>
         <ul class="nav-links">
-            <li><a href="/f1">Home</a></li>
-            <li><a href="/tracks">Tracks</a></li>
-            <li><a href="/drivers">Drivers</a></li>
-            <li><a href="/schedule">Schedule</a></li>
-            <li><a href="/news">News</a></li>
+            <li><a href="/">Kezdőlap</a></li>
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers">Versenyzők</a></li>
+            <li><a href="/schedule">Versenynaptár</a></li>
+            <li><a href="/News">Hírek</a></li>
+            <li><a href="/regulation_changes">Szabályváltozások</a></li>
         </ul>
     </nav>
 
@@ -190,117 +20,105 @@
     <div class="drivers-grid">
         @* Red Bull *@
         <div class="driver-card redbull" @onclick='() => OpenDriver("verstappen")'>
-            <img src="max.jpg">
+            <img src="https://www.formulaonehistory.com/wp-content/uploads/2023/10/Max-Verstappen-F1-2026.webp">
             <div class="driver-name">Max Verstappen</div>
             <div class="team">Red Bull Racing</div>
         </div>
 
         <div class="driver-card redbull" @onclick='() => OpenDriver("hadjar")'>
-            <img src="isack.jpg">
+            <img src="https://cdn.racingnews365.com/Riders/Hadjar/driver_avatar_ih_red_2026.png?v=1772640454&width=360&height=420&format=png&crop=393%2C458%2C32%2C0">
             <div class="driver-name">Isack Hadjar</div>
             <div class="team">Red Bull Racing</div>
         </div>
 
+        @* McLaren *@
+        <div class="driver-card mclaren" @onclick='() => OpenDriver("verstappen")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5579.png&w=350&h=254">
+            <div class="driver-name">Lando Norris</div>
+            <div class="team">McLaren</div>
+        </div>
+
+        <div class="driver-card mclaren" @onclick='() => OpenDriver("hadjar")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5752.png&w=350&h=254">
+            <div class="driver-name">Oscar Piastri</div>
+            <div class="team">McLaren</div>
+        </div>
+
+
+
         @* Ferrari *@
         <div class="driver-card ferrari" @onclick='() => OpenDriver("leclerc")'>
-            <img src="leclerc.jpg">
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5498.png&w=350&h=254">
             <div class="driver-name">Charles Leclerc</div>
             <div class="team">Ferrari</div>
         </div>
 
         <div class="driver-card ferrari" @onclick='() => OpenDriver("hamilton")'>
-            <img src="lewis.jpg">
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/868.png&w=350&h=254">
             <div class="driver-name">Lewis Hamilton</div>
             <div class="team">Ferrari</div>
         </div>
 
-        @* Haas - Itt is kijavítva @onclick-re *@
+        
         <div class="driver-card haas" @onclick='() => OpenDriver("ocon")'>
-            <img src="ocon.jpg">
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Esteban-Ocon-Haas.png">
             <div class="driver-name">Esteban Ocon</div>
             <div class="team">Haas</div>
         </div>
 
         <div class="driver-card haas" @onclick='() => OpenDriver("bearman")'>
-            <img src="bearman.jpg">
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Oliver-Bearman.png">
             <div class="driver-name">Oliver Bearman</div>
             <div class="team">Haas</div>
         </div>
 
         @* Racing Bulls *@
         <div class="driver-card racingbulls" @onclick='() => OpenDriver("lawson")'>
-            <img src="liam.jpg">
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Liam-Lawson.png">
             <div class="driver-name">Liam Lawson</div>
             <div class="team">Racing Bulls</div>
         </div>
 
         <div class="driver-card racingbulls" @onclick='() => OpenDriver("lindblad")'>
-            <img src="arvid.jpg">
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5855.png">
             <div class="driver-name">Arvid Lindblad</div>
             <div class="team">Racing Bulls</div>
         </div>
 
-        @* Audi *@
-        <div class="driver-card audi" @onclick='() => OpenDriver("hulkenberg")'>
-            <img src="hulk.jpg">
-            <div class="driver-name">Nico Hulkenberg</div>
-            <div class="team">Audi</div>
-        </div>
-
-        <div class="driver-card audi" @onclick='() => OpenDriver("bortoleto")'>
-            <img src="bortoleto.jpg">
-            <div class="driver-name">Gabriel Bortoleto</div>
-            <div class="team">Audi</div>
-        </div>
-
         @* Alpine *@
         <div class="driver-card alpine" @onclick='() => OpenDriver("gasly")'>
-            <img src="gasly.jpg">
+            <img src="https://image-service.zaonce.net/eyJidWNrZXQiOiJmcm9udGllci1jbXMiLCJrZXkiOiJmMW1hbmFnZXIvMjAyNC9kcml2ZXJzL2hlYWRzaG90cy9mMS9nYXMucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo1MDB9fX0=">
             <div class="driver-name">Pierre Gasly</div>
             <div class="team">Alpine</div>
         </div>
 
         <div class="driver-card alpine" @onclick='() => OpenDriver("colapinto")'>
-            <img src="franco.jpg">
+            <img src="https://www.formulaonehistory.com/wp-content/uploads/2024/08/Franco-Colapinto-Alpine-2025.webp">
             <div class="driver-name">Franco Colapinto</div>
             <div class="team">Alpine</div>
         </div>
 
-        @* Williams - Kijavítva a CSS osztály és az eseménykezelő *@
+        @* Williams*@
         <div class="driver-card astonmartin" @onclick='() => OpenDriver("sainz")'>
-            <img src="hulk.jpg"> @* Itt érdemes lesz majd a sainz.jpg-re cserélni *@
+            <img src="https://gridsticker.com/cdn/shop/collections/carsai01.png?v=1741766597&width=750">
             <div class="driver-name">Carlos Sainz</div>
             <div class="team">Williams</div>
         </div>
 
         <div class="driver-card astonmartin" @onclick='() => OpenDriver("albon")'>
-            <img src="bortoleto.jpg">
+            <img src="https://ratings-images-prod.pulse.ea.com/F1-25/portraits/p13.png?im=FaceCrop,algorithm=dnn,padding=0.7,width=256,height=256">
             <div class="driver-name">Alexander Albon</div>
             <div class="team">Williams</div>
         </div>
 
-        @* Cadillac (vagy Haas alapú színekkel) *@
-        <div class="driver-card haas" @onclick='() => OpenDriver("perez")'>
-            <img src="gasly.jpg">
-            <div class="driver-name">Sergio Perez</div>
-            <div class="team">Cadillac</div>
-        </div>
-
-        <div class="driver-card haas" @onclick='() => OpenDriver("bottas")'>
-            <img src="franco.jpg">
-            <div class="driver-name">Valtteri Bottas</div>
-            <div class="team">Cadillac</div>
-        </div>
-
-        
         <div class="driver-card astonmartin" @onclick='() => OpenDriver("alonso")'>
-            <img src="alonso.jpg">
+            <img src="https://cdn.racingnews365.com/Riders/Alonso/driver_avatar_fa_ast_2026.png?v=1772640296&width=360&height=420&format=png&crop=393%2C458%2C32%2C0">
             <div class="driver-name">Fernando Alonso</div>
             <div class="team">Aston Martin</div>
         </div>
 
         <div class="driver-card astonmartin" @onclick='() => OpenDriver("stroll")'>
-            <img src="franco.jpg">
+            <img src="https://image-service.zaonce.net/eyJidWNrZXQiOiJmcm9udGllci1jbXMiLCJrZXkiOiJmMW1hbmFnZXIvMjAyMi9kcml2ZXJzL2hlYWRzaG90cy9mMS9zdHIucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo1MDB9fX0=">
             <div class="driver-name">Lance Stroll</div>
             <div class="team">Aston Martin</div>
         </div>
@@ -308,12 +126,7 @@
     </div> @* teljes grid vege *@
 
     <footer>
-        <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy Policy</a>
-        </div>
-        <p class="footer-copyright">© 2026 F1 Racing Hub. All rights reserved.</p>
+        <p>© 2026 F1 Racing Zone</p>
     </footer>
 </div>
 
@@ -323,7 +136,7 @@
 
     private void OpenDriver(string driverName)
     {
-        // Blazorban így navigálunk a JS window.location helyett:
+        
         NavManager.NavigateTo($"driver?name={driverName}");
     }
 }
