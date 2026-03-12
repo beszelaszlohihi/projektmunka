@@ -1,0 +1,70 @@
+﻿@page "/tracks"
+@inject HttpClient Http
+
+<div class="f1-body">
+    <nav>
+        <a href="/f1" class="logo">F1 RACING HUB</a>
+        <ul class="nav-links">
+            <li><a href="/">Kezdőlap</a></li>
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers">Versenyzők</a></li>
+            <li><a href="/schedule">Versenynaptár</a></li>
+            <li><a href="/news">Hírek</a></li>
+            <li><a href="/regulation_changes">Szabályváltozások</a></li>
+        </ul>
+        <button class="login-btn">Bejelentkezés</button>
+    </nav>
+    <div class="section-header" style="margin-top: 4rem; text-align: center;">
+        <h2>Versenynaptár Pályái</h2>
+        <p>Böngészd végig a Forma-1 szezon összes legendás helyszínét!</p>
+    </div>
+
+    @if (tracks == null)
+    {
+        <p style="text-align: center;"><em>Pályák betöltése a boxutcából...</em></p>
+    }
+    else
+    {
+        <div class="tracks-grid">
+            @foreach (var track in tracks)
+            {
+                <article class="track-card">
+                    <div class="track-image">
+                        <img src="@(string.IsNullOrEmpty(track.ImageUrl) ? "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&h=400&fit=crop" : track.ImageUrl)" alt="@track.Circuit_name">
+                    </div>
+                    <div class="track-content">
+                        <div class="track-country">@track.Country</div>
+                        <h3 class="track-name">@track.Circuit_name</h3>
+                        <p>palya leiras</p>
+                        <div class="track-stats">
+                            <div class="stat"><div class="stat-value">@track.Length_km km</div><div class="stat-label">Hossz</div></div>
+                            <div class="stat"><div class="stat-value">@track.Turns</div><div class="stat-label">Kanyar</div></div>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Track>? tracks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        tracks = await Http.GetFromJsonAsync<List<Track>>("api/Circuits");
+    }
+
+    // Az adatmodell a pályákhoz
+    public class Track
+    {
+        public int Id { get; set; }
+        public string Circuit_name { get; set; }
+        public string Location { get; set; }
+        public string Country { get; set; }
+        public double Length_km { get; set; }
+        public int Turns { get; set; }
+        public string? ImageUrl { get; set; }
+    }
+}

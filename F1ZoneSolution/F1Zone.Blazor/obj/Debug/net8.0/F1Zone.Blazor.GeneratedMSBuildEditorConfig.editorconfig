@@ -28,14 +28,6 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/Drivers.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRHJpdmVycy5yYXpvcg==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/F1.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRjEucmF6b3I=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -47,3 +39,19 @@ build_metadata.AdditionalFiles.CssScope = b-xplqksdc2u
 [C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-nd2no5o2m8
+
+[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/Drivers.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRHJpdmVycy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-u4i3hny2cc
+
+[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/F1.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRjEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-o0qp7esqw0
+
+[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/News.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTmV3cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-e8kfbljd7m
+
+[C:/ev vegi projekt/visual studios cuccok/F1ZoneSolution/F1Zone.Blazor/Pages/Tracks.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhY2tzLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-901pzmq8ab

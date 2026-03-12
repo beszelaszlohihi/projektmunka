@@ -81,3 +81,11 @@
         overflow-y: auto;
     }
 }
+
+
+/* Az aktív menüpont stílusa*/
+.nav-links a.active {
+    color: #e10600; 
+    font-weight: bold;
+    border-bottom: 2px solid #e10600; 
+}

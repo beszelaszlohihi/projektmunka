@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj": {}
+    "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj": {
+    "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
+        "projectUniqueName": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
         "projectName": "F1Zone.Blazor",
-        "projectPath": "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
-        "packagesPath": "C:\\Users\\bartf\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.Blazor\\obj\\",
+        "projectPath": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\F1Zone.Blazor.csproj",
+        "packagesPath": "C:\\Users\\RYZEN\\.nuget\\packages\\",
+        "outputPath": "C:\\ev vegi projekt\\visual studios cuccok\\F1ZoneSolution\\F1Zone.Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\bartf\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\RYZEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -62,13 +63,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.24, )",
+              "version": "[8.0.20, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.3, )",
+              "version": "[9.0.9, )",
               "autoReferenced": true
             }
           },
@@ -85,20 +86,8 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.24, 8.0.24]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[8.0.24, 8.0.24]"
-            },
-            {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[8.0.24, 8.0.24]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[8.0.24, 8.0.24]"
+              "version": "[8.0.20, 8.0.20]"
             }
           ],
           "frameworkReferences": {
@@ -106,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
