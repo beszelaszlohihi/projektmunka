@@ -17,5 +17,6 @@ namespace F1ZoneLibrary.MODEL
         public decimal length_km { get; set; }
         public int turns { get; set; }
         public string? ImageUrl { get; set; }
+        public string circuit_description { get; set; }
     }
 }

@@ -33,5 +33,6 @@ namespace F1ZoneLibrary.DATA
         public DbSet<Sponsors> Sponsors { get; set; }
         public DbSet<Team_sponsors> Team_sponsors { get; set; }
         public DbSet<Teams> Teams { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }
