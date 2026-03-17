@@ -35,7 +35,7 @@
                     <div class="track-content">
                         <div class="track-country">@track.Country</div>
                         <h3 class="track-name">@track.Circuit_name</h3>
-                        <p>palya leiras</p>
+                        <p>@track.Circuit_description</p>
                         <div class="track-stats">
                             <div class="stat"><div class="stat-value">@track.Length_km km</div><div class="stat-label">Hossz</div></div>
                             <div class="stat"><div class="stat-value">@track.Turns</div><div class="stat-label">Kanyar</div></div>
@@ -52,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+
         tracks = await Http.GetFromJsonAsync<List<Track>>("api/Circuits");
     }
 
@@ -66,5 +66,6 @@
         public double Length_km { get; set; }
         public int Turns { get; set; }
         public string? ImageUrl { get; set; }
+        public string Circuit_description { get; set; }
     }
 }

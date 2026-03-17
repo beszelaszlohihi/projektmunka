@@ -28,11 +28,16 @@
 
 /* Maga a kártya (sötétszürke háttérrel) */
 .track-card {
-    background-color: #1e1e1e; /* Sötétebb kártya háttér */
+    background-color: #1e1e1e;
     border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid #2a2a2a; /* Finom keret */
+    /*overflow: hidden;*/
+    border: 1px solid #2a2a2a; 
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+    /*a szoveghez kapcsolodo dolgok hogy ne csusszon el*/
+    display:flex;
+    flex-direction: column;
+    height: 100%;
 }
 
     /* Lebegő animáció, ha ráviszed az egeret */
@@ -64,6 +69,12 @@
 /* Szöveges tartalom része */
 .track-content {
     padding: 1.8rem;
+
+
+    /*szoveghez kapcsolodo resz*/
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .track-country {
@@ -83,15 +94,17 @@
 }
 
 .track-content > p {
+    height: auto;
     color: #b3b3b3;
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 2rem;
-    /* Ha túl hosszú a szöveg, levágja 2 sor után (opcionális, de szép) */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    /*-webkit-line-clamp: 2;*/
+    /*-webkit-box-orient: vertical;
+    overflow: hidden;*/
+    flex: 1 0 auto;
+    overflow: visible;
+    display: block;
 }
 
 /* Statisztikák (Hossz, Körök, Kanyarok) */
@@ -101,6 +114,7 @@
     gap: 2.5rem;
     border-top: 1px solid #333333; /* Elválasztó vonal */
     padding-top: 1.5rem;
+    margin-top: auto;
 }
 
 .stat-value {
