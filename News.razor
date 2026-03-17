@@ -1,0 +1,142 @@
+﻿@page "/Drivers"
+
+
+
+<div class="drivers-body">
+    <nav>
+        <a href="/f1" class="logo">F1 RACING HUB</a>
+        <ul class="nav-links">
+            <li><a href="/">Kezdőlap</a></li>
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers">Versenyzők</a></li>
+            <li><a href="/schedule">Versenynaptár</a></li>
+            <li><a href="/News">Hírek</a></li>
+            <li><a href="/regulation_changes">Szabályváltozások</a></li>
+        </ul>
+    </nav>
+
+    <h1>Piloták</h1>
+
+    <div class="drivers-grid">
+        @* Red Bull *@
+        <div class="driver-card redbull" @onclick='() => OpenDriver("verstappen")'>
+            <img src="https://www.formulaonehistory.com/wp-content/uploads/2023/10/Max-Verstappen-F1-2026.webp">
+            <div class="driver-name">Max Verstappen</div>
+            <div class="team">Red Bull Racing</div>
+        </div>
+
+        <div class="driver-card redbull" @onclick='() => OpenDriver("hadjar")'>
+            <img src="https://cdn.racingnews365.com/Riders/Hadjar/driver_avatar_ih_red_2026.png?v=1772640454&width=360&height=420&format=png&crop=393%2C458%2C32%2C0">
+            <div class="driver-name">Isack Hadjar</div>
+            <div class="team">Red Bull Racing</div>
+        </div>
+
+        @* McLaren *@
+        <div class="driver-card mclaren" @onclick='() => OpenDriver("verstappen")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5579.png&w=350&h=254">
+            <div class="driver-name">Lando Norris</div>
+            <div class="team">McLaren</div>
+        </div>
+
+        <div class="driver-card mclaren" @onclick='() => OpenDriver("hadjar")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5752.png&w=350&h=254">
+            <div class="driver-name">Oscar Piastri</div>
+            <div class="team">McLaren</div>
+        </div>
+
+
+
+        @* Ferrari *@
+        <div class="driver-card ferrari" @onclick='() => OpenDriver("leclerc")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5498.png&w=350&h=254">
+            <div class="driver-name">Charles Leclerc</div>
+            <div class="team">Ferrari</div>
+        </div>
+
+        <div class="driver-card ferrari" @onclick='() => OpenDriver("hamilton")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/868.png&w=350&h=254">
+            <div class="driver-name">Lewis Hamilton</div>
+            <div class="team">Ferrari</div>
+        </div>
+
+        
+        <div class="driver-card haas" @onclick='() => OpenDriver("ocon")'>
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Esteban-Ocon-Haas.png">
+            <div class="driver-name">Esteban Ocon</div>
+            <div class="team">Haas</div>
+        </div>
+
+        <div class="driver-card haas" @onclick='() => OpenDriver("bearman")'>
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Oliver-Bearman.png">
+            <div class="driver-name">Oliver Bearman</div>
+            <div class="team">Haas</div>
+        </div>
+
+        @* Racing Bulls *@
+        <div class="driver-card racingbulls" @onclick='() => OpenDriver("lawson")'>
+            <img src="https://www.sportmonks.com/wp-content/uploads/2025/04/Liam-Lawson.png">
+            <div class="driver-name">Liam Lawson</div>
+            <div class="team">Racing Bulls</div>
+        </div>
+
+        <div class="driver-card racingbulls" @onclick='() => OpenDriver("lindblad")'>
+            <img src="https://a.espncdn.com/combiner/i?img=/i/headshots/rpm/players/full/5855.png">
+            <div class="driver-name">Arvid Lindblad</div>
+            <div class="team">Racing Bulls</div>
+        </div>
+
+        @* Alpine *@
+        <div class="driver-card alpine" @onclick='() => OpenDriver("gasly")'>
+            <img src="https://image-service.zaonce.net/eyJidWNrZXQiOiJmcm9udGllci1jbXMiLCJrZXkiOiJmMW1hbmFnZXIvMjAyNC9kcml2ZXJzL2hlYWRzaG90cy9mMS9nYXMucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo1MDB9fX0=">
+            <div class="driver-name">Pierre Gasly</div>
+            <div class="team">Alpine</div>
+        </div>
+
+        <div class="driver-card alpine" @onclick='() => OpenDriver("colapinto")'>
+            <img src="https://www.formulaonehistory.com/wp-content/uploads/2024/08/Franco-Colapinto-Alpine-2025.webp">
+            <div class="driver-name">Franco Colapinto</div>
+            <div class="team">Alpine</div>
+        </div>
+
+        @* Williams*@
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("sainz")'>
+            <img src="https://gridsticker.com/cdn/shop/collections/carsai01.png?v=1741766597&width=750">
+            <div class="driver-name">Carlos Sainz</div>
+            <div class="team">Williams</div>
+        </div>
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("albon")'>
+            <img src="https://ratings-images-prod.pulse.ea.com/F1-25/portraits/p13.png?im=FaceCrop,algorithm=dnn,padding=0.7,width=256,height=256">
+            <div class="driver-name">Alexander Albon</div>
+            <div class="team">Williams</div>
+        </div>
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("alonso")'>
+            <img src="https://cdn.racingnews365.com/Riders/Alonso/driver_avatar_fa_ast_2026.png?v=1772640296&width=360&height=420&format=png&crop=393%2C458%2C32%2C0">
+            <div class="driver-name">Fernando Alonso</div>
+            <div class="team">Aston Martin</div>
+        </div>
+
+        <div class="driver-card astonmartin" @onclick='() => OpenDriver("stroll")'>
+            <img src="https://image-service.zaonce.net/eyJidWNrZXQiOiJmcm9udGllci1jbXMiLCJrZXkiOiJmMW1hbmFnZXIvMjAyMi9kcml2ZXJzL2hlYWRzaG90cy9mMS9zdHIucG5nIiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo1MDB9fX0=">
+            <div class="driver-name">Lance Stroll</div>
+            <div class="team">Aston Martin</div>
+        </div>
+
+    </div> @* teljes grid vege *@
+
+    <footer>
+        <p>© 2026 F1 Racing Zone</p>
+    </footer>
+</div>
+
+@code {
+    [Inject]
+    public NavigationManager NavManager { get; set; }
+
+    private void OpenDriver(string driverName)
+    {
+        
+        NavManager.NavigateTo($"driver?name={driverName}");
+    }
+}

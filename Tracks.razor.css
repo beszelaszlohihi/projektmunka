@@ -1,0 +1,61 @@
+﻿@page "/news"
+
+<PageTitle>F1 Zone - News</PageTitle>
+
+<nav>
+    <a href="/f1" class="logo">F1 RACING HUB</a>
+    <ul class="nav-links">
+        <li><a href="/">Kezdőlap</a></li>
+        <li><a href="/tracks">Pályák</a></li>
+        <li><a href="/drivers">Versenyzők</a></li>
+        <li><a href="/schedule">Versenynaptár</a></li>
+        <li><a href="/News">Hírek</a></li>
+        <li><a href="/regulation_changes">Szabályváltozások</a></li>
+    </ul>
+</nav>
+
+
+<div class="news-page-wrapper">
+    <section class="hero">
+        <small>FORMULA 1</small>
+        <h1>Legfrissebb F1 <span>Hírek</span></h1>
+        <p>Megdöbbentő hírek és minden ami a pályán és pályán kívül történik a F1 világában és pilótáival.</p>
+    </section>
+
+    <div class="news-container">
+        @foreach (var article in NewsArticles)
+        {
+            <div class="news-card">
+                <div class="category">@article.Category</div>
+                <div class="date">@article.Date.ToString("MMMM d, yyyy")</div>
+
+                <div class="news-title">@article.Title</div>
+
+                <div class="news-text">@article.Summary</div>
+
+                
+
+                <div class="number">@article.Id.ToString("D2")</div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    public class NewsArticle
+    {
+        public int Id { get; set; }
+        public string Category { get; set; }
+        public DateTime Date { get; set; }
+        public string Title { get; set; }
+        public string Summary { get; set; }
+    }
+
+    private List<NewsArticle> NewsArticles = new()
+    {
+        new NewsArticle { Id = 1, Category = "Verseny hétvége", Date = new DateTime(2025, 3, 8), Title = "A Red Bull dominált a hétvégén", Summary = "A redbull egy mesteri stratégiával es pilotái remekek teljesitmenyenek hala domiált a hétvégén." },
+        new NewsArticle { Id = 2, Category = "Technikai", Date = new DateTime(2026, 3, 7), Title = "Ferrari hatalmas ujítással rukkolt elő", Summary = "A Ferrari bemutatott egy új aeorodinamikai technologíát a vasárnapi futamon." },
+        new NewsArticle { Id = 3, Category = "Közelgő esemény", Date = new DateTime(2026, 3, 6), Title = "A várható időjárás a következő futamon!", Summary = "A szombati Monacoi nagydíjon várhatóan heves esőzés várható!"}
+    };
+}
+
