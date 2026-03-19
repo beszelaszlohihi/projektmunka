@@ -1,23 +1,21 @@
-﻿
-
-.f1-body {
+﻿.f1-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
+    background-color: #06131c; /* Red Bull mélykék */
     color: #fafafa;
     line-height: 1.6;
     margin: 0;
     min-height: 100vh;
 }
 
-
+/* --- NAVIGÁCIÓ (Ha nem az app.css-ből veszi) --- */
 nav {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(18, 18, 18, 0.95);
+    background: rgba(6, 19, 28, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid #2d2d2d;
+    border-bottom: 2px solid #fcd700;
     padding: 1rem 2rem;
     display: flex;
     justify-content: center;
@@ -30,8 +28,9 @@ nav {
     left: 2rem;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #e10600;
+    color: #fcd700;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 .nav-links {
@@ -43,103 +42,108 @@ nav {
 }
 
     .nav-links a {
-        color: #999;
+        color: #cbd5e0;
         text-decoration: none;
         transition: color 0.3s;
+        font-weight: 500;
     }
 
         .nav-links a:hover {
-            color: #e10600;
+            color: #fcd700;
         }
 
 .login-btn {
     position: absolute;
     right: 2rem;
-    background: #e10600;
-    color: white;
+    background: #fcd700;
+    color: #06131c;
     border: none;
     padding: 0.5rem 1.5rem;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s;
+    font-weight: 700;
+    transition: all 0.3s;
 }
 
+    .login-btn:hover {
+        background: #e10600;
+        color: white;
+    }
 
+/* --- HERO SZEKCIÓ --- */
 .hero {
-    padding: 8rem 2rem 4rem;
+    padding: 10rem 2rem 6rem;
     text-align: center;
-    background: linear-gradient(135deg, #1a1a1a 0%, #121212 50%, #1a0a0a 100%);
-    border-bottom: 1px solid #2d2d2d;
+    /* Red Bull kék gradiens */
+    background: linear-gradient(135deg, #0b2230 0%, #06131c 50%, #0b2230 100%);
+    border-bottom: 1px solid #1a2a35;
 }
 
     .hero h1 {
         font-size: 3.5rem;
         margin-bottom: 1rem;
-        background: linear-gradient(90deg, #fff, #e10600);
+        /* Fehér-Sárga gradiens szöveg */
+        background: linear-gradient(90deg, #fff, #fcd700);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        font-weight: 900;
     }
 
     .hero p {
         font-size: 1.25rem;
-        color: #999;
+        color: #8899a6;
         max-width: 600px;
         margin: 0 auto 2rem;
     }
 
 .hero-btn {
-    background: #e10600;
+    background: #e10600; /* Maradjon piros a "tűz" miatt */
     color: white;
     border: none;
     padding: 1rem 2rem;
     border-radius: 4px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
+    text-transform: uppercase;
 }
 
     .hero-btn:hover {
-        background: #b80500;
+        background: #fcd700;
+        color: #06131c;
         transform: translateY(-2px);
     }
 
-
+/* --- TARTALMI RÉSZ ÉS KÁRTYÁK --- */
 .tracks-section {
     padding: 4rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
 }
 
-.section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-    .section-header h2 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-.tracks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
 }
 
 .track-card {
-    background: #1a1a1a;
-    border: 1px solid #2d2d2d;
-    border-radius: 8px;
+    background: #0b2230; /* Red Bull kék, világosabb árnyalat */
+    border: 1px solid #1a2a35;
+    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Hogy a kártyák egyforma magasak legyenek */
 }
 
     .track-card:hover {
-        border-color: #e10600;
-        transform: translateY(-4px);
+        border-color: #fcd700; /* Sárga keret hovernél */
+        transform: translateY(-8px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
 .track-image img {
@@ -150,55 +154,81 @@ nav {
 
 .track-content {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Hogy a tartalom kitöltse a helyet */
 }
 
 .track-country {
-    color: #e10600;
+    color: #fcd700; /* Sárga ország */
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 800;
     text-transform: uppercase;
+    letter-spacing: 2px;
     margin-bottom: 0.5rem;
 }
 
 .track-name {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #ffffff;
     margin-bottom: 1rem;
 }
 
+.track-content p {
+    color: #cbd5e0;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    flex: 1; /* Tolja lefelé a statisztikákat */
+}
+
+/* --- STATISZTIKÁK FIXÁLÁSA --- */
 .track-stats {
     display: flex;
-    gap: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #2d2d2d;
+    justify-content: space-between; /* Egyenletesen elosztja a stat-okat */
+    gap: 1rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #1a2a35;
+    margin-top: auto; /* Mindig a kártya alján maradjon */
+}
+
+.tracks-grid {
+    display: grid;
+    /* Ez a bűvös sor: megpróbál annyi oszlopot létrehozni, amennyi belefér, 
+       de legalább 350px széles legyen egy kártya */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem; /* Távolság a kártyák között */
+    width: 100%;
+    max-width: 1200px; /* Hogy ne nyúljon túl szélesre nagy monitoron */
+    margin: 0 auto; /* Középre igazítja az egész rácsot */
+    padding: 2rem 0;
+}
+
+
+.stat {
+    text-align: center;
+    flex: 1; /* Egyforma szélesek a stat oszlopok */
 }
 
 .stat-value {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #e10600;
+    color: #fcd700; /* Sárga értékek */
+    font-weight: 900;
+    font-size: 1.3rem; /* Nagyobb és kövérebb */
+    display: block;
 }
 
 .stat-label {
     font-size: 0.75rem;
-    color: #666;
+    color: #8899a6;
     text-transform: uppercase;
+    display: block;
+    margin-top: 2px;
 }
 
 footer {
-    background: #0a0a0a;
-    border-top: 1px solid #2d2d2d;
+    background: #030a0f;
+    border-top: 1px solid #1a2a35;
     padding: 3rem 2rem;
     text-align: center;
-}
-
-
-@media (max-width: 768px) {
-    .nav-links {
-        display: none;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
+    color: #8899a6;
 }

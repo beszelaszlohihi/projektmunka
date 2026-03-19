@@ -1,0 +1,63 @@
+﻿@page "/regulation_changes"
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+<div class="f1-body">
+    <nav>
+        <a href="/" class="logo">F1ZONE</a>
+        <ul class="nav-links">
+            <li><a href="/">Kezdőlap</a></li>
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers">Versenyzők</a></li>
+            <li><a href="/schedule">Versenynaptár</a></li>
+            <li><a href="/News">Hírek</a></li>
+            <li><a href="/regulation_changes">Szabályváltozások</a></li>
+        </ul>
+        <button class="login-btn">Bejelentkezés</button>
+    </nav>
+    <div class="timeline-container">
+        <div class="section-header">
+            <h2>Technikai Szabályváltozások</h2>
+            <p>A Forma-1 evolúciója az első szezontól napjainkig.</p>
+        </div>
+
+        @if (regulations == null)
+        {
+            <p class="loading">Adatok betöltése a boxutcából...</p>
+        }
+        else
+        {
+            <div class="timeline">
+                @foreach (var reg in regulations)
+                {
+                    <div class="timeline-item">
+                        <div class="timeline-year">@reg.Season_year</div>
+                        <div class="timeline-content">
+                            <p>@reg.Technical_regulations</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    // Ide jön majd a C# kód az adatbázis híváshoz
+    private List<RegulationDto> regulations; // Feltételezve, hogy van ilyen DTO-d
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // IDE ÍRD AZ API-D PONTOS NEVÉT!
+            // Ha a kontrollered neve pl. TechnicalRegulationsController, akkor "api/TechnicalRegulations"
+            regulations = await Http.GetFromJsonAsync<List<RegulationDto>>("api/Seasons");
+        }
+        catch (Exception ex)
+        {
+            // Ha hiba van, itt látszódni fog a konzolon (F12 a böngészőben)
+            Console.WriteLine($"Hiba történt: {ex.Message}");
+        }
+    }
+}

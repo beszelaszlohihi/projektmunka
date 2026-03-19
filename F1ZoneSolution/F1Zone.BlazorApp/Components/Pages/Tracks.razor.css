@@ -28,14 +28,13 @@
 
 /* Maga a kártya (sötétszürke háttérrel) */
 .track-card {
-    background-color: #1e1e1e;
+    background-color: #06131c !important;
     border-radius: 6px;
     /*overflow: hidden;*/
-    border: 1px solid #2a2a2a; 
+    border: 1px solid #2a2a2a;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-
     /*a szoveghez kapcsolodo dolgok hogy ne csusszon el*/
-    display:flex;
+    display: flex;
     flex-direction: column;
     height: 100%;
 }
@@ -129,4 +128,35 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-top: 4px;
+}
+
+.f1-body {
+    background-color: #06131c !important; 
+    color: #fafafa;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 80px;
+}
+
+.logo {
+    position: absolute;
+    left: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fcd700;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.login-btn {
+    position: absolute;
+    right: 2rem;
+    background: #fcd700;
+    color: #06131c;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s;
 }

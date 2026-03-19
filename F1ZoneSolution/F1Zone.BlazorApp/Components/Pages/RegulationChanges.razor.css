@@ -1,0 +1,85 @@
+﻿.timeline-container {
+    padding-top: 100px; /* Hely a menünek */
+    padding-bottom: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Maga a függőleges vonal */
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #fcd700; /* Red Bull Sárga vonal */
+        box-shadow: 0 0 15px rgba(252, 215, 0, 0.3);
+    }
+
+/* Egy-egy évszám és leírás blokkja */
+.timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    padding-left: 60px;
+    transition: all 0.3s ease;
+}
+
+    /* A kis kör a vonalon */
+    .timeline-item::after {
+        content: '';
+        position: absolute;
+        left: 14px;
+        top: 5px;
+        width: 15px;
+        height: 15px;
+        background: #e10600; /* Red Bull Piros "megálló" */
+        border: 3px solid #fcd700;
+        border-radius: 50%;
+        z-index: 2;
+    }
+
+.timeline-year {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fcd700;
+    margin-bottom: 0.5rem;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.timeline-content {
+    background: #0b2230; /* Red Bull mélykék kártya háttér */
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #e10600;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+    .timeline-content p {
+        color: #cbd5e0;
+        margin: 0;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+
+/* Hover effekt: kicsit kiemelkedik az év */
+.timeline-item:hover {
+    transform: translateX(10px);
+}
+
+    .timeline-item:hover .timeline-year {
+        color: #fff;
+    }
+
+.f1-body {
+    background-color: #06131c !important;
+    color: #fafafa;
+    min-height: 100vh;
+    margin: 0;
+    padding-top: 80px;
+}
