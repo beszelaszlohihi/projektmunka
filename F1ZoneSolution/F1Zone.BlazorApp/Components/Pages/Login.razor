@@ -1,0 +1,53 @@
+﻿@page "/login"
+@inject AuthService AuthService
+@inject NavigationManager NavManager
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4 card shadow p-4">
+            <h3 class="text-center mb-4">F1 Zone Belépés</h3>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger">@errorMessage</div>
+            }
+
+            <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label class="form-label">Email cím</label>
+                    <InputText @bind-Value="loginModel.Email" class="form-control" placeholder="pelda@f1.hu" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Jelszó</label>
+                    <InputText @bind-Value="loginModel.Password" type="password" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Bejelentkezés</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginDto loginModel = new LoginDto();
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        // errorMessage = null;
+        // var error = await AuthService.Login(loginModel);
+
+        // if (error == null)
+        // {
+        //     // Ha sikerült, irány a főoldal!
+        //     NavManager.NavigateTo("/");
+        // }
+        // else
+        // {
+        //     errorMessage = error;
+        // }
+    }
+}
