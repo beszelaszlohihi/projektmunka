@@ -1,0 +1,79 @@
+﻿@page "/driver/{id}"
+
+@inject NavigationManager Nav
+
+@code {
+    [Parameter] public string id { get; set; } = string.Empty;
+
+    private string DriverName => FormatName(id);
+
+    // Egyszerű átalakítás, hogy az URL-ből szépen jelenjen meg a név
+    private static string FormatName(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return "Driver not found";
+
+        text = text.Replace("-", " ");
+        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(text);
+    }
+
+    // Navigációs metódusok a gombokhoz
+    //private void GoToLogin()
+    //{
+   //     Nav.NavigateTo("/login");
+   // }
+
+    private void BackToDrivers()
+    {
+        Nav.NavigateTo("/drivers");
+    }
+}
+
+<div class="driver-detail-page">
+
+    <nav>
+        <a class="logo" href="/f1">F1<span>ZONE</span></a>
+        <ul class="nav-links">
+            <li><a href="/">Kezdőlap</a></li>   
+            <li><a href="/tracks">Pályák</a></li>
+            <li><a href="/drivers" class="active">Piloták</a></li>
+            <li><a href="/schedule">Naptár</a></li>
+            <li><a href="/news">Hírek</a></li>
+        </ul>
+
+        <button class="login-btn" @* @onclick="GoToLogin" *@>Bejelentkezés</button>
+    </nav>
+
+    <section class="hero" style="text-align:center; padding-top:120px;">
+        <div class="hero-accent"></div>
+        <h1>@DriverName</h1>
+        
+    </section>
+
+    <div class="detail-content" style="max-width:900px; margin:auto; padding:40px 20px;">
+        <h2>Életrajz</h2>
+        <div class="bio-card">
+            <p>
+                Itt majd megjelenik
+                <strong>@DriverName</strong>.
+                Ez majd db-bol loesz betoltve
+            </p>
+        </div>
+
+        <h2>Karrier/Szezon statisztika hihi</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-value">42</div><div class="stat-label">Győzelmek</div></div>
+            <div class="stat-card"><div class="stat-value">13</div><div class="stat-label">Pódiumok</div></div>
+            <div class="stat-card"><div class="stat-value">67:67:67</div><div class="stat-label">legyorsabb kör</div></div>
+            <div class="stat-card"><div class="stat-value">69</div><div class="stat-label">Világbajnoki címek</div></div>
+            <div class="stat-card"><div class="stat-value">420</div><div class="stat-label">Pontok</div></div>
+        </div>
+
+        <button class="back-btn" @onclick="BackToDrivers">← Vissza a többi pilótához!</button>
+    </div>
+
+    <footer>
+        <p>© 2026 F1 Racing Zone</p>
+    </footer>
+
+</div>

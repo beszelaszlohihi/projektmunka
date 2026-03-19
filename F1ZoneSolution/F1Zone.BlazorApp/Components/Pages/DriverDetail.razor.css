@@ -1,0 +1,187 @@
+﻿body, .driver-detail-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #fff;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+nav {
+    background: #121212;
+    border-bottom: 1px solid #2d2d2d;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.logo {
+    color: #e10600;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+    .logo span {
+        color: white;
+    }
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+    .nav-links a {
+        color: #aaa;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #e10600;
+        }
+
+.login-btn {
+    background: #e10600;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+    .login-btn:hover {
+        background: #b80500;
+    }
+
+/* HERO */
+.hero {
+    padding-top: 120px;
+    padding-bottom: 40px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(225,6,0,0.1) 0%, transparent 100%);
+}
+
+.hero-accent {
+    width: 60px;
+    height: 4px;
+    background: #e10600;
+    margin: 0 auto 20px;
+    border-radius: 2px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.hero p {
+    color: #888;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* DETAIL CONTENT */
+.detail-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+    .detail-content h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 40px 0 20px;
+    }
+
+/* BIO SECTION */
+.bio-card {
+    background: #1a1a1a;
+    border: 1px solid #2d2d2d;
+    border-radius: 10px;
+    padding: 25px;
+    color: #bbb;
+    line-height: 1.7;
+    box-shadow: 0 0 10px rgba(255,255,255,0.05);
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+    .bio-card:hover {
+        border-color: #e10600;
+        box-shadow: 0 5px 25px rgba(225,6,0,0.2);
+    }
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: #1a1a1a;
+    border: 1px solid #2d2d2d;
+    border-radius: 10px;
+    padding: 20px 10px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.2s ease;
+}
+
+    .stat-card:hover {
+        border-color: #e10600;
+        transform: translateY(-3px);
+    }
+
+.stat-value {
+    font-size: 30px;
+    font-weight: 900;
+    color: #e10600;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #777;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* BACK BUTTON */
+.back-btn {
+    background: none;
+    border: 1px solid #2d2d2d;
+    color: #888;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+    .back-btn:hover {
+        color: #fff;
+        border-color: #e10600;
+    }
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #555;
+    border-top: 1px solid #2d2d2d;
+    font-size: 14px;
+}
