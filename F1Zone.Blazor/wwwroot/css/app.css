@@ -1,0 +1,75 @@
+/* Globális sötét téma beállítása */
+body {
+    background-color: #111111;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Reseteljük az alapértelmezett margókat */
+* {
+    box-sizing: border-box;
+}
+
+
+/* A fõ sáv elrendezése */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111111; 
+    padding: 1.2rem 2.5rem;
+    border-bottom: 3px solid #e10600; 
+}
+
+    /* A logó formázása */
+    nav .logo {
+        color: #e10600; 
+        font-size: 1.6rem;
+        font-weight: 900;
+        text-decoration: none;
+        letter-spacing: 2px;
+    }
+
+    /* A lista, ami egymás mellé rendezi a linkeket */
+    nav .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2.5rem; 
+        margin: 0;
+        padding: 0;
+    }
+
+        /* Maguk a linkek (Kezdõlap, Pályák, stb.) */
+        nav .nav-links li a {
+            color: #cccccc;
+            text-decoration: none; 
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+            /* Ha ráviszed az egeret a linkre, kivilágosodik */
+            nav .nav-links li a:hover {
+                color: #ffffff;
+            }
+
+    /* A Bejelentkezés gomb */
+    nav .login-btn {
+        background-color: #e10600;
+        color: white;
+        border: none;
+        padding: 0.7rem 1.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        nav .login-btn:hover {
+            background-color: #bf0500;
+            transform: scale(1.05); 
+        }

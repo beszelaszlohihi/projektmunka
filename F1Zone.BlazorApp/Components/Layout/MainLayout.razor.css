@@ -1,0 +1,23 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #000000;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000;
+}
+
+
+.top-row {
+    display: none !important;
+}
+
+.content {
+    padding: 0 !important;
+    margin: 0 !important;
+}
