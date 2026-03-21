@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("F1Zone.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d28da3783ec6e86ce337834207190e4337f4799c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("F1Zone.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("F1Zone.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
