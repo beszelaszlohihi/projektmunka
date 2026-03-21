@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,5 +35,6 @@ namespace F1ZoneLibrary.DATA
         public DbSet<Team_sponsors> Team_sponsors { get; set; }
         public DbSet<Teams> Teams { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RaceSchedules> RaceSchedules { get; set; }
     }
 }
