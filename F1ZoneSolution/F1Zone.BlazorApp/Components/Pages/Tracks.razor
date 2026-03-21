@@ -3,17 +3,43 @@
 @inject HttpClient Http
 
 <div class="f1-body">
-    <nav>
-        <a href="/" class="logo">F1ZONE</a>
-        <ul class="nav-links">
-            <li><a href="/">Kezdőlap</a></li>
-            <li><a href="/tracks">Pályák</a></li>
-            <li><a href="/drivers">Versenyzők</a></li>
-            <li><a href="/schedule">Versenynaptár</a></li>
-            <li><a href="/news">Hírek</a></li>
-            <li><a href="/regulation_changes">Szabályváltozások</a></li>
-        </ul>
-        <button class="login-btn">Bejelentkezés</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">F1<span>ZONE</span></a>
+            </div>
+
+            <ul class="nav-links @(isMenuOpen ? "active" : "")">
+                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+
+
+                <li class="mobile-only">
+                    <button class="login-btn">BEJELENTKEZÉS</button>
+                </li>
+            </ul>
+
+
+            <div class="nav-actions">
+                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+
+                <button class="burger-btn" @onclick="ToggleMenu">
+                    @if (isMenuOpen)
+                    {
+                        <span>&times;</span>
+                    }
+                    else
+                    {
+
+                        <span>&#9776;</span>
+                    }
+                </button>
+            </div>
+        </div>
     </nav>
     <div class="section-header" style="margin-top: 4rem; text-align: center;">
         <h2>Versenynaptár Pályái</h2>
@@ -56,6 +82,11 @@
 
         tracks = await Http.GetFromJsonAsync<List<Track>>("api/Circuits");
     }
+
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
 
     // Az adatmodell a pályákhoz
     public class Track

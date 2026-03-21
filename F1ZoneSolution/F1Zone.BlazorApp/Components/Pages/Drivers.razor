@@ -2,31 +2,52 @@
 
 <div class="drivers-body">
 
-    <!-- NAVBAR -->
-    <nav>
-        <a class="logo" href="/">F1<span>ZONE</span></a>
-        <ul class="nav-links">
-            <li><a href="/">Kezdőlap</a></li>
-            <li><a href="/tracks">Pályák</a></li>
-            <li><a href="/drivers">Versenyzők</a></li>
-            <li><a href="/schedule">Versenynaptár</a></li>
-            <li><a href="/News">Hírek</a></li>
-            <li><a href="/regulation_changes">Szabályváltozások</a></li>
-        </ul>
-        <button class="login-btn">Log In</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">F1<span>ZONE</span></a>
+            </div>
+
+            <ul class="nav-links @(isMenuOpen ? "active" : "")">
+                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+
+
+                <li class="mobile-only">
+                    <button class="login-btn">BEJELENTKEZÉS</button>
+                </li>
+            </ul>
+
+
+            <div class="nav-actions">
+                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+
+                <button class="burger-btn" @onclick="ToggleMenu">
+                    @if (isMenuOpen)
+                    {
+                        <span>&times;</span>
+                    }
+                    else
+                    {
+
+                        <span>&#9776;</span>
+                    }
+                </button>
+            </div>
+        </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero">
-        <div class="hero-accent"></div>
-        <h1><span>Piloták</span></h1>
-        <p>Kattints egy pilotára ,hogy többet tudj meg róla</p>
+        <h1>Piloták</h1>
+        <p>Kattints egy pilotára, hogy többet tudj meg róla</p>
     </section>
 
-    <!-- TEAM + DRIVER GRID -->
     <div class="container">
 
-        <!-- Red Bull Racing -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#3671C6"></div>
@@ -54,7 +75,6 @@
             </div>
         </div>
 
-        <!-- McLaren -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#FF8000"></div>
@@ -82,7 +102,6 @@
             </div>
         </div>
 
-        <!-- Ferrari -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#E8002D"></div>
@@ -110,7 +129,6 @@
             </div>
         </div>
 
-        <!-- Mercedes -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#27F4D2"></div>
@@ -138,7 +156,6 @@
             </div>
         </div>
 
-        <!-- Aston Martin -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#229971"></div>
@@ -166,7 +183,6 @@
             </div>
         </div>
 
-        <!-- Alpine -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#0093CC"></div>
@@ -194,7 +210,6 @@
             </div>
         </div>
 
-        <!-- Haas -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#B6BABD"></div>
@@ -222,7 +237,6 @@
             </div>
         </div>
 
-        <!-- Racing Bulls -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#6692FF"></div>
@@ -250,7 +264,6 @@
             </div>
         </div>
 
-        <!-- Williams -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#1868DB"></div>
@@ -278,7 +291,6 @@
             </div>
         </div>
 
-        <!-- Kick Sauber -->
         <div class="team-section">
             <div class="team-header">
                 <div class="team-color-bar" style="background:#52E252"></div>
@@ -306,10 +318,18 @@
             </div>
         </div>
 
-    </div> <!-- container vége -->
-    <!-- FOOTER -->
+    </div>
+
     <footer>
-        <p>© 2026 F1 Racing Zone</p>
+        <p>© 2026 F1 Racing Zone</p>
     </footer>
 
-</div> <!-- drivers-body vége -->
+</div>
+
+@code {
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
+
+}

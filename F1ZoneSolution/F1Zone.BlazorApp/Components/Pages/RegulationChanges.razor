@@ -5,17 +5,43 @@
 @inject HttpClient Http
 
 <div class="f1-body">
-    <nav>
-        <a href="/" class="logo">F1ZONE</a>
-        <ul class="nav-links">
-            <li><a href="/">Kezdőlap</a></li>
-            <li><a href="/tracks">Pályák</a></li>
-            <li><a href="/drivers">Versenyzők</a></li>
-            <li><a href="/schedule">Versenynaptár</a></li>
-            <li><a href="/News">Hírek</a></li>
-            <li><a href="/regulation_changes">Szabályváltozások</a></li>
-        </ul>
-        <button class="login-btn">Bejelentkezés</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">F1<span>ZONE</span></a>
+            </div>
+
+            <ul class="nav-links @(isMenuOpen ? "active" : "")">
+                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+
+
+                <li class="mobile-only">
+                    <button class="login-btn">BEJELENTKEZÉS</button>
+                </li>
+            </ul>
+
+
+            <div class="nav-actions">
+                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+
+                <button class="burger-btn" @onclick="ToggleMenu">
+                    @if (isMenuOpen)
+                    {
+                        <span>&times;</span>
+                    }
+                    else
+                    {
+
+                        <span>&#9776;</span>
+                    }
+                </button>
+            </div>
+        </div>
     </nav>
     <div class="timeline-container">
         <div class="section-header">
@@ -47,6 +73,11 @@
 @code {
     // Ide jön majd a C# kód az adatbázis híváshoz
     private List<RegulationDto> regulations; // Feltételezve, hogy van ilyen DTO-d
+
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
 
     protected override async Task OnInitializedAsync()
     {

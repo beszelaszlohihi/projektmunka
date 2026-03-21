@@ -7,55 +7,100 @@
 @rendermode InteractiveServer
 
 <div class="driver-detail-page">
-    <nav>
-        <a href="/f1" class="logo">F1ZONE</a>
-        <ul class="nav-links">
-            <li><a href="/">Kezdőlap</a></li>
-            <li><a href="/tracks">Pályák</a></li>
-            <li><a href="/drivers" class="active">Piloták</a></li>
-            <li><a href="/schedule">Naptár</a></li>
-            <li><a href="/News">Hírek</a></li>
-        </ul>
-        <button class="login-btn">Bejelentkezés</button>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="/" class="logo">F1<span>ZONE</span></a>
+            </div>
+
+            <ul class="nav-links @(isMenuOpen ? "active" : "")">
+                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+
+
+                <li class="mobile-only">
+                    <button class="login-btn">BEJELENTKEZÉS</button>
+                </li>
+            </ul>
+
+
+            <div class="nav-actions">
+                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+
+                <button class="burger-btn" @onclick="ToggleMenu">
+                    @if (isMenuOpen)
+                    {
+                        <span>&times;</span>
+                    }
+                    else
+                    {
+
+                        <span>&#9776;</span>
+                    }
+                </button>
+            </div>
+        </div>
     </nav>
 
-    <section class="hero" style="text-align:center; padding-top:120px;">
-        <div class="hero-accent"></div>
+    <section class="hero">
         <h1>@(driver?.driver_name ?? id.Replace("-", " ").ToUpper())</h1>
     </section>
 
-    <div class="detail-content" style="max-width:900px; margin:auto; padding:40px 20px;">
-        <h2>Életrajz</h2>
-        <div class="bio-card">
-            @if (driver == null)
+    <div class="container">
+        <div class="detail-section">
+            <h2>Életrajz</h2>
+            <div class="bio-card">
+                @if (driver == null)
+                {
+                    <div class="loading-box">
+                        <p>🏎️ Adatok betöltése a boxutcából...</p>
+                    </div>
+                }
+                else
+                {
+                    <p>@driver.biography</p>
+                }
+            </div>
+
+            <h2>Karrier / Szezon statisztika</h2>
+            @if (driver != null)
             {
-                <div class="loading-box">
-                    <p>🏎️ Adatok betöltése a boxutcából...</p>
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-value @(driver.wins > 0 ? "gold" : "")">@driver.wins</div>
+                        <div class="stat-label">Győzelmek</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.podiums</div>
+                        <div class="stat-label">Pódiumok</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.fastest_laps</div>
+                        <div class="stat-label">Leggyorsabb kör</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value @(driver.championships > 0 ? "gold" : "")">@driver.championships</div>
+                        <div class="stat-label">VB címek</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.points</div>
+                        <div class="stat-label">Pontok</div>
+                    </div>
                 </div>
             }
             else
             {
-                <p style="white-space:pre-line;">@driver.biography</p>
+                <p class="loading-text">Statisztikák betöltése...</p>
             }
-        </div>
 
-        <h2>Karrier / Szezon statisztika</h2>
-        @if (driver != null)
-        {
-            <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value">@driver.wins</div><div class="stat-label">Győzelmek</div></div>
-                <div class="stat-card"><div class="stat-value">@driver.podiums</div><div class="stat-label">Pódiumok</div></div>
-                <div class="stat-card"><div class="stat-value">@driver.fastest_laps</div><div class="stat-label">Leggyorsabb kör</div></div>
-                <div class="stat-card"><div class="stat-value">@driver.championships</div><div class="stat-label">VB címek</div></div>
-                <div class="stat-card"><div class="stat-value">@driver.points</div><div class="stat-label">Pontok</div></div>
+            <div class="actions">
+                <button class="back-btn" @onclick="BackToDrivers">← Vissza a többi pilótához!</button>
             </div>
-        }
-        else
-        {
-            <p>Statisztikák betöltése...</p>
-        }
-
-        <button class="back-btn" @onclick="BackToDrivers">← Vissza a többi pilótához!</button>
+        </div>
     </div>
 
     <footer>
@@ -67,12 +112,16 @@
     [Parameter] public string id { get; set; } = string.Empty;
     private DriverDto? driver;
 
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
+
     protected override async Task OnInitializedAsync()
     {
         await LoadDriver();
     }
 
-    // Ha az URL változik (pl. egyik pilótáról a másikra mész), ez is lefut
     protected override async Task OnParametersSetAsync()
     {
         if (driver != null && driver.driver_name.Replace(" ", "-").ToLower() != id.ToLower())
@@ -85,9 +134,7 @@
     {
         try
         {
-            // Pontosan úgy, ahogy a naptárnál, de egyetlen objektumot várunk
             driver = await Http.GetFromJsonAsync<DriverDto>($"api/drivers/{id}");
-           
         }
         catch (Exception ex)
         {
@@ -103,28 +150,13 @@
 
     public class DriverDto
     {
-        [JsonPropertyName("driver_id")]
-        public int driver_id { get; set; }
-
-        [JsonPropertyName("driver_name")]
-        public string driver_name { get; set; } = "";
-
-        [JsonPropertyName("biography")]
-        public string biography { get; set; } = "";
-
-        [JsonPropertyName("championships")]
-        public int championships { get; set; }
-
-        [JsonPropertyName("wins")]
-        public int wins { get; set; }
-
-        [JsonPropertyName("podiums")]
-        public int podiums { get; set; }
-
-        [JsonPropertyName("fastest_laps")]
-        public int fastest_laps { get; set; }
-
-        [JsonPropertyName("points")]
-        public decimal points { get; set; }
+        [JsonPropertyName("driver_id")] public int driver_id { get; set; }
+        [JsonPropertyName("driver_name")] public string driver_name { get; set; } = "";
+        [JsonPropertyName("biography")] public string biography { get; set; } = "";
+        [JsonPropertyName("championships")] public int championships { get; set; }
+        [JsonPropertyName("wins")] public int wins { get; set; }
+        [JsonPropertyName("podiums")] public int podiums { get; set; }
+        [JsonPropertyName("fastest_laps")] public int fastest_laps { get; set; }
+        [JsonPropertyName("points")] public decimal points { get; set; }
     }
 }
