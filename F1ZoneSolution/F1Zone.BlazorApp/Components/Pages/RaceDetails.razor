@@ -1,0 +1,74 @@
+﻿@page "/schedule/details/{Id:int}"
+@using F1ZoneLibrary.Dto
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+
+<div class="details-wrapper">
+    <div class="nav-actions">
+        <button class="back-btn" @onclick="GoBack">
+            <span class="arrow">←</span> Vissza a versenynaptárhoz
+        </button>
+    </div>
+
+    <div class="details-container">
+        @if (details == null)
+        {
+            <div class="loading-box">
+                <div class="spinner"></div>
+                <p>Adatok betöltése a paddockból...</p>
+            </div>
+        }
+        else
+        {
+            <h1 class="race-title">@details.RaceName - Részletek</h1>
+
+            <div class="details-grid">
+                <div class="info-card main-info">
+                    <h3><i class="bi bi-flag"></i> Pálya: @details.TrackName</h3>
+                    <p class="date-text">
+                        <i class="bi bi-calendar3"></i>
+                        Időpont: @details.RaceDate.ToString("yyyy. MMMM dd. HH:mm")
+                    </p>
+                </div>
+
+                <div class="info-card extra-info">
+                    <p class="status">Státusz: @(details.RaceDate < DateTime.Now ? "Lezajlott" : "Közelgő")</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private RaceDto? details;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fontos: Itt a saját API-d pontos végpontját használd!
+            details = await Http.GetFromJsonAsync<RaceDto>($"api/raceschedules/{Id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Hiba az adatok lekérésekor: {ex.Message}");
+        }
+    }
+
+    private void GoBack()
+    {
+        NavManager.NavigateTo("/schedule");
+    }
+
+    // Ideiglenes DTO, ha a Library-ből nem húzná be rendesen
+    public class RaceDto
+    {
+        public int Id { get; set; }
+        public string RaceName { get; set; } = "";
+        public string TrackName { get; set; } = "";
+        public DateTime RaceDate { get; set; }
+        public string CountryCode { get; set; } = "";
+    }
+}

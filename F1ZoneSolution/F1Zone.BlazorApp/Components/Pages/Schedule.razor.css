@@ -1,0 +1,178 @@
+﻿body, .schedule-container {
+    background-color: #06131c !important;
+}
+
+/* Konténer igazítása a rajtrácshoz */
+.schedule-container {
+    max-width: 1200px; /* Szélesebbre vettem, hogy legyen helye az eltolásnak */
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 100px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    counter-reset: race-counter; /* Elindítjuk a számlálót a futamoknak */
+    background-color: #06131c !important;
+    background-image: radial-gradient(#112638 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+    width: 100%;
+}
+
+/* Alap kártya stílus */
+.race-card {
+    background-color: #0a1b29;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 65%; /* Nem tölti ki a teljes szélességet, hogy tudjon mozogni */
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+    /* --- RAJTRÁCS LOGIKA (Cikcak) --- */
+
+    /* Páratlan futamok (1, 3, 5...) - Bal oldalra tolt */
+    .race-card:nth-child(odd) {
+        align-self: flex-start;
+        border-right: 6px solid #fcd700 !important;
+    }
+
+    /* Páros futamok (2, 4, 6...) - Jobb oldalra tolt */
+    .race-card:nth-child(even) {
+        align-self: flex-end;
+        border-right: 6px solid #fcd700 !important;
+        /* Opcionális: a párosokat díszítheted másképp is, pl. bal oldali sávval */
+    }
+
+    /* Pozíció számok (P1, P2, P3...) a háttérben */
+    .race-card::before {
+        counter-increment: race-counter;
+        content: "P" counter(race-counter);
+        position: absolute;
+        left: -60px; /* A kártyán kívülre rakja */
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: rgba(252, 215, 0, 0.05); /* Nagyon halvány sárga */
+        font-style: italic;
+    }
+
+    /* Jobbra tolt kártyáknál a szám a jobb oldalra kerül */
+    .race-card:nth-child(even)::before {
+        left: auto;
+        right: -60px;
+    }
+
+    /* --- INTERAKCIÓK ÉS ÁLLAPOTOK --- */
+
+    .race-card:hover {
+        background-color: #1f1f27;
+        transform: scale(1.03); /* Most már nem csak jobbra ugrik, hanem "kiemelkedik" */
+        border-color: rgba(252, 215, 0, 0.5);
+        z-index: 10;
+    }
+
+.past-race {
+    background-color: rgba(10, 27, 41, 0.6) !important;
+    opacity: 0.7;
+}
+
+/* --- BELSŐ ELEMEK --- */
+
+.card-left {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.flag {
+    width: 60px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.race-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.race-date {
+    color: #ff1801;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.race-name {
+    margin: 5px 0;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.track-name {
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.status-badge {
+    background: #333;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    color: #aaa;
+    text-transform: uppercase;
+}
+
+/* Részletek gomb finomítása, hogy illeszkedjen a sárgához */
+.details-btn {
+    background: white;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .details-btn:hover {
+        background: #fcd700;
+    }
+
+/* Mobilos nézet: ott ne cikcakozzon, mert kevés a hely */
+@media (max-width: 768px) {
+    .race-card {
+        width: 100%;
+        align-self: center !important;
+    }
+
+        .race-card::before {
+            display: none; /* Mobilon zavaró lehet a szám */
+        }
+}
+
+.round-number {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: #fcd700; /* Sárga háttér */
+    color: #15151e; /* Sötét szöveg */
+    padding: 2px 10px;
+    font-weight: 900;
+    font-size: 0.7rem;
+    border-radius: 3px;
+    z-index: 5;
+    transform: skewX(-15deg); /* F1-es, dőlt stílus */
+}
+
+/* A páros (jobb oldali) kártyáknál tegyük a jobb szélre a számot */
+.race-card:nth-child(even) .round-number {
+    left: auto;
+    right: 20px;
+}

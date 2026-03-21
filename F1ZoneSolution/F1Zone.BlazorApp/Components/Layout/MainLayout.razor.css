@@ -1,23 +1,19 @@
+/* Ez az egész oldal alapja */
 .page {
+    background-color: #06131c !important;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #000000;
 }
 
+/* A fõ tartalomkezelõ (ahol a naptárad lakik) */
 main {
+    background-color: #06131c !important;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #000000;
 }
 
-
+/* A Blazor sablon oldalsávja vagy felsõ sávja mögötti rész */
 .top-row {
-    display: none !important;
-}
-
-.content {
-    padding: 0 !important;
-    margin: 0 !important;
+    background-color: #06131c !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

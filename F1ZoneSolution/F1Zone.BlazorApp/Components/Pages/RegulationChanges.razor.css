@@ -83,3 +83,20 @@
     margin: 0;
     padding-top: 80px;
 }
+
+.section-header {
+    display: flex;
+    flex-direction: column; /* Egymás alá rakja a címet és a szöveget */
+    align-items: center; /* Vízszintesen középre teszi őket */
+    text-align: center; /* A szövegtörzs is középre zárt lesz */
+    padding: 40px 20px; /* Adunk neki egy kis levegőt */
+    max-width: 800px; /* Ne legyen túl széles, hogy olvasható maradjon */
+    margin: 0 auto; /* Magát a containert is középre rakja a képernyőn */
+    margin-top: -20px; /* Negatív margóval tudod "feljebb rántani" */
+    padding-top: 0px !important; /* Kényszerítjük, hogy ne legyen belső távolság felül */
+}
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }

@@ -1,5 +1,7 @@
 ﻿@page "/regulation_changes"
-@rendermode InteractiveServer
+@using F1ZoneLibrary.Dto
+@using Microsoft.AspNetCore.Components.Web
+@rendermode RenderMode.InteractiveServer
 @inject HttpClient Http
 
 <div class="f1-body">
@@ -18,7 +20,7 @@
     <div class="timeline-container">
         <div class="section-header">
             <h2>Technikai Szabályváltozások</h2>
-            <p>A Forma-1 evolúciója az első szezontól napjainkig.</p>
+            <p>Az oldalon az első hivatalos szezontól a mai napig a nagyobb, jelentőségteljesebb szabályváltozásokat gyűjtöttük össze ide.</p>
         </div>
 
         @if (regulations == null)

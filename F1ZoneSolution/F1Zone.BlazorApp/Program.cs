@@ -2,7 +2,7 @@ using F1Zone.BlazorApp.Components;
 using F1Zone.BlazorApp.Services;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using F1ZoneLibrary.Dto; // Ellenõrizd, hogy a DTO-k itt vannak-e
+using F1ZoneLibrary.Dto; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-//LocalStorage (hogy el tudjuk menteni a tokent)
+//LocalStorage
 builder.Services.AddBlazoredLocalStorage();
 
 //Hitelesítési alapok
