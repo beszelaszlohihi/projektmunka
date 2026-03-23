@@ -63,9 +63,36 @@
     private int selectedCircuitId = 0;
 
     private string message = "";
+    private bool authChecked = false;
 
     protected override async Task OnInitializedAsync()
     {
+        try
+        {
+            drivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
+            circuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
+
+            var currentSettings = await Http.GetFromJsonAsync<HomepageSettings>("https://localhost:7120/api/homepagesettings/1");
+
+            if (currentSettings != null)
+            {
+                selectedCircuitId = currentSettings.FeaturedCircuitId;
+                selectedDriverId = currentSettings.FeaturedDriverId;
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Hiba történt az adatok betöltésekor: {ex.Message}";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender || authChecked)
+            return;
+
+        authChecked = true;
+
         var isAuthenticated = await localStorage.GetItemAsync<bool>("isAuthenticated");
 
         if (!isAuthenticated)
@@ -74,15 +101,7 @@
             return;
         }
 
-        try
-        {
-            drivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
-            circuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
-        }
-        catch (Exception ex)
-        {
-            message = $"Hiba történt az adatok betöltésekor: {ex.Message}";
-        }
+        StateHasChanged();
     }
 
     private void GoHome()
@@ -92,7 +111,8 @@
 
     private async Task Logout()
     {
-        await localStorage.ClearAsync();
+        await localStorage.RemoveItemAsync("isAuthenticated");
+        await localStorage.RemoveItemAsync("userName");
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
@@ -104,10 +124,38 @@
             return;
         }
 
-        await localStorage.SetItemAsync("selectedCircuitId", selectedCircuitId);
-        await localStorage.SetItemAsync("selectedDriverId", selectedDriverId);
+        var data = new HomepageSettings
+        {
+            Id = 1,
+            FeaturedCircuitId = selectedCircuitId,
+            FeaturedDriverId = selectedDriverId
+        };
 
-        message = "A főoldal adatai el lettek mentve.";
+        try
+        {
+            var response = await Http.PutAsJsonAsync("https://localhost:7120/api/homepagesettings/1", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                message = "Elmentve adatbázisba!";
+            }
+            else
+            {
+                var errorText = await response.Content.ReadAsStringAsync();
+                message = $"Mentési hiba: {(int)response.StatusCode} - {errorText}";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Kivétel mentés közben: {ex.Message}";
+        }
+    }
+
+    public class HomepageSettings
+    {
+        public int Id { get; set; }
+        public int FeaturedCircuitId { get; set; }
+        public int FeaturedDriverId { get; set; }
     }
 
     public class DriverDto

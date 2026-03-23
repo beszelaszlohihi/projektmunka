@@ -17,10 +17,12 @@
                 <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+
                 @if (isLoggedIn)
                 {
-                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkeztése</a></li>
+                    <li><a href="/admin/home" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
+
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -37,7 +39,7 @@
             <div class="nav-actions">
                 @if (isLoggedIn)
                 {
-                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin")'>ADMIN</button>
+                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
                     <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
                     <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
                 }
@@ -87,8 +89,6 @@
                         <div class="stat">
                             <div class="stat-value">@(selectedCircuit is not null ? $"{selectedCircuit.length_km} km" : "-")</div>
                             <div class="stat-label">Hossz</div>
-                        </div>
-                        <div class="stat">
                         </div>
                         <div class="stat">
                             <div class="stat-value">@(selectedCircuit?.turns.ToString() ?? "-")</div>
@@ -146,6 +146,11 @@
     private Circuits? selectedCircuit;
     private DriverDto? selectedDriver;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadHomepageSelectionsFromApi();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -158,22 +163,27 @@
             userName = await localStorage.GetItemAsync<string>("userName");
         }
 
-        await LoadHomepageSelections();
         StateHasChanged();
     }
 
-    private async Task LoadHomepageSelections()
+    private async Task LoadHomepageSelectionsFromApi()
     {
         try
         {
-            var selectedCircuitId = await localStorage.GetItemAsync<int>("selectedCircuitId");
-            var selectedDriverId = await localStorage.GetItemAsync<int>("selectedDriverId");
+            var settings = await Http.GetFromJsonAsync<HomepageSettings>("https://localhost:7120/api/homepagesettings/1");
+
+            if (settings == null)
+            {
+                selectedCircuit = null;
+                selectedDriver = null;
+                return;
+            }
 
             var allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
             var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
 
-            selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == selectedCircuitId);
-            selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == selectedDriverId);
+            selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == settings.FeaturedCircuitId);
+            selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == settings.FeaturedDriverId);
         }
         catch
         {
@@ -211,12 +221,20 @@
 
     private async Task Logout()
     {
-        await localStorage.ClearAsync();
+        await localStorage.RemoveItemAsync("isAuthenticated");
+        await localStorage.RemoveItemAsync("userName");
+
         isLoggedIn = false;
         userName = "";
-        selectedCircuit = null;
-        selectedDriver = null;
+
         NavManager.NavigateTo("/", forceLoad: true);
+    }
+
+    public class HomepageSettings
+    {
+        public int Id { get; set; }
+        public int FeaturedCircuitId { get; set; }
+        public int FeaturedDriverId { get; set; }
     }
 
     public class DriverDto
