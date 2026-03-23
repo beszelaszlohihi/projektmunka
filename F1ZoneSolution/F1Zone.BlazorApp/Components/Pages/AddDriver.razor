@@ -44,6 +44,21 @@
             </div>
 
             <div class="form-group">
+                <label>Csapatnév (pl. Audi, Cadillac, Ferrari):</label>
+                <input type="text" @bind="newDriver.teamname" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Csapatszín (Hex kód, pl. #FF0000):</label>
+                <input type="color" @bind="newDriver.teamcolor" class="form-control color-picker" />
+            </div>
+
+            <div class="form-group">
+                <label>Rajtszám:</label>
+                <input type="number" @bind="newDriver.racing_number" class="form-control" />
+            </div>
+
+            <div class="form-group">
                 <label>Életrajz / Rövid leírás</label>
                 <textarea @bind="newDriver.biography" rows="3" class="form-control"></textarea>
             </div>

@@ -7,6 +7,9 @@
 @inject IJSRuntime JSRuntime
 
 <div class="f1-body admin-container">
+    <button class="back-btn" @onclick='() => NavManager.NavigateTo("/")'>
+        <i class="bi bi-arrow-left"></i> VISSZA A FŐOLDALRA
+    </button>
     <div class="section-header">
         <h2>Adminisztrációs Panel</h2>
         <p>Pilóták statisztikáinak és adatainak kezelése</p>

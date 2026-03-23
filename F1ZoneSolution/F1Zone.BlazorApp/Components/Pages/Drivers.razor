@@ -1,5 +1,6 @@
 ﻿@page "/drivers"
 @inject NavigationManager NavManager
+@inject HttpClient Http
 
 <div class="drivers-body">
 
@@ -49,275 +50,101 @@
 
     <div class="container">
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#3671C6"></div>
-                <h2>Red Bull Racing</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/max-verstappen">
-                    <span class="driver-number-bg" style="color:#3671C6">1</span>
-                    <div class="driver-avatar" style="background:rgba(54,113,198,0.15);color:#3671C6">1</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Max Verstappen</div>
-                        <div class="driver-team">Red Bull Racing</div>
-                        <div class="driver-nationality">🇳🇱 HOLLAND</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/isack-hadjar">
-                    <span class="driver-number-bg" style="color:#3671C6">6</span>
-                    <div class="driver-avatar" style="background:rgba(54,113,198,0.15);color:#3671C6">6</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Isack Hadjar</div>
-                        <div class="driver-team">Red Bull Racing</div>
-                        <div class="driver-nationality">🇫🇷 FRANCIA</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+        @* <div class="drivers-container">
+            @if (drivers == null)
+            {
+                <p>Pilóták betöltése az adatbázisból...</p>
+            }
+            else if (!drivers.Any())
+            {
+                <p>Jelenleg nincs pilóta rögzítve az Alpine csapatnál.</p>
+            }
+            else
+            {
+                @foreach (var driver in drivers)
+                {
+                    <div class="driver-card">
+                        <div class="driver-info">
+                            <h2>@driver.driver_name</h2>
+                            <p class="nationality">Nemzetiség: @driver.nationality</p>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#FF8000"></div>
-                <h2>McLaren</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/lando-norris">
-                    <span class="driver-number-bg" style="color:#FF8000">4</span>
-                    <div class="driver-avatar" style="background:rgba(255,128,0,0.15);color:#FF8000">4</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Lando Norris</div>
-                        <div class="driver-team">McLaren</div>
-                        <div class="driver-nationality">🇬🇧 BRIT</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/oscar-piastri">
-                    <span class="driver-number-bg" style="color:#FF8000">81</span>
-                    <div class="driver-avatar" style="background:rgba(255,128,0,0.15);color:#FF8000">81</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Oscar Piastri</div>
-                        <div class="driver-team">McLaren</div>
-                        <div class="driver-nationality">🇦🇺 AUSZTRÁL</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span>Győzelmek</span>
+                                    <strong>@driver.wins</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <span>VB Címek</span>
+                                    <strong>@driver.championships</strong>
+                                </div>
+                            </div>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#E8002D"></div>
-                <h2>Ferrari</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/charles-leclerc">
-                    <span class="driver-number-bg" style="color:#E8002D">16</span>
-                    <div class="driver-avatar" style="background:rgba(232,0,45,0.15);color:#E8002D">16</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Charles Leclerc</div>
-                        <div class="driver-team">Ferrari</div>
-                        <div class="driver-nationality">🇲🇨 MONAKÓI</div>
+                            <p class="bio">@driver.biography</p>
+                        </div>
                     </div>
-                </a>
-                <a class="driver-card" href="/driver/lewis-hamilton">
-                    <span class="driver-number-bg" style="color:#E8002D">44</span>
-                    <div class="driver-avatar" style="background:rgba(232,0,45,0.15);color:#E8002D">44</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Lewis Hamilton</div>
-                        <div class="driver-team">Ferrari</div>
-                        <div class="driver-nationality">🇬🇧 BRIT</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                }
+            }
+        </div> *@
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#27F4D2"></div>
-                <h2>Mercedes</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/george-russell">
-                    <span class="driver-number-bg" style="color:#27F4D2">63</span>
-                    <div class="driver-avatar" style="background:rgba(39,244,210,0.15);color:#27F4D2">63</div>
-                    <div class="driver-info">
-                        <div class="driver-name">George Russell</div>
-                        <div class="driver-team">Mercedes</div>
-                        <div class="driver-nationality">🇬🇧 BRIT</div>
+        @if (groupedDrivers == null)
+        {
+            <p>Adatok betöltése...</p>
+        }
+        else
+        {
+            @foreach (var group in groupedDrivers)
+            {
+                <div class="team-section">
+                    <div class="team-header">
+                        @* 1. A csapat függőleges csíkja *@
+                        <div class="team-color-bar" style="background: @(group.FirstOrDefault()?.teamcolor ?? "#3671C6")"></div>
+                        <h2>@group.Key</h2>
                     </div>
-                </a>
-                <a class="driver-card" href="/driver/kimi-antonelli">
-                    <span class="driver-number-bg" style="color:#27F4D2">12</span>
-                    <div class="driver-avatar" style="background:rgba(39,244,210,0.15);color:#27F4D2">12</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Kimi Antonelli</div>
-                        <div class="driver-team">Mercedes</div>
-                        <div class="driver-nationality">🇮🇹 OLASZ</div>
-                    </div>
-                </a>
-            </div>
-        </div>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#229971"></div>
-                <h2>Aston Martin</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/fernando-alonso">
-                    <span class="driver-number-bg" style="color:#229971">14</span>
-                    <div class="driver-avatar" style="background:rgba(34,153,113,0.15);color:#229971">14</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Fernando Alonso</div>
-                        <div class="driver-team">Aston Martin</div>
-                        <div class="driver-nationality">🇪🇸 SPANYOL</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/lance-stroll">
-                    <span class="driver-number-bg" style="color:#229971">18</span>
-                    <div class="driver-avatar" style="background:rgba(34,153,113,0.15);color:#229971">18</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Lance Stroll</div>
-                        <div class="driver-team">Aston Martin</div>
-                        <div class="driver-nationality">🇨🇦 KANADAI</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                    <div class="drivers-grid">
+                        @foreach (var driver in group)
+                        {
+                           /* <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
+                                @* 2. Háttérben lévő nagy rajtszám *@
+                                <span class="driver-number-bg" style="color: @driver.teamcolor">@(driver.racing_number ?? 0)</span>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#0093CC"></div>
-                <h2>Alpine</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/pierre-gasly">
-                    <span class="driver-number-bg" style="color:#0093CC">10</span>
-                    <div class="driver-avatar" style="background:rgba(0,147,204,0.15);color:#0093CC">10</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Pierre Gasly</div>
-                        <div class="driver-team">Alpine</div>
-                        <div class="driver-nationality">🇫🇷 FRANCIA</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/franco-colapinto">
-                    <span class="driver-number-bg" style="color:#0093CC">43</span>
-                    <div class="driver-avatar" style="background:rgba(0,147,204,0.15);color:#0093CC">43</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Franco Colapinto</div>
-                        <div class="driver-team">Alpine</div>
-                        <div class="driver-nationality">🇦🇷 ARGENTIN</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                                @* 3. A körben lévő rajtszám és annak háttere *@
+                                <div class="driver-avatar" style="background: @(HexToRgba(driver.teamcolor, 0.15)); color: @driver.teamcolor">
+                                    @(driver.racing_number ?? 0)
+                                </div>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#B6BABD"></div>
-                <h2>Haas</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/esteban-ocon">
-                    <span class="driver-number-bg" style="color:#B6BABD">31</span>
-                    <div class="driver-avatar" style="background:rgba(182,186,189,0.15);color:#B6BABD">31</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Esteban Ocon</div>
-                        <div class="driver-team">Haas</div>
-                        <div class="driver-nationality">🇫🇷 FRANCIA</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/oliver-bearman">
-                    <span class="driver-number-bg" style="color:#B6BABD">87</span>
-                    <div class="driver-avatar" style="background:rgba(182,186,189,0.15);color:#B6BABD">87</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Oliver Bearman</div>
-                        <div class="driver-team">Haas</div>
-                        <div class="driver-nationality">🇬🇧 BRIT</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                                <div class="driver-info">
+                                    <div class="driver-name">@driver.driver_name</div>
+                                    <div class="driver-team">@driver.teamname</div>
+                                    <div class="driver-nationality">@driver.nationality?.ToUpper()</div>
+                                </div>
+                            </a>*/
+                            <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
+                                @* 2. Háttérben lévő nagy rajtszám - kicsit halványítva, hogy ne nyomja el a nevet *@
+                                <span class="driver-number-bg" style="color: @driver.teamcolor; opacity: 0.2;">
+                                    @(driver.racing_number ?? 0)
+                                </span>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#6692FF"></div>
-                <h2>Racing Bulls</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/liam-lawson">
-                    <span class="driver-number-bg" style="color:#6692FF">30</span>
-                    <div class="driver-avatar" style="background:rgba(102,146,255,0.15);color:#6692FF">30</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Liam Lawson</div>
-                        <div class="driver-team">Racing Bulls</div>
-                        <div class="driver-nationality">🇳🇿 ÚJ-ZÉLANDI</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/arvid-lindblad">
-                    <span class="driver-number-bg" style="color:#6692FF">36</span>
-                    <div class="driver-avatar" style="background:rgba(102,146,255,0.15);color:#6692FF">36</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Arvid Lindblad</div>
-                        <div class="driver-team">Racing Bulls</div>
-                        <div class="driver-nationality">🇬🇧 BRIT</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                                @* 3. A körben lévő rajtszám - Adjunk neki egy vékony keretet a csapatszínnel! *@
+                                <div class="driver-avatar"
+                                     style="background: @(HexToRgba(driver.teamcolor, 0.1));
+                            border: 1px solid @driver.teamcolor;
+                            color: @driver.teamcolor;
+                            box-shadow: 0 0 10px @(HexToRgba(driver.teamcolor, 0.3));">
+                                    @(driver.racing_number ?? 0)
+                                </div>
 
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#1868DB"></div>
-                <h2>Williams</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/carlos-sainz">
-                    <span class="driver-number-bg" style="color:#1868DB">55</span>
-                    <div class="driver-avatar" style="background:rgba(24,104,219,0.15);color:#1868DB">55</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Carlos Sainz</div>
-                        <div class="driver-team">Williams</div>
-                        <div class="driver-nationality">🇪🇸 SPANYOL</div>
+                                <div class="driver-info">
+                                    <div class="driver-name">@driver.driver_name</div>
+                                    <div class="driver-team">@driver.teamname</div>
+                                    <div class="driver-nationality">@driver.nationality?.ToUpper()</div>
+                                </div>
+                            </a>
+                        }
                     </div>
-                </a>
-                <a class="driver-card" href="/driver/alexander-albon">
-                    <span class="driver-number-bg" style="color:#1868DB">23</span>
-                    <div class="driver-avatar" style="background:rgba(24,104,219,0.15);color:#1868DB">23</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Alexander Albon</div>
-                        <div class="driver-team">Williams</div>
-                        <div class="driver-nationality">🇹🇭 THAI</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="team-section">
-            <div class="team-header">
-                <div class="team-color-bar" style="background:#52E252"></div>
-                <h2>Kick Sauber</h2>
-            </div>
-            <div class="drivers-grid">
-                <a class="driver-card" href="/driver/nico-hulkenberg">
-                    <span class="driver-number-bg" style="color:#52E252">27</span>
-                    <div class="driver-avatar" style="background:rgba(82,226,82,0.15);color:#52E252">27</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Nico Hülkenberg</div>
-                        <div class="driver-team">Kick Sauber</div>
-                        <div class="driver-nationality">🇩🇪 NÉMET</div>
-                    </div>
-                </a>
-                <a class="driver-card" href="/driver/gabriel-bortoleto">
-                    <span class="driver-number-bg" style="color:#52E252">5</span>
-                    <div class="driver-avatar" style="background:rgba(82,226,82,0.15);color:#52E252">5</div>
-                    <div class="driver-info">
-                        <div class="driver-name">Gabriel Bortoleto</div>
-                        <div class="driver-team">Kick Sauber</div>
-                        <div class="driver-nationality">🇧🇷 BRAZIL</div>
-                    </div>
-                </a>
-            </div>
-        </div>
+                </div>
+            }
+        }
 
     </div>
 
@@ -333,4 +160,34 @@
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
 
+    private IEnumerable<IGrouping<string, DriverDto>> groupedDrivers;
+    private List<F1ZoneLibrary.Dto.DriverDto> drivers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Az admin-list-et hívjuk, mert abban benne van a teamname és a bio is
+        var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("api/drivers/admin-list");
+        if (allDrivers != null)
+        {
+            // Csoportosítás csapat szerint
+            groupedDrivers = allDrivers.Where(d => d.teamname != null).GroupBy(d => d.teamname);
+        }
+    }
+
+    // Ez a függvény a #HEX színből csinál rgba(r,g,b, 0.15) formátumot
+    private string HexToRgba(string hex, double opacity)
+    {
+        if (string.IsNullOrEmpty(hex)) return $"rgba(255,255,255,{opacity})";
+        try
+        {
+            var r = int.Parse(hex.Substring(1, 2), System.Globalization.NumberStyles.HexNumber);
+            var g = int.Parse(hex.Substring(3, 2), System.Globalization.NumberStyles.HexNumber);
+            var b = int.Parse(hex.Substring(5, 2), System.Globalization.NumberStyles.HexNumber);
+            return $"rgba({r}, {g}, {b}, {opacity.ToString().Replace(",", ".")})";
+        }
+        catch
+        {
+            return $"rgba(255,255,255,{opacity})";
+        }
+    }
 }

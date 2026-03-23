@@ -17,10 +17,14 @@
                 <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-
+                @if (isLoggedIn)
+                {
+                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkeztése</a></li>
+                }
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
                         <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
                     }
                     else
@@ -33,6 +37,8 @@
             <div class="nav-actions">
                 @if (isLoggedIn)
                 {
+                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin")'>ADMIN</button>
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
                     <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
                 }
                 else

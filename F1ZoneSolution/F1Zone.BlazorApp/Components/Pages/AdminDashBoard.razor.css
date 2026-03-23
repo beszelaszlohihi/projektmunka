@@ -58,3 +58,20 @@
     align-items: center;
     margin-bottom: 20px;
 }
+
+.back-btn {
+    background: transparent;
+    color: #ffcc00; /* A sárga színed, ami a fejlécben is van */
+    border: 1px solid #ffcc00;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+    .back-btn:hover {
+        background: #ffcc00;
+        color: #000;
+    }
