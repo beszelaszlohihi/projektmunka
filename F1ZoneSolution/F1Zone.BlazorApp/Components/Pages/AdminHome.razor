@@ -1,0 +1,139 @@
+﻿@page "/admin/home"
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+
+<div class="admin-page">
+
+    <nav class="admin-navbar">
+        <div class="admin-navbar-left">
+            <h2>Admin Panel</h2>
+        </div>
+
+        <div class="admin-navbar-right">
+            <button class="nav-btn" @onclick="GoHome">Főoldal</button>
+            <button class="nav-btn logout-btn" @onclick="Logout">Kijelentkezés</button>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <h1>Homepage beállítások</h1>
+        <p class="admin-subtitle">
+            Itt tudod kiválasztani, hogy melyik pálya és melyik versenyző jelenjen meg a főoldalon.
+        </p>
+
+        <div class="admin-card">
+            <h2>Legutóbbi futam</h2>
+            <label for="trackSelect">Válassz pályát:</label>
+            <select id="trackSelect" @bind="selectedCircuitId">
+                <option value="0">-- Válassz pályát --</option>
+                @foreach (var circuit in circuits)
+                {
+                    <option value="@circuit.circuit_id">@circuit.circuit_name</option>
+                }
+            </select>
+        </div>
+
+        <div class="admin-card">
+            <h2>Driver of the Day</h2>
+            <label for="driverSelect">Válassz versenyzőt:</label>
+            <select id="driverSelect" @bind="selectedDriverId">
+                <option value="0">-- Válassz versenyzőt --</option>
+                @foreach (var driver in drivers)
+                {
+                    <option value="@driver.driver_id">@driver.driver_name</option>
+                }
+            </select>
+        </div>
+
+        <button class="save-btn" @onclick="SaveHomepageSettings">Mentés</button>
+
+        @if (!string.IsNullOrWhiteSpace(message))
+        {
+            <p class="message">@message</p>
+        }
+    </div>
+</div>
+
+@code {
+    private List<DriverDto> drivers = new();
+    private List<Circuits> circuits = new();
+
+    private int selectedDriverId = 0;
+    private int selectedCircuitId = 0;
+
+    private string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var isAuthenticated = await localStorage.GetItemAsync<bool>("isAuthenticated");
+
+        if (!isAuthenticated)
+        {
+            NavManager.NavigateTo("/");
+            return;
+        }
+
+        try
+        {
+            drivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
+            circuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
+        }
+        catch (Exception ex)
+        {
+            message = $"Hiba történt az adatok betöltésekor: {ex.Message}";
+        }
+    }
+
+    private void GoHome()
+    {
+        NavManager.NavigateTo("/");
+    }
+
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync();
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+
+    private async Task SaveHomepageSettings()
+    {
+        if (selectedCircuitId == 0 || selectedDriverId == 0)
+        {
+            message = "Válassz ki egy pályát és egy versenyzőt.";
+            return;
+        }
+
+        await localStorage.SetItemAsync("selectedCircuitId", selectedCircuitId);
+        await localStorage.SetItemAsync("selectedDriverId", selectedDriverId);
+
+        message = "A főoldal adatai el lettek mentve.";
+    }
+
+    public class DriverDto
+    {
+        public int driver_id { get; set; }
+        public string driver_name { get; set; } = "";
+        public int wins { get; set; }
+        public int championships { get; set; }
+        public decimal points { get; set; }
+        public string nationality { get; set; } = "";
+        public int debut_year { get; set; }
+        public int podiums { get; set; }
+        public int fastest_laps { get; set; }
+        public string biography { get; set; } = "";
+        public string TeamName { get; set; } = "";
+    }
+
+    public class Circuits
+    {
+        public int circuit_id { get; set; }
+        public string circuit_name { get; set; } = "";
+        public string location { get; set; } = "";
+        public string country { get; set; } = "";
+        public decimal length_km { get; set; }
+        public int turns { get; set; }
+        public string? ImageUrl { get; set; }
+        public string circuit_description { get; set; } = "";
+    }
+}

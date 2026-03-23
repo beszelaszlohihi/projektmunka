@@ -335,3 +335,8 @@ footer {
         color: #e10600; /* Piros hover */
         border-color: #e10600;
     }
+
+
+.disabled-card { /* csak akk lehet ranyomni ha bevan jelentkezve */
+    pointer-events: none;
+}
