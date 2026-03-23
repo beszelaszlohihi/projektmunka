@@ -52,7 +52,9 @@ namespace F1Zone.API.Controllers
                 podiums = d.podiums,
                 fastest_laps = d.fastest_laps,
                 biography = d.biography,
-                TeamName = "F1 Team"
+                teamname = d.teamname,
+                teamcolor = d.teamcolor,
+                racing_number = d.racing_number
             });
 
             return Ok(result);
@@ -86,6 +88,30 @@ namespace F1Zone.API.Controllers
                 Console.WriteLine($"HIBA: {ex.Message}");
                 return BadRequest("Hiba a mentés során.");
             }
+        }
+
+
+        [HttpGet("team/{teamName}")]
+        public async Task<ActionResult<IEnumerable<DriverDto>>> GetDriversByTeam(string teamName)
+        {
+            var allDrivers = await _service.GetAll();
+
+            // Szűrünk azokra, akiknek a TeamName megegyezik (kis-nagybetű nem számít)
+            var teamDrivers = allDrivers
+                .Where(d => d.teamname != null && d.teamname.Equals(teamName, StringComparison.OrdinalIgnoreCase))
+                .Select(d => new DriverDto
+                {
+                    driver_id = d.driver_id,
+                    driver_name = d.driver_name,
+                    wins = d.wins,
+                    championships = d.championships,
+                    points = d.points,
+                    nationality = d.nationality,
+                    biography = d.biography,
+                    teamname = d.teamname
+                });
+
+            return Ok(teamDrivers);
         }
 
     }
