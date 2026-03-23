@@ -21,6 +21,9 @@ namespace F1ZoneLibrary.DATA
             
         }
 
+        public DbSet<HomepageSettings> HomepageSettings { get; set; }
+
+
         public DbSet<Circuits> Circuits { get; set; }
         public DbSet<Driver_contracts> Driver_contracts { get; set; }
         public DbSet<Drivers> Drivers { get; set; }
