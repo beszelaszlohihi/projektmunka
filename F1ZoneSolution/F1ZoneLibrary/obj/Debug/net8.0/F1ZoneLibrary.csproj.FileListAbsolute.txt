@@ -1,0 +1,12 @@
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\bin\Debug\net8.0\F1ZoneLibrary.deps.json
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\bin\Debug\net8.0\F1ZoneLibrary.dll
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\bin\Debug\net8.0\F1ZoneLibrary.pdb
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.csproj.AssemblyReference.cache
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.AssemblyInfoInputs.cache
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.AssemblyInfo.cs
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.csproj.CoreCompileInputs.cache
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.dll
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\refint\F1ZoneLibrary.dll
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\F1ZoneLibrary.pdb
+C:\Users\RYZEN\Downloads\projektmunka-main (1)\projektmunka-main\F1ZoneSolution\F1ZoneLibrary\obj\Debug\net8.0\ref\F1ZoneLibrary.dll

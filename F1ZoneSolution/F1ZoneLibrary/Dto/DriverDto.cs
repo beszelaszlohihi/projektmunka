@@ -13,17 +13,19 @@ namespace F1ZoneLibrary.Dto
         public int driver_id { get; set; }
         [JsonPropertyName("driver_name")]
         public string driver_name { get; set; } = "";
-        public string nationality { get; set; } = "";
-        public int debut_year { get; set; }
-        public string biography { get; set; } = "";
-        public string TeamName { get; set; }
+        public string? nationality { get; set; } = "";
+        public int? debut_year { get; set; }
+        public string? biography { get; set; } = "";
+        public string? teamname { get; set; }
         [JsonPropertyName("championships")]
-        public int championships { get; set; }
+        public int? championships { get; set; }
         [JsonPropertyName("wins")]
-        public int wins { get; set; }
-        public int podiums { get; set; }
-        public int fastest_laps { get; set; }
+        public int? wins { get; set; }
+        public int? podiums { get; set; }
+        public int? fastest_laps { get; set; }
         [JsonPropertyName("points")]
-        public decimal points { get; set; }
+        public decimal? points { get; set; }
+        public string? teamcolor { get; set; }
+        public int? racing_number { get; set; }
     }
 }
