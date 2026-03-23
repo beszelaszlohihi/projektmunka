@@ -1,0 +1,63 @@
+﻿@page "/register"
+@using F1ZoneLibrary.Dto
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<div class="f1-body login-page">
+    <div class="login-card">
+        <div class="login-header">
+            <a href="/" class="logo">F1<span>ZONE</span></a>
+            <h2>Csatlakozz a rácshoz</h2>
+            <p>Hozd létre a profilod és kövesd az F1 világát!</p>
+        </div>
+
+        <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
+            <div class="form-group">
+                <label>Felhasználónév</label>
+                <input type="text" @bind-value="registerModel.Username" placeholder="Schumi91" required />
+            </div>
+
+            <div class="form-group">
+                <label>Email cím</label>
+                <input type="email" @bind-value="registerModel.Email" placeholder="pelda@email.com" required />
+            </div>
+
+            <div class="form-group">
+                <label>Jelszó</label>
+                <input type="password" @bind-value="registerModel.Password" placeholder="••••••••" required />
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="error-msg">@errorMessage</div>
+            }
+
+            <button type="submit" class="hero-btn">REGISZTRÁCIÓ</button>
+        </EditForm>
+
+        <div class="login-footer">
+            <p>Van már fiókod? <a href="/login">Bejelentkezés</a></p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RegisterDto registerModel = new RegisterDto();
+    private string errorMessage;
+
+    private async Task HandleRegister()
+    {
+        errorMessage = null;
+        var response = await Http.PostAsJsonAsync("api/auth/register", registerModel);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // Sikeres regisztráció után küldjük át a Loginra
+            NavManager.NavigateTo("/login");
+        }
+        else
+        {
+            errorMessage = "A regisztráció nem sikerült. Lehet, hogy már létezik ez az email?";
+        }
+    }
+}

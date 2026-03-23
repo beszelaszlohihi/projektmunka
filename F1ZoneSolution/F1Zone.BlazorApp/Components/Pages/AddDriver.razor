@@ -1,0 +1,86 @@
+﻿@page "/admin/add-driver"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<div class="f1-body login-page">
+    <div class="login-card admin-card">
+        <h3>Új pilóta felvétele</h3>
+
+        <EditForm Model="@newDriver" OnValidSubmit="SaveDriver">
+            <div class="form-group">
+                <label>Név</label>
+                <input type="text" @bind-value="newDriver.driver_name" required />
+            </div>
+            <div class="form-group">
+                <label>Győzelmek</label>
+                <input type="number" @bind-value="newDriver.wins" />
+            </div>
+            <div class="form-group">
+                <label>VB címek</label>
+                <input type="number" @bind-value="newDriver.championships" />
+            </div>
+            <div class="form-group">
+                <label>Pontszám</label>
+                <input type="number" step="0.5" @bind-value="newDriver.points" />
+            </div>
+            <div class="form-group">
+                <label>Nemzetiség (pl. HUN, GER)</label>
+                <input type="text" @bind-value="newDriver.nationality" />
+            </div>
+
+            <div class="form-group">
+                <label>Bemutatkozás éve</label>
+                <input type="number" @bind-value="newDriver.debut_year" />
+            </div>
+
+            <div class="form-group">
+                <label>Dobogós helyezések</label>
+                <input type="number" @bind-value="newDriver.podiums" />
+            </div>
+
+            <div class="form-group">
+                <label>Leggyorsabb körök</label>
+                <input type="number" @bind-value="newDriver.fastest_laps" />
+            </div>
+
+            <div class="form-group">
+                <label>Életrajz / Rövid leírás</label>
+                <textarea @bind="newDriver.biography" rows="3" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="hero-btn">PILÓTA MENTÉSE</button>
+            <button type="button" class="logout-btn" @onclick='() => NavManager.NavigateTo("/admin")'>MÉGSE</button>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <p class="status-msg">@statusMessage</p>
+        }
+    </div>
+</div>
+
+@code {
+    // Használd a TELJES nevet, hogy ne legyen keveredés:
+    private F1ZoneLibrary.MODEL.Drivers newDriver = new F1ZoneLibrary.MODEL.Drivers();
+    private string statusMessage = "";
+
+    private async Task SaveDriver()
+    {
+
+        // Az API GenericController-je Drivers objektumot vár
+        var response = await Http.PostAsJsonAsync("api/drivers", newDriver);
+        statusMessage = "Mentes folyamatban";
+
+        if (response.IsSuccessStatusCode)
+        {
+            statusMessage = "✅ Sikeres mentés!";
+            StateHasChanged();
+            await Task.Delay(1500);
+            NavManager.NavigateTo("/admin");
+        }
+        else
+        {
+            statusMessage = "❌ Hiba történt a mentéskor!";
+        }
+    }
+}

@@ -22,14 +22,14 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
 
 
-                <li class="mobile-only">
+                <li class="mobile-only" @onclick='() => NavManager.NavigateTo("/login")'>
                     <button class="login-btn">BEJELENTKEZÉS</button>
                 </li>
             </ul>
 
 
             <div class="nav-actions">
-                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+                <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)

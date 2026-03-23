@@ -306,3 +306,32 @@ footer {
     text-align: center;
     color: #8899a6;
 }
+
+
+/*felhasznalo neve*/
+.user-welcome {
+    color: #fafafa;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+    .user-welcome strong {
+        color: #fcd700; /* Sárga név */
+        text-transform: uppercase;
+    }
+
+.logout-btn {
+    background: transparent;
+    color: #8899a6;
+    border: 1px solid #1a2a35;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s;
+}
+
+    .logout-btn:hover {
+        color: #e10600; /* Piros hover */
+        border-color: #e10600;
+    }

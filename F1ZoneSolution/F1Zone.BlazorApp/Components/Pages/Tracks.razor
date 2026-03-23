@@ -1,6 +1,7 @@
 ﻿@page "/tracks"
 @rendermode InteractiveServer
 @inject HttpClient Http
+@inject NavigationManager NavManager
 
 <div class="f1-body">
     <nav class="navbar">
@@ -19,13 +20,13 @@
 
 
                 <li class="mobile-only">
-                    <button class="login-btn">BEJELENTKEZÉS</button>
+                    <button class="login-btn" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
                 </li>
             </ul>
 
 
             <div class="nav-actions">
-                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+                <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)

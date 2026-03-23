@@ -24,8 +24,8 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/Login.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
+[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/AddDriver.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZGREcml2ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Routes.razor]
@@ -44,6 +44,10 @@ build_metadata.AdditionalFiles.CssScope = b-x2qujij793
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-q0r6906h7t
 
+[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/AdminDashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xBZG1pbkRhc2hib2FyZC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-4cucxmze3g
+
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/DriverDetail.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEcml2ZXJEZXRhaWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-heoz45zx1j
@@ -52,9 +56,17 @@ build_metadata.AdditionalFiles.CssScope = b-heoz45zx1j
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEcml2ZXJzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-zurxuxha5o
 
+[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/EditDriver.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFZGl0RHJpdmVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-wmqmz7wsm5
+
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/F1.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xGMS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-kwefrrru9s
+
+[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-7s9lhjvecc
 
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/News.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOZXdzLnJhem9y
@@ -63,6 +75,10 @@ build_metadata.AdditionalFiles.CssScope = b-0hq5fl6mt5
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/RaceDetails.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSYWNlRGV0YWlscy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-yrqeg1z351
+
+[C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/Register.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWdpc3Rlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-brswtk7aio
 
 [C:/ev vegi projekt/projektmunka-main/F1ZoneSolution/F1Zone.BlazorApp/Components/Pages/RegulationChanges.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWd1bGF0aW9uQ2hhbmdlcy5yYXpvcg==

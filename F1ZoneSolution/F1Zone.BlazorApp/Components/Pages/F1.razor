@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 
 <div class="f1-body">
@@ -18,13 +20,29 @@
                 
 
                 <li class="mobile-only">
-                    <button class="login-btn">BEJELENTKEZÉS</button>
+                    @if (isLoggedIn)
+                    {
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                        <button class="logout-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                    }
+                    else
+                    {
+                        <button class="login-btn" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                    }
                 </li>
             </ul>
            
 
             <div class="nav-actions">
-                <button class="login-btn desktop-only">BEJELENTKEZÉS</button>
+                @if (isLoggedIn)
+                {
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="logout-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                }
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
@@ -33,7 +51,6 @@
                     }
                     else
                     {
-
                         <span>&#9776;</span>
                     }
                 </button>
@@ -120,8 +137,32 @@
 
 @code {
     private bool isMenuOpen = false;
+    private bool isLoggedIn = false;
+    private string userName = "";
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Csak az első betöltésnél nézzük meg, később nem kell
+        if (firstRender)
+        {
+            isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+            if (isLoggedIn)
+            {
+                userName = await localStorage.GetItemAsync<string>("userName");
+                // Mivel ez a renderelés után történik, szólnunk kell a Blazornak,
+                // hogy frissítse a felületet (rajzolja ki a nevet)
+                StateHasChanged();
+            }
+        }
+    }
+
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync(); // Töröljük a mentéseket
+        NavManager.NavigateTo("/", forceLoad: true); // Újratöltjük az oldalt
+    }
 
 }
