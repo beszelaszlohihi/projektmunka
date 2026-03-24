@@ -20,7 +20,7 @@
 
                 @if (isLoggedIn && userRole == "Admin")
                 {
-                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                    <li><a href="/admin/home" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
                 <li class="mobile-only">
@@ -39,7 +39,6 @@
             <div class="nav-actions">
                 @if (isLoggedIn)
                 {
-
                     @if (userRole == "Admin")
                     {
                         <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
@@ -72,15 +71,47 @@
         <a href="/tracks" class="hero-btn">Pályák felfedezése</a>
     </section>
 
+    @if (nextRace != null)
+    {
+        <section class="countdown-section">
+            <div class="countdown-container">
+                <div class="countdown-header">
+                    <h2>Következő futam</h2>
+                    <p>@nextRace.RaceName • @nextRace.TrackName</p>
+                    <span>@nextRace.RaceDate.ToString("yyyy.MM.dd HH:mm")</span>
+                </div>
+
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span>@timeLeft.Days</span>
+                        <small>Nap</small>
+                    </div>
+                    <div class="countdown-item">
+                        <span>@timeLeft.Hours</span>
+                        <small>Óra</small>
+                    </div>
+                    <div class="countdown-item">
+                        <span>@timeLeft.Minutes</span>
+                        <small>Perc</small>
+                    </div>
+                    <div class="countdown-item">
+                        <span>@timeLeft.Seconds</span>
+                        <small>Mp</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
     <section class="tracks-section">
         <div class="section-header">
             <h2>Legutóbbi futam</h2>
         </div>
 
         <div class="tracks-grid">
-            <article class="track-card @(isLoggedIn ? "" : "disabled-card")"
+            <article class="track-card @(isLoggedIn && userRole == "Admin" ? "" : "disabled-card")"
                      @onclick="NavigateToAdmin"
-                     style="cursor:@(isLoggedIn ? "pointer" : "not-allowed");">
+                     style="cursor:@(isLoggedIn && userRole == "Admin" ? "pointer" : "not-allowed");">
                 <div class="track-image">
                     <img src="@(selectedCircuit?.ImageUrl ?? "https://via.placeholder.com/600x350?text=Nincs+kep")"
                          alt="Selected Circuit">
@@ -108,12 +139,9 @@
         </div>
 
         <div class="tracks-grid">
-            <article class="track-card @(isLoggedIn ? "" : "disabled-card")"
+            <article class="track-card @(isLoggedIn && userRole == "Admin" ? "" : "disabled-card")"
                      @onclick="NavigateToAdmin"
-                     style="cursor:@(isLoggedIn ? "pointer" : "not-allowed");">
-                <div class="track-image">
-                    <img src="https://via.placeholder.com/600x350?text=Driver+of+the+Day" alt="Selected Driver">
-                </div>
+                     style="cursor:@(isLoggedIn && userRole == "Admin" ? "pointer" : "not-allowed");">
                 <div class="track-content">
                     <div class="track-country">@(selectedDriver?.nationality ?? "Nincs kiválasztva")</div>
                     <h3 class="track-name">@(selectedDriver?.driver_name ?? "Nincs kiválasztott versenyző")</h3>
@@ -151,9 +179,14 @@
     private Circuits? selectedCircuit;
     private DriverDto? selectedDriver;
 
+    private RaceSchedule? nextRace;
+    private TimeSpan timeLeft;
+    private System.Timers.Timer? countdownTimer;
+
     protected override async Task OnInitializedAsync()
     {
         await LoadHomepageSelectionsFromApi();
+        await LoadNextRaceAsync();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -166,32 +199,10 @@
         if (isLoggedIn)
         {
             userName = await localStorage.GetItemAsync<string>("userName");
-            // BEOLVASSUK A SZEREPKÖRT IS:
             userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
         }
 
-        await LoadHomepageSelections();
         StateHasChanged();
-    }
-
-    private async Task LoadHomepageSelections()
-    {
-        try
-        {
-            var selectedCircuitId = await localStorage.GetItemAsync<int>("selectedCircuitId");
-            var selectedDriverId = await localStorage.GetItemAsync<int>("selectedDriverId");
-
-            var allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
-            var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
-
-            selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == selectedCircuitId);
-            selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == selectedDriverId);
-        }
-        catch
-        {
-            selectedCircuit = null;
-            selectedDriver = null;
-        }
     }
 
     private async Task LoadHomepageSelectionsFromApi()
@@ -209,7 +220,7 @@
 
             var allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
             var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
-
+                
             selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == settings.FeaturedCircuitId);
             selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == settings.FeaturedDriverId);
         }
@@ -220,11 +231,51 @@
         }
     }
 
+    private async Task LoadNextRaceAsync()
+    {
+        try
+        {
+            nextRace = await Http.GetFromJsonAsync<RaceSchedule>("https://localhost:7120/api/raceschedules/next-race");
+
+            if (nextRace != null)
+            {
+                UpdateCountdown();
+
+                countdownTimer = new System.Timers.Timer(1000);
+                countdownTimer.Elapsed += async (_, _) =>
+                {
+                    UpdateCountdown();
+                    await InvokeAsync(StateHasChanged);
+                };
+                countdownTimer.Start();
+            }
+        }
+        catch
+        {
+            nextRace = null;
+        }
+    }
+
+    private void UpdateCountdown()
+    {
+        if (nextRace == null)
+            return;
+
+        timeLeft = nextRace.RaceDate - DateTime.Now;
+
+        if (timeLeft.TotalSeconds <= 0)
+        {
+            timeLeft = TimeSpan.Zero;
+            countdownTimer?.Stop();
+        }
+    }
+
     private async Task NavigateToAdmin()
     {
         var isAuthenticated = await localStorage.GetItemAsync<bool>("isAuthenticated");
+        var role = await localStorage.GetItemAsync<string>("userRole");
 
-        if (!isAuthenticated)
+        if (!isAuthenticated || role != "Admin")
         {
             return;
         }
@@ -249,12 +300,14 @@
 
     private async Task Logout()
     {
-        await localStorage.ClearAsync();
+        await localStorage.RemoveItemAsync("isAuthenticated");
+        await localStorage.RemoveItemAsync("userName");
+        await localStorage.RemoveItemAsync("userRole");
+
         isLoggedIn = false;
         userName = "";
         userRole = "";
-        selectedCircuit = null;
-        selectedDriver = null;
+
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
@@ -290,5 +343,14 @@
         public int turns { get; set; }
         public string? ImageUrl { get; set; }
         public string circuit_description { get; set; } = "";
+    }
+
+    public class RaceSchedule
+    {
+        public int Id { get; set; }
+        public string RaceName { get; set; } = "";
+        public string TrackName { get; set; } = "";
+        public DateTime RaceDate { get; set; }
+        public string CountryCode { get; set; } = "";
     }
 }

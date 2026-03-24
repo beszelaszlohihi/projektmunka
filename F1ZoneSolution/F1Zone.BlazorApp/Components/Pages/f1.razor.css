@@ -340,3 +340,111 @@ footer {
 .disabled-card { /* csak akk lehet ranyomni ha bevan jelentkezve */
     pointer-events: none;
 }
+
+
+/* --- KÖVETKEZŐ FUTAM COUNTDOWN --- */
+.countdown-section {
+    padding: 2rem 2rem 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.countdown-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #0b2230 0%, #081a24 100%);
+    border: 1px solid #1a2a35;
+    border-left: 4px solid #fcd700;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.countdown-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+    .countdown-header h2 {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fcd700;
+        margin-bottom: 0.5rem;
+    }
+
+    .countdown-header p {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.4rem;
+    }
+
+    .countdown-header span {
+        font-size: 0.95rem;
+        color: #8899a6;
+    }
+
+.countdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.countdown-item {
+    background: #06131c;
+    border: 1px solid #1a2a35;
+    border-radius: 10px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+    .countdown-item:hover {
+        transform: translateY(-4px);
+        border-color: #fcd700;
+    }
+
+    .countdown-item span {
+        display: block;
+        font-size: 2rem;
+        font-weight: 900;
+        color: #fcd700;
+        line-height: 1.1;
+        margin-bottom: 0.4rem;
+    }
+
+    .countdown-item small {
+        display: block;
+        font-size: 0.8rem;
+        color: #8899a6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+/* Mobil */
+@media (max-width: 768px) {
+    .countdown-section {
+        padding: 1.5rem 1rem 0.5rem;
+    }
+
+    .countdown-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .countdown-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .countdown-header p {
+        font-size: 1rem;
+    }
+
+    .countdown-grid {
+        grid-template-columns: repeat(2, minmax(100px, 1fr));
+    }
+
+    .countdown-item span {
+        font-size: 1.6rem;
+    }
+}
+
