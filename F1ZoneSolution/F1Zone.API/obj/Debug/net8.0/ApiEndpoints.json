@@ -1108,6 +1108,26 @@
     ]
   },
   {
+    "ContainingType": "F1Zone.API.Controllers.RaceSchedulesController",
+    "Method": "GetNextRace",
+    "RelativePath": "api/RaceSchedules/next-race",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "F1ZoneLibrary.MODEL.RaceSchedules",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "F1Zone.API.Controllers.GenericController\u00601[[F1ZoneLibrary.MODEL.Seasons, F1ZoneLibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
     "Method": "GetAll",
     "RelativePath": "api/Seasons",

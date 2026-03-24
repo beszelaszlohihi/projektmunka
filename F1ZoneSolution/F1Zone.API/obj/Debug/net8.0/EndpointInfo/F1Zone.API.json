@@ -1768,6 +1768,35 @@
         }
       }
     },
+    "/api/RaceSchedules/next-race": {
+      "get": {
+        "tags": [
+          "RaceSchedules"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaceSchedules"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaceSchedules"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaceSchedules"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/RaceSchedules": {
       "get": {
         "tags": [
