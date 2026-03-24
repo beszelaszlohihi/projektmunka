@@ -12,5 +12,7 @@ namespace F1ZoneLibrary.Dto
         public string Username { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        public string Token { get; set; }
+        public bool IsAdmin { get; set; } // Ez mondja meg, hogy admin-e
     }
 }
