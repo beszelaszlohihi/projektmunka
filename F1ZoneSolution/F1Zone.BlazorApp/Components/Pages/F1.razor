@@ -18,9 +18,9 @@
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
 
-                @if (isLoggedIn)
+                @if (isLoggedIn && userRole == "Admin")
                 {
-                    <li><a href="/admin/home" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
                 <li class="mobile-only">
@@ -39,7 +39,11 @@
             <div class="nav-actions">
                 @if (isLoggedIn)
                 {
-                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+
+                    @if (userRole == "Admin")
+                    {
+                        <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                    }
                     <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
                     <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
                 }
@@ -142,6 +146,7 @@
     private bool isMenuOpen = false;
     private bool isLoggedIn = false;
     private string userName = "";
+    private string userRole = "";
 
     private Circuits? selectedCircuit;
     private DriverDto? selectedDriver;
@@ -161,9 +166,32 @@
         if (isLoggedIn)
         {
             userName = await localStorage.GetItemAsync<string>("userName");
+            // BEOLVASSUK A SZEREPKÖRT IS:
+            userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
         }
 
+        await LoadHomepageSelections();
         StateHasChanged();
+    }
+
+    private async Task LoadHomepageSelections()
+    {
+        try
+        {
+            var selectedCircuitId = await localStorage.GetItemAsync<int>("selectedCircuitId");
+            var selectedDriverId = await localStorage.GetItemAsync<int>("selectedDriverId");
+
+            var allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
+            var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
+
+            selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == selectedCircuitId);
+            selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == selectedDriverId);
+        }
+        catch
+        {
+            selectedCircuit = null;
+            selectedDriver = null;
+        }
     }
 
     private async Task LoadHomepageSelectionsFromApi()
@@ -221,12 +249,12 @@
 
     private async Task Logout()
     {
-        await localStorage.RemoveItemAsync("isAuthenticated");
-        await localStorage.RemoveItemAsync("userName");
-
+        await localStorage.ClearAsync();
         isLoggedIn = false;
         userName = "";
-
+        userRole = "";
+        selectedCircuit = null;
+        selectedDriver = null;
         NavManager.NavigateTo("/", forceLoad: true);
     }
 

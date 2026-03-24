@@ -48,16 +48,24 @@
 
         if (response.IsSuccessStatusCode)
         {
-            // Sikeres belépés után irány a főoldal
-            var user = await response.Content.ReadFromJsonAsync<UserDto>(); // Feltételezve, hogy az API visszaküldi a user adatait
-            await localStorage.SetItemAsync("userName", user.Username);
-            await localStorage.SetItemAsync("userRole", user.Role);
-            await localStorage.SetItemAsync("isAuthenticated", true);
-            NavManager.NavigateTo("/", forceLoad: true); // forceLoad: true, hogy a fejléc frissüljön
+            // Kiolvassuk a választ a UserDto-ba
+            var result = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            if (result != null)
+            {
+                await localStorage.SetItemAsync("token", result.Token);
+                await localStorage.SetItemAsync("userName", result.Username);
+                await localStorage.SetItemAsync("isAuthenticated", true);
+
+                // Itt a lényeg: Az adatbázisból jövő Role szöveget ("Admin" vagy "User") mentjük el!
+                await localStorage.SetItemAsync("userRole", result.Role);
+
+                NavManager.NavigateTo("/", forceLoad: true);
+            }
         }
         else
         {
-            errorMessage = "Hibás email vagy jelszó! Próbáld újra.";
+            errorMessage = "Hibás email vagy jelszó!";
         }
     }
 }

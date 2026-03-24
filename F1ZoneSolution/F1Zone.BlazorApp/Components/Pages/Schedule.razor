@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @rendermode InteractiveServer
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <nav class="navbar">
     <div class="nav-container">
@@ -18,15 +19,39 @@
             <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
             <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
 
+            @if (isLoggedIn && userRole == "Admin")
+            {
+                <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+            }
 
             <li class="mobile-only">
-                <button class="login-btn" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                @if (isLoggedIn)
+                {
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                }
             </li>
         </ul>
 
-
         <div class="nav-actions">
-            <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+            @if (isLoggedIn)
+            {
+
+                @if (userRole == "Admin")
+                {
+                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                }
+                <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+            }
+            else
+            {
+                <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+            }
 
             <button class="burger-btn" @onclick="ToggleMenu">
                 @if (isMenuOpen)
@@ -35,7 +60,6 @@
                 }
                 else
                 {
-
                     <span>&#9776;</span>
                 }
             </button>
@@ -75,12 +99,41 @@
 @code {
     private List<RaceDto> races = new();
 
+    private bool isMenuOpen = false;
+
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
+
+    private bool isLoggedIn = false;
+    private string userName = "";
+    private string userRole = "";
+
+    private void GoToLogin() => NavManager.NavigateTo("/login");
+
     protected override async Task OnInitializedAsync()
     {
         // Ha kész az API-d, akkor majd ez kell:
         races = await Http.GetFromJsonAsync<List<RaceDto>>("api/raceschedules");
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Kiolvassuk, hogy be van-e jelentkezve
+            isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+
+            if (isLoggedIn)
+            {
+                // Ha igen, beletesszük a dobozokba a nevet és a rangot
+                userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
+                userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
+            }
+
+            // Megkérjük a Blazort, hogy rajzolja újra az oldalt a friss adatokkal
+            StateHasChanged();
+        }
+    }
     
 
     private void NavigateToDetails(int raceId)
@@ -88,10 +141,15 @@
         NavManager.NavigateTo($"/schedule/details/{raceId}");
     }
 
-    private bool isMenuOpen = false;
-
-    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-    private void CloseMenu() => isMenuOpen = false;
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync();
+        isLoggedIn = false;
+        userName = "";
+        userRole = "";
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+  
 
     // Segéd osztály, ha még nincs a DTO könyvtáradban
     public class RaceDto

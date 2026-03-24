@@ -4,6 +4,7 @@
 @rendermode InteractiveServer
 @using System.Text.Json.Serialization
 @inject NavigationManager Nav
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="news-page">
     <nav class="navbar">
@@ -20,15 +21,39 @@
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
 
+                @if (isLoggedIn && userRole == "Admin")
+                {
+                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                }
 
                 <li class="mobile-only">
-                    <button class="login-btn" @onclick='() => Nav.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                    @if (isLoggedIn)
+                    {
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                    }
+                    else
+                    {
+                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                    }
                 </li>
             </ul>
 
-
             <div class="nav-actions">
-                <button class="login-btn desktop-only" @onclick='() => Nav.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                @if (isLoggedIn)
+                {
+
+                    @if (userRole == "Admin")
+                    {
+                        <button class="login-btn desktop-only" @onclick='() => Nav.NavigateTo("/admin/home")'>ADMIN</button>
+                    }
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                }
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
@@ -37,7 +62,6 @@
                     }
                     else
                     {
-
                         <span>&#9776;</span>
                     }
                 </button>
@@ -94,13 +118,17 @@
     private List<NewsArticle>? articles;
     private string? errorMsg;
 
-    // IDE MÁSOLD BE A SAJÁT KULCSODAT A NEWSAPI.ORG-RÓL
+    // az api kulcs amiert regisztralnom kellett
     private string apiKey = "a1184626f3ff4c4e9cfefdd5ca821261";
 
     private bool isMenuOpen = false;
+    private bool isLoggedIn = false;
+    private string userName = "";
+    private string userRole = "";
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
+    private void GoToLogin() => Nav.NavigateTo("/login");
 
     // ...
     private void OpenArticle(string url)
@@ -140,6 +168,29 @@
             errorMsg = $"Kritikus hiba: {ex.Message}";
             articles = new List<NewsArticle>();
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+            if (isLoggedIn)
+            {
+                userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
+                userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
+            }
+            StateHasChanged();
+        }
+    }
+
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync();
+        isLoggedIn = false;
+        userName = "";
+        userRole = "";
+        Nav.NavigateTo("/", forceLoad: true);
     }
 
     // --- DTO OSZTÁLYOK (Csak egyszer szerepeljenek!) ---

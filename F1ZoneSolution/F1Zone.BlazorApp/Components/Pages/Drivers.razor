@@ -1,6 +1,8 @@
 ﻿@page "/drivers"
 @inject NavigationManager NavManager
 @inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavManager
 
 <div class="drivers-body">
 
@@ -18,15 +20,39 @@
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
 
+                @if (isLoggedIn && userRole == "Admin")
+                {
+                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                }
 
                 <li class="mobile-only">
-                    <button class="login-btn" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                    @if (isLoggedIn)
+                    {
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                    }
+                    else
+                    {
+                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                    }
                 </li>
             </ul>
 
-
             <div class="nav-actions">
-                <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                @if (isLoggedIn)
+                {
+
+                    @if (userRole == "Admin")
+                    {
+                        <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                    }
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                }
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
@@ -35,7 +61,6 @@
                     }
                     else
                     {
-
                         <span>&#9776;</span>
                     }
                 </button>
@@ -49,42 +74,6 @@
     </section>
 
     <div class="container">
-
-        @* <div class="drivers-container">
-            @if (drivers == null)
-            {
-                <p>Pilóták betöltése az adatbázisból...</p>
-            }
-            else if (!drivers.Any())
-            {
-                <p>Jelenleg nincs pilóta rögzítve az Alpine csapatnál.</p>
-            }
-            else
-            {
-                @foreach (var driver in drivers)
-                {
-                    <div class="driver-card">
-                        <div class="driver-info">
-                            <h2>@driver.driver_name</h2>
-                            <p class="nationality">Nemzetiség: @driver.nationality</p>
-
-                            <div class="stats-grid">
-                                <div class="stat-item">
-                                    <span>Győzelmek</span>
-                                    <strong>@driver.wins</strong>
-                                </div>
-                                <div class="stat-item">
-                                    <span>VB Címek</span>
-                                    <strong>@driver.championships</strong>
-                                </div>
-                            </div>
-
-                            <p class="bio">@driver.biography</p>
-                        </div>
-                    </div>
-                }
-            }
-        </div> *@
 
         @if (groupedDrivers == null)
         {
@@ -104,22 +93,7 @@
                     <div class="drivers-grid">
                         @foreach (var driver in group)
                         {
-                           /* <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
-                                @* 2. Háttérben lévő nagy rajtszám *@
-                                <span class="driver-number-bg" style="color: @driver.teamcolor">@(driver.racing_number ?? 0)</span>
-
-                                @* 3. A körben lévő rajtszám és annak háttere *@
-                                <div class="driver-avatar" style="background: @(HexToRgba(driver.teamcolor, 0.15)); color: @driver.teamcolor">
-                                    @(driver.racing_number ?? 0)
-                                </div>
-
-                                <div class="driver-info">
-                                    <div class="driver-name">@driver.driver_name</div>
-                                    <div class="driver-team">@driver.teamname</div>
-                                    <div class="driver-nationality">@driver.nationality?.ToUpper()</div>
-                                </div>
-                            </a>*/
-                            <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
+                           <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
                                 @* 2. Háttérben lévő nagy rajtszám - kicsit halványítva, hogy ne nyomja el a nevet *@
                                 <span class="driver-number-bg" style="color: @driver.teamcolor; opacity: 0.2;">
                                     @(driver.racing_number ?? 0)
@@ -155,7 +129,11 @@
 </div>
 
 @code {
+
     private bool isMenuOpen = false;
+    private bool isLoggedIn = false;
+    private string userName = "";
+    private string userRole = "";
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
@@ -189,5 +167,33 @@
         {
             return $"rgba(255,255,255,{opacity})";
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender) // Csak az első betöltéskor fusson le
+        {
+            // 1. Kiolvassuk a bejelentkezés állapotát (bool!)
+            isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+
+            if (isLoggedIn)
+            {
+                // 2. Kiolvassuk a nevet és a rangot (string!)
+                userName = await localStorage.GetItemAsync<string>("userName");
+                userRole = await localStorage.GetItemAsync<string>("userRole");
+            }
+
+            // 3. KÉNYSZERÍTJÜK az oldalt, hogy rajzolja újra magát az adatokkal!
+            StateHasChanged();
+        }
+    }
+
+    private void GoToLogin() => NavManager.NavigateTo("/login");
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync();
+        userName = "";
+        userRole = "";
+        NavManager.NavigateTo("/", forceLoad: true);
     }
 }

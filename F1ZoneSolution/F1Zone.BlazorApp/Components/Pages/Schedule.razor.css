@@ -347,3 +347,14 @@
     left: auto;
     right: 20px;
 }
+
+.user-welcome {
+    color: #fafafa;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+    .user-welcome strong {
+        color: #fcd700; /* Sárga név */
+        text-transform: uppercase;
+    }
