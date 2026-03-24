@@ -1,4 +1,5 @@
-# F1Zone
+## F1Zone
 
-Bártfai Levente
-Besze László
+##Tagok:
+- Bártfai Levente
+- Besze László
