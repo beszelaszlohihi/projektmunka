@@ -17,6 +17,7 @@
                 <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+                <li><a href="/strategy">Stratégia</a></li>
 
                 @if (isLoggedIn && userRole == "Admin")
                 {
@@ -220,7 +221,7 @@
 
             var allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("https://localhost:7120/api/circuits") ?? new();
             var allDrivers = await Http.GetFromJsonAsync<List<DriverDto>>("https://localhost:7120/api/drivers/admin-list") ?? new();
-                
+
             selectedCircuit = allCircuits.FirstOrDefault(c => c.circuit_id == settings.FeaturedCircuitId);
             selectedDriver = allDrivers.FirstOrDefault(d => d.driver_id == settings.FeaturedDriverId);
         }

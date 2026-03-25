@@ -14,6 +14,56 @@
 
 <body>
     <Routes @rendermode="new InteractiveServerRenderMode(prerender: false)" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+                window.setupStrategyChart = (laps, times, lineColors) => {
+            const canvas = document.getElementById('strategyChart');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            // Biztonsági ellenőrzés: ha lineColors nem tömb, csinálunk egy alap színt
+            const colors = Array.isArray(lineColors) ? lineColors : ['#ff1801'];
+            const backgrounds = colors.map(c => c.includes("rgba") ? c.replace("1)", "0.2)") : "rgba(255,24,1,0.2)");
+
+            window.myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: laps,
+                    datasets: [{
+                        label: 'Köridő (mp)',
+                        data: times,
+                        borderColor: colors,
+                        backgroundColor: backgrounds,
+                        borderWidth: 3,
+                        pointRadius: 3,
+                        pointBackgroundColor: colors,
+                        tension: 0.3,
+                        segment: {
+                            borderColor: ctx => colors[ctx.p1DataIndex] || colors[0]
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { grid: { color: '#333' }, ticks: { color: 'white' } },
+                        x: { grid: { display: false }, ticks: { color: 'white' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        };
+    </script>
+
     <script src="_framework/blazor.web.js"></script>
 </body>
 
