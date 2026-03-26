@@ -69,7 +69,7 @@ namespace F1Zone.API.Controllers
             
             var token = CreateToken(user);
 
-            return Ok(new { Token = token, Username = user.Username, Role = user.Role });
+            return Ok(new { Id = user.Id, Token = token, Username = user.Username, Role = user.Role });
         }
 
 
