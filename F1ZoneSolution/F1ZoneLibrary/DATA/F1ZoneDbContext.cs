@@ -39,5 +39,6 @@ namespace F1ZoneLibrary.DATA
         public DbSet<Teams> Teams { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<RaceSchedules> RaceSchedules { get; set; }
+        public DbSet<UserFavorites> UserFavorites { get; set; }
     }
 }
