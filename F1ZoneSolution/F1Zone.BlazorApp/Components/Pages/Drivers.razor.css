@@ -257,6 +257,11 @@ nav {
         border-color: #fcd700; /* Hover keret is sárga */
     }
 
+.favorite-container button:hover span {
+    color: rgba(255,255,255,0.9) !important;
+    transform: scale(1.1);
+}
+
 /* Rajtszám a háttérben - ERŐSEBBRE ÁLLÍTVA */
 .driver-number-bg {
     position: absolute;

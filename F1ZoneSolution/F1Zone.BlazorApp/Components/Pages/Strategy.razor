@@ -57,7 +57,7 @@
                         <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                     }
 
-                    
+
                     <button class="burger-btn" @onclick="ToggleMenu">
                         <span>@(isMenuOpen ? "×" : "☰")</span>
                     </button>
@@ -67,10 +67,10 @@
 
         <section class="strategy-section" style="padding: 2rem; color: white; max-width: 1650px; margin: 0 auto;">
             <h1 style="color: #ff1801; font-family: 'F1-Bold', sans-serif; text-align: center; margin-bottom: 2rem; letter-spacing: 2px; text-transform: uppercase;">
-                Race Strategist
+                Stratégia szimulátor
             </h1>
 
-            
+
             <div class="strategy-layout" style="display: grid; grid-template-columns: 330px 1fr 380px; gap: 1.5rem; align-items: start; width: 100%;">
 
                 @* 1. OSZLOP: BEÁLLÍTÁSOK PANEL *@
@@ -112,7 +112,7 @@
                                style="width: 100%; margin: 10px 0; accent-color: @GetTyreColor(); cursor: pointer;" />
                     </div>
 
-                    
+
                     <div style="margin: 1rem 0; padding: 10px; border: 1px dashed #444; border-radius: 8px;">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <input type="checkbox" @bind="isTwoStopStrategy" id="twoStop" style="width: 18px; height: 18px; cursor: pointer;" />
@@ -145,7 +145,7 @@
                 <div class="analysis-card" style="background: #111111; border: 1px solid #252525; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); padding: 1.5rem;">
                     <h3 style="margin-top: 0; text-align: center; color: #fff; font-weight: 300; text-transform: uppercase; letter-spacing: 1px;">Teljesítmény Görbe</h3>
 
-                    
+
                     <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 1.5rem;">
                         <div style="text-align: center;">
                             <div style="color: #888; font-size: 0.7rem; text-transform: uppercase;">Versenyidő</div>
@@ -157,7 +157,7 @@
                             <div style="color: #fff; font-size: 1.2rem;">@(allCircuits.FirstOrDefault(c => c.circuit_id.ToString() == selectedTrackId)?.circuit_name ?? "-")</div> @*itt modositas volt*@
                         </div>
 
-                        
+
                         <div style="text-align: center;">
                             <div style="color: #888; font-size: 0.7rem; text-transform: uppercase;">Átlagidő</div>
                             <div style="color: #fff; font-size: 1.2rem;">
@@ -166,7 +166,7 @@
                         </div>
                     </div>
 
-                    
+
                     <div id="chartParent" style="height: 380px; width: 100%; background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; position: relative;">
                         <canvas id="strategyChart"></canvas>
                     </div>

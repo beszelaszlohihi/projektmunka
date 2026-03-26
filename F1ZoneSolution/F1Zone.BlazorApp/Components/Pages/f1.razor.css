@@ -166,6 +166,8 @@
         padding: 20px;
         text-align: center;
     }
+
+
 }
 
 .mobile-only {
@@ -446,4 +448,5 @@ footer {
     .countdown-item span {
         font-size: 1.6rem;
     }
+
 }

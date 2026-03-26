@@ -1,4 +1,4 @@
-﻿.f1-body {
+﻿﻿.f1-body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #06131c;
     color: #fafafa;
@@ -25,7 +25,7 @@
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     height: 100%;
@@ -43,7 +43,7 @@
     font-weight: 800;
     color: #fcd700;
     text-decoration: none;
-    line-height: 1; 
+    line-height: 1;
     display: flex;
     align-items: center;
 }
@@ -95,59 +95,60 @@
 
 @media (max-width: 1100px) {
 
-    
+
     .nav-links {
-        display: none; 
+        display: none;
         flex-direction: column;
         position: fixed;
-        top: 80px; 
+        top: 80px;
         left: 0;
         right: 0;
-        height: 100vh;
+        height: calc(100vh - 80px) !important;
         background-color: #06131c !important;
         z-index: 9999;
-        padding-top: 60px; 
+        padding-top: 60px;
         margin: 0;
-        gap: 0; 
-        overflow-y: auto; 
+        gap: 0;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 30px !important;
     }
 
-        
+
         .nav-links.active {
             display: flex;
         }
 
-        
+
         .nav-links li {
             width: 100%;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
             .nav-links li a {
                 display: block;
                 padding: 20px;
-                font-size: 1.3rem; 
+                font-size: 1.3rem;
                 color: white;
                 text-decoration: none;
                 width: 100%;
             }
 
-   
+
     .nav-actions {
         display: flex;
         align-items: center;
-        height: 100%; 
+        height: 100%;
     }
 
     .burger-btn {
-        display: block !important; 
+        display: block !important;
         background: transparent;
         border: none;
         color: #fcd700;
         font-size: 2.5rem;
         cursor: pointer;
-        
         margin-top: -5px;
     }
 
@@ -156,10 +157,44 @@
     }
 
     .mobile-only {
-        display: block !important;
-        padding: 20px;
-        text-align: center;
+        display: flex !important;
+        flex-direction: column !important; 
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 30px 20px !important;
+        background: rgba(0,0,0,0.2); 
+        width: 100% !important;
+        position: relative !important; 
+        gap: 10px !important; 
     }
+
+        .mobile-only .user-welcome {
+            position: relative !important;
+            display: block !important;
+            width: 100% !important;
+            text-align: center !important;
+            margin: 0 0 10px 0 !important;
+            color: white !important;
+            font-size: 1rem !important;
+        }
+
+            .mobile-only .user-welcome strong {
+                color: #fcd700 !important;
+                display: block !important; 
+            }
+
+
+        .mobile-only .login-btn {
+            display: block !important;
+            margin: 10px auto 0 auto !important; /* A 'auto' margók teszik vízszintesen középre */
+            width: 80% !important; /* Ne legyen túl széles, de ne is legyen pici */
+            max-width: 250px !important;
+            padding: 12px 20px !important;
+            text-align: center !important;
+            position: relative !important;
+            left: 0 !important; /* Ha maradt volna benne korábbi eltolás, ezt nullázzuk */
+            right: 0 !important;
+        }
 }
 
 .mobile-only {
@@ -184,7 +219,6 @@
     }
 
     .login-btn.desktop-only {
-        
     }
 
 .user-welcome {
@@ -200,12 +234,12 @@
 
 
 .strategy-section {
-    padding-top: 100px; 
+    padding-top: 100px;
 }
 
 
 .analysis-card, .controls-card, .data-card {
-    background: #111111 !important; 
+    background: #111111 !important;
     border: 1px solid #222222 !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important;
 }
@@ -228,5 +262,89 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* --- MOBIL ÉS TABLET JAVÍTÁS (1200px alatt) --- */
+@media (max-width: 1200px) {
+    /* 1. Kényszerítjük a gridet, hogy 1 oszlopos legyen */
+    .strategy-layout {
+        grid-template-columns: 1fr !important;
+        padding: 0 1rem !important;
+        gap: 1.5rem !important;
+    }
+
+    /* 2. Lehúzzuk a sectiont a navbar alól, hogy ne takarja ki a címet */
+    .strategy-section {
+        padding-top: 130px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* 3. A kártyák magasságát és szélességét rugalmassá tesszük */
+    .controls-card, .analysis-card, .data-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important; /* Középre igazítja a kártyát */
+        box-sizing: border-box !important;
+    }
+
+        /* 4. A grafikon feletti statisztikákat (versenyidő, stb.) egymás alá tesszük */
+        .analysis-card > div[style*="display: flex"] {
+            flex-direction: column !important;
+            gap: 1rem !important;
+            align-items: center !important;
+        }
+
+    /* 5. A grafikon konténere ne lógjon ki */
+    #chartParent {
+        width: 100% !important;
+        height: 300px !important; /* Mobilon kicsit alacsonyabb grafikon */
+    }
+
+    .strategy-grid-container {
+        grid-template-columns: 1fr !important;
+        padding-left: 15px !important; /* EZ HÚZZA BELJEBB BALRÓL */
+        padding-right: 15px !important; /* EZ HÚZZA BELJEBB JOBBRÓL */
+        gap: 1.5rem !important;
+        width: 100% !important;
+        box-sizing: border-box !important; /* Hogy a padding ne növelje a szélességet */
+    }
+
+
+}
+
+/* --- EXTRA FINOMÍTÁS NAGYON KIS MOBILRA (600px alatt) --- */
+@media (max-width: 600px) {
+    .strategy-section h1 {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* --- EXTRA KIS TELEFONOKRA (400px alatt) --- */
+@media (max-width: 400px) {
+    .strategy-section {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    .controls-card, .analysis-card, .data-card {
+        padding: 1rem 0.8rem !important; /* Kisebb belső helyet hagyunk, több marad a tartalomnak */
+    }
+
+    /* A gomb betűméretét is csökkentjük, hogy ne feszítse szét a kártyát */
+    .hero-btn {
+        padding: 0.8rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* A táblázat betűit is összehúzzuk kicsit */
+    .table-container table {
+        font-size: 0.75rem !important;
+    }
+
+    /* A grafikon alatti tengely feliratai is kisebbek legyenek */
+    #strategyChart {
+        max-width: 100% !important;
     }
 }

@@ -2,9 +2,13 @@
 @using F1ZoneLibrary.Dto
 @using System.Net.Http.Json
 @using System.Text.Json.Serialization
+@using F1ZoneLibrary.MODEL
 @inject HttpClient Http
 @inject NavigationManager NavManager
 @rendermode InteractiveServer
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
 
 <div class="driver-detail-page">
     <nav class="navbar">
@@ -20,15 +24,40 @@
                 <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
                 <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-               
-                <li class="mobile-only" @onclick='() => NavManager.NavigateTo("/login")'>
-                    <button class="login-btn">BEJELENTKEZÉS</button>
+                <li><a href="/strategy">Stratégia</a></li>
+
+                @if (isLoggedIn && userRole == "Admin")
+                {
+                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                }
+
+                <li class="mobile-only">
+                    @if (isLoggedIn)
+                    {
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                    }
+                    else
+                    {
+                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                    }
                 </li>
             </ul>
 
-
             <div class="nav-actions">
-                <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/login")'>BEJELENTKEZÉS</button>
+                @if (isLoggedIn)
+                {
+                    @if (userRole == "Admin")
+                    {
+                        <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                    }
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                }
 
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
@@ -37,7 +66,6 @@
                     }
                     else
                     {
-
                         <span>&#9776;</span>
                     }
                 </button>
@@ -110,15 +138,87 @@
 @code {
     [Parameter] public string id { get; set; } = string.Empty;
     private DriverDto? driver;
+    [Parameter] public int masodikid { get; set; }
+    private bool isFavorite = false;
+    private int currentUserId;
+    private bool isLoggedIn;
+    private string userName = "";
+    private string userRole = "";
 
     private bool isMenuOpen = false;
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
 
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // 1. Kiolvassuk a user ID-t (ezt már profin csinálod)
+            currentUserId = await localStorage.GetItemAsync<int>("userId");
+
+            if (currentUserId > 0)
+            {
+                // 2. Megkérdezzük az API-t, hogy ez a pilóta kedvenc-e
+                // A legegyszerűbb: lekérjük a user kedvenceit és megnézzük benne van-e az ID
+                var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
+                if (favs != null)
+                {
+                    isFavorite = favs.Any(f => f.UserId == currentUserId && f.ItemId == masodikid);
+                    StateHasChanged(); // Frissítjük a UI-t, hogy megjelenjen a banner
+                }
+            }
+        }
+    }
+
+    private void GoToLogin()
+    {
+        NavManager.NavigateTo("/login");
+    }
+
+    private async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("isAuthenticated");
+        await localStorage.RemoveItemAsync("userName");
+        await localStorage.RemoveItemAsync("userRole");
+
+        isLoggedIn = false;
+        userName = "";
+        userRole = "";
+
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+
     protected override async Task OnInitializedAsync()
     {
+        // 1. Adatok betöltése
         await LoadDriver();
+
+        // 2. Auth állapot lekérése
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            isLoggedIn = true;
+            userName = user.Identity.Name ?? "Felhasználó";
+
+            // KRITIKUS: Itt töltsd be a Role-t is a Claim-ek közül,
+            // különben a Navbar @if elágazása hibázhat!
+            userRole = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value
+                       ?? await localStorage.GetItemAsync<string>("userRole")
+                       ?? "";
+        }
+        else
+        {
+            isLoggedIn = false;
+            userName = "";
+            userRole = "";
+        }
+
+        // 3. Kényszerített UI frissítés
+        StateHasChanged();
     }
 
     protected override async Task OnParametersSetAsync()

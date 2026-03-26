@@ -38,8 +38,11 @@
 </div>
 
 @code {
+
     private LoginDto loginModel = new LoginDto();
+
     private string errorMessage;
+
 
     private async Task HandleLogin()
     {
@@ -50,12 +53,14 @@
         {
             // Kiolvassuk a választ a UserDto-ba
             var result = await response.Content.ReadFromJsonAsync<UserDto>();
+            
 
             if (result != null)
             {
                 await localStorage.SetItemAsync("token", result.Token);
                 await localStorage.SetItemAsync("userName", result.Username);
                 await localStorage.SetItemAsync("isAuthenticated", true);
+                await localStorage.SetItemAsync("userId", result.Id);
 
                 // Itt a lényeg: Az adatbázisból jövő Role szöveget ("Admin" vagy "User") mentjük el!
                 await localStorage.SetItemAsync("userRole", result.Role);

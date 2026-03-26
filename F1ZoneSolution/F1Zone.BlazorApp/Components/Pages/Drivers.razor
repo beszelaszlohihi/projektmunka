@@ -1,4 +1,5 @@
 ﻿@page "/drivers"
+@using F1ZoneLibrary.MODEL
 @inject NavigationManager NavManager
 @inject HttpClient Http
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
@@ -94,27 +95,44 @@
                     <div class="drivers-grid">
                         @foreach (var driver in group)
                         {
-                           <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()">
-                                @* 2. Háttérben lévő nagy rajtszám - kicsit halványítva, hogy ne nyomja el a nevet *@
-                                <span class="driver-number-bg" style="color: @driver.teamcolor; opacity: 0.2;">
-                                    @(driver.racing_number ?? 0)
-                                </span>
+                            @* 1. A kártya fő kerete (ez tartja össze a linket és a szívet) *@
+                            <div class="driver-card-wrapper" style="position: relative;">
 
-                                @* 3. A körben lévő rajtszám - Adjunk neki egy vékony keretet a csapatszínnel! *@
-                                <div class="driver-avatar"
-                                     style="background: @(HexToRgba(driver.teamcolor, 0.1));
-                            border: 1px solid @driver.teamcolor;
-                            color: @driver.teamcolor;
-                            box-shadow: 0 0 10px @(HexToRgba(driver.teamcolor, 0.3));">
-                                    @(driver.racing_number ?? 0)
-                                </div>
+                                @* 2. Maga a kattintható kártya *@
+                                <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()" style="display: block;">
+                                    <span class="driver-number-bg" style="color: @driver.teamcolor; opacity: 0.2;">
+                                        @(driver.racing_number ?? 0)
+                                    </span>
 
-                                <div class="driver-info">
-                                    <div class="driver-name">@driver.driver_name</div>
-                                    <div class="driver-team">@driver.teamname</div>
-                                    <div class="driver-nationality">@driver.nationality?.ToUpper()</div>
-                                </div>
-                            </a>
+                                    <div class="driver-avatar" style="background: @(HexToRgba(driver.teamcolor, 0.1)); border: 1px solid @driver.teamcolor; box-shadow: 0 0 10px @(HexToRgba(driver.teamcolor, 0.3)); color: @driver.teamcolor;">
+                                        @(driver.racing_number ?? 0)
+                                    </div>
+
+                                    <div class="driver-info">
+                                        <div class="driver-name">@driver.driver_name</div>
+                                        <div class="driver-team">@driver.teamname</div>
+                                        <div class="driver-nationality">@driver.nationality?.ToUpper()</div>
+                                    </div>
+                                </a>
+
+                                @* 3. A KEDVENC GOMB (Most már a linken KÍVÜL, de a kártyán BELÜL) *@
+                                @if (isLoggedIn)
+                                {
+                                    <div class="favorite-container" style="position: absolute; top: 15px; right: 15px; z-index: 100;">
+                                        <button @onclick="() => ToggleFavorite(driver.driver_id)"
+                                                style="background: none; border: none; cursor: pointer; padding: 5px; outline: none;">
+                                            @if (favoriteDriverIds.Contains(driver.driver_id))
+                                            {
+                                                <span style="color: #ff1801; font-size: 1.4rem; filter: drop-shadow(0 0 5px rgba(255,24,1,0.5));">❤️</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color: rgba(255,255,255,0.4); font-size: 1.4rem;">🤍</span>
+                                            }
+                                        </button>
+                                    </div>
+                                }
+                            </div>
                         }
                     </div>
                 </div>
@@ -135,12 +153,93 @@
     private bool isLoggedIn = false;
     private string userName = "";
     private string userRole = "";
+    private List<int> favoriteDriverIds = new();
+    private int currentUserId = 1;
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
 
     private IEnumerable<IGrouping<string, DriverDto>> groupedDrivers;
     private List<F1ZoneLibrary.Dto.DriverDto> drivers;
+
+    //kedvencek cucc
+    private async Task ToggleFavorite(int driverId)
+    {
+        if (!isLoggedIn || currentUserId <= 0) 
+        {
+            // Opcionálisan: NavManager.NavigateTo("/login");
+            return; 
+        }
+
+        Console.WriteLine($"Mentés indítása - User: {currentUserId}, Driver: {driverId}");
+        if (favoriteDriverIds.Contains(driverId))
+        {
+            
+            var response = await Http.DeleteAsync($"api/favorites/{currentUserId}/{driverId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                favoriteDriverIds.Remove(driverId);
+            }
+        }
+        else
+        {
+            
+            var newFavorite = new UserFavorites
+            {
+                UserId = currentUserId,
+                ItemId = driverId,
+                ItemType = "Driver"
+            };
+
+            var response = await Http.PostAsJsonAsync("api/favorites", newFavorite);
+
+            if (response.IsSuccessStatusCode)
+            {
+                favoriteDriverIds.Add(driverId);
+            }
+        }
+        StateHasChanged(); 
+    }
+
+    private async Task LoadFavorites()
+    {
+        try
+        {
+            // 1. Kézzel állítjuk be a GET metódust, hogy véletlenül se legyen kavarodás
+            var request = new HttpRequestMessage(HttpMethod.Get, "api/Favorites");
+            var response = await Http.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var allFavs = await response.Content.ReadFromJsonAsync<List<UserFavorites>>();
+                if (allFavs != null)
+                {
+                    favoriteDriverIds = allFavs
+                        .Where(f => f.UserId == currentUserId && f.ItemType == "Driver")
+                        .Select(f => f.ItemId)
+                        .ToList();
+
+                    StateHasChanged();
+                }
+            }
+            else
+            {
+                // Itt kiírja a pontos hibaüzenetet a konzolra!
+                var errorBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"API Hiba ({response.StatusCode}): {errorBody}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Kritikus hiba: {ex.Message}");
+        }
+    }
+
+
+    private bool IsFavorite(int driverId) => favoriteDriverIds.Contains(driverId);
+
+    //eddig van a kedvencek
 
     protected override async Task OnInitializedAsync()
     {
@@ -172,19 +271,22 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender) // Csak az első betöltéskor fusson le
+        if (firstRender)
         {
-            // 1. Kiolvassuk a bejelentkezés állapotát (bool!)
             isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
 
             if (isLoggedIn)
             {
-                // 2. Kiolvassuk a nevet és a rangot (string!)
                 userName = await localStorage.GetItemAsync<string>("userName");
                 userRole = await localStorage.GetItemAsync<string>("userRole");
+                currentUserId = await localStorage.GetItemAsync<int>("userId");
+
+                
+                await LoadFavorites();
             }
 
-            // 3. KÉNYSZERÍTJÜK az oldalt, hogy rajzolja újra magát az adatokkal!
+            
+
             StateHasChanged();
         }
     }
