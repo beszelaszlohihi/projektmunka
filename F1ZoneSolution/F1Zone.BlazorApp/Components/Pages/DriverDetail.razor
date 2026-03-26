@@ -11,6 +11,8 @@
 @inject AuthenticationStateProvider AuthStateProvider
 
 <div class="driver-detail-page">
+    @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapotától
+       és szerepkörétől függően jelenít meg opciókat *@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -26,11 +28,14 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+
+                @* Admin esetén külön admin menüpont megjelenítése *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
+                @* Mobilnézetben a felhasználói műveletek külön menüpontban jelennek meg *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -59,6 +64,7 @@
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
 
+                @* Mobil hamburger menü nyitása és zárása *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -73,6 +79,8 @@
         </div>
     </nav>
 
+
+    @* A kiválasztott pilóta neve jelenik meg főcímként *@
     <section class="hero">
         <h1>@(driver?.driver_name ?? id.Replace("-", " ").ToUpper())</h1>
     </section>
@@ -96,6 +104,7 @@
             <h2>Karrier / Szezon statisztika</h2>
             @if (driver != null)
             {
+                @* A pilóta legfontosabb statisztikáinak kártyás megjelenítése *@
                 <div class="stats-row">
                     <div class="stat-card">
                         <div class="stat-value @(driver.wins > 0 ? "gold" : "")">@driver.wins</div>
@@ -123,7 +132,8 @@
             {
                 <p class="loading-text">Statisztikák betöltése...</p>
             }
-
+            
+            @* Navigáció vissza a versenyzők listájához *@
             <div class="actions">
                 <button class="back-btn" @onclick="BackToDrivers">← Vissza a többi pilótához!</button>
             </div>
@@ -136,32 +146,48 @@
 </div>
 
 @code {
+
+    // Az URL-ből érkező pilótaazonosító
     [Parameter] public string id { get; set; } = string.Empty;
+    
+    
+    // A lekért pilóta adatai
     private DriverDto? driver;
+
+
+    // Másodlagos azonosító, amelyet jelenleg a kedvenc ellenőrzéshez kell
     [Parameter] public int masodikid { get; set; }
+    
+    // Kedvenc állapot és bejelentkezett felhasználó adatai
     private bool isFavorite = false;
     private int currentUserId;
     private bool isLoggedIn;
     private string userName = "";
     private string userRole = "";
 
+
+    // Mobil menü nyitott / zárt állapotának tárolása
     private bool isMenuOpen = false;
 
+    // Hamburger menü állapotának váltása
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    
+    // Menü bezárása navigáció után
     private void CloseMenu() => isMenuOpen = false;
 
 
+    // Az első renderelés után betöltjük a felhasználó azonosítóját
+    // majd ellenőrizzük, hogy az aktuális pilóta szerepel e a kedvencek között
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // 1. Kiolvassuk a user ID-t (ezt már profin csinálod)
+            
             currentUserId = await localStorage.GetItemAsync<int>("userId");
 
             if (currentUserId > 0)
             {
-                // 2. Megkérdezzük az API-t, hogy ez a pilóta kedvenc-e
-                // A legegyszerűbb: lekérjük a user kedvenceit és megnézzük benne van-e az ID
+                
                 var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
                 if (favs != null)
                 {
@@ -172,11 +198,16 @@
         }
     }
 
+
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin()
     {
         NavManager.NavigateTo("/login");
     }
 
+
+    // Kijelentkezéskor töröljük a helyi tárolóból a felhasználói adatokat
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.RemoveItemAsync("isAuthenticated");
@@ -190,12 +221,13 @@
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
+    // betöltjük a pilóta adatait
+    // majd lekérjük a felhasználó hitelesítési állapotát és szerepkörét
     protected override async Task OnInitializedAsync()
     {
-        // 1. Adatok betöltése
+        
         await LoadDriver();
 
-        // 2. Auth állapot lekérése
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -204,8 +236,8 @@
             isLoggedIn = true;
             userName = user.Identity.Name ?? "Felhasználó";
 
-            // KRITIKUS: Itt töltsd be a Role-t is a Claim-ek közül,
-            // különben a Navbar @if elágazása hibázhat!
+            // A szerepkört először a claim-ekből próbáljuk lekérni,
+            // majd szükség esetén a local storage-ból olvassuk ki
             userRole = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value
                        ?? await localStorage.GetItemAsync<string>("userRole")
                        ?? "";
@@ -217,10 +249,12 @@
             userRole = "";
         }
 
-        // 3. Kényszerített UI frissítés
+       
         StateHasChanged();
     }
 
+
+    // Ha az URL paraméter megváltozik, újra betöltjük a pilóta adatait
     protected override async Task OnParametersSetAsync()
     {
         if (driver != null && driver.driver_name.Replace(" ", "-").ToLower() != id.ToLower())
@@ -229,6 +263,7 @@
         }
     }
 
+    // A kiválasztott pilóta adatainak lekérése az API-ból
     private async Task LoadDriver()
     {
         try
@@ -242,11 +277,13 @@
         }
     }
 
+    // Visszanavigálás a versenyzők listájára
     private void BackToDrivers()
     {
         NavManager.NavigateTo("/drivers");
     }
 
+    // A pilóta részletes adatainak kezelésére szolgáló DTO
     public class DriverDto
     {
         [JsonPropertyName("driver_id")] public int driver_id { get; set; }

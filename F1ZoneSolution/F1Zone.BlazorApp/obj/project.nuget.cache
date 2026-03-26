@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Wm6WP7cMiGI=",
+  "dgSpecHash": "DWTFmCx9Csc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\bartf\\OneDrive\\Desktop\\0324\\projektmunka-main\\F1ZoneSolution\\F1Zone.BlazorApp\\F1Zone.BlazorApp.csproj",
+  "projectFilePath": "C:\\Users\\bartf\\OneDrive\\Desktop\\projektmunka-main\\F1ZoneSolution\\F1Zone.BlazorApp\\F1Zone.BlazorApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bartf\\.nuget\\packages\\blazored.localstorage\\4.5.0\\blazored.localstorage.4.5.0.nupkg.sha512",
     "C:\\Users\\bartf\\.nuget\\packages\\microsoft.aspnetcore.authorization\\8.0.20\\microsoft.aspnetcore.authorization.8.0.20.nupkg.sha512",

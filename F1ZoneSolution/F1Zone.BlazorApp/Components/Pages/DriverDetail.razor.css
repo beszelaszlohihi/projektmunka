@@ -114,42 +114,39 @@ nav {
 /* --- MOBIL NÉZET (1100px alatt) --- */
 @media (max-width: 1100px) {
 
-    /* A MENÜ LISTA JAVÍTÁSA */
+    /* A MENÜ LISTA */
     .nav-links {
-        display: none; /* Alapból rejtve */
+        display: none; 
         flex-direction: column;
-        position: fixed; /* Kifeszítjük az egész képernyőre */
-        top: 80px; /* A navbar magassága */
+        position: fixed; 
+        top: 80px; 
         left: 0;
         right: 0;
-        /* EZ A KULCS: Kitölti a képernyőt lefelé */
         height: 100vh;
-        /* FIX, TÖMÖR HÁTTÉR (Nem látszik át!) */
         background-color: #06131c !important;
-        /* LEGFELÜL LEGYEN (Elrejtjük a Hero-t) */
         z-index: 9999;
-        padding-top: 60px; /* Hely a linkek felett */
+        padding-top: 60px;
         margin: 0;
-        gap: 0; /* Mobilon ne legyen gap */
-        overflow-y: auto; /* Ha sok a link, lehessen görgetni */
+        gap: 0;
+        overflow-y: auto;
     }
 
-        /* Amikor nyitva van, muszáj megjelennie */
+        
         .nav-links.active {
             display: flex;
         }
 
-        /* A listaelemek stílusa */
+        
         .nav-links li {
             width: 100%;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.05); /* Halvány elválasztó csík */
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
         }
 
             .nav-links li a {
                 display: block;
                 padding: 20px;
-                font-size: 1.3rem; /* Nagyobb, olvashatóbb betűk */
+                font-size: 1.3rem;
                 color: white;
                 text-decoration: none;
                 width: 100%;
@@ -158,18 +155,18 @@ nav {
     /* A burger gombot is lökjük középre a sárga vonal és a navbar teteje között */
     .nav-actions {
         display: flex;
-        align-items: center; /* Függőlegesen középre tesz mindent */
-        height: 100%; /* Kitölti a navbar magasságát */
+        align-items: center;
+        height: 100%;
     }
 
     .burger-btn {
-        display: block; /* Megjelenik a burger */
+        display: block;
         background: transparent;
         border: none;
         color: #fcd700;
         font-size: 2.5rem;
         cursor: pointer;
-        /* EZT NÉZD MEG JÓL: Manuális korrekció feljebb pöccintéshez */
+        
         margin-top: -5px;
     }
 
@@ -184,14 +181,12 @@ nav {
     }
 
     .stats-row {
-        flex-wrap: wrap !important; /* EZ A KULCS: Engedi a tördelést */
+        flex-wrap: wrap !important; 
         gap: 10px !important;
         padding: 0 10px !important;
     }
 
     .stat-card {
-        /* Mobilon: 2 kártya egymás mellett */
-        /* A calc levonja a gap-et, hogy pontosan beférjen kettő */
         flex: 0 0 calc(50% - 10px) !important;
         min-width: 140px !important;
         padding: 1rem !important;
@@ -202,7 +197,6 @@ nav {
     display: none;
 }
 
-/* GOMB STÍLUS */
 .login-btn {
     background: #fcd700;
     color: #06131c;
@@ -211,8 +205,7 @@ nav {
     border-radius: 4px;
     font-weight: 800;
     cursor: pointer;
-    /*transition: 0.3s;
-    white-space: nowrap;*/
+   
 }
 
     .login-btn:hover {
@@ -221,7 +214,7 @@ nav {
     }
 
     .login-btn.desktop-only {
-        /* Alapértelmezett asztali stílus */
+        
     }
 
 /* HERO */
@@ -268,18 +261,18 @@ h2 {
     justify-content: center !important;
     gap: 15px !important;
     width: 100% !important;
-    flex-wrap: nowrap; /* Alapból egymás mellett vannak */
+    flex-wrap: nowrap; 
     margin: 20px 0;
 }
 
 .stat-card {
     /* EZ AZ EREDETI SZÍNED A KÉPRŐL */
     background: #0d1a26;
-    border: 1px solid #1c2e3f; /* Egy kicsit világosabb keret */
+    border: 1px solid #1c2e3f; 
     border-radius: 12px;
     padding: 1.5rem;
     text-align: center;
-    flex: 1; /* Egyforma szélesség asztalin */
+    flex: 1; 
     min-width: 120px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
@@ -292,7 +285,7 @@ h2 {
 .stat-value {
     font-size: 32px;
     font-weight: 900;
-    color: white; /* Alapértelmezett fehér */
+    color: white; 
     margin-bottom: 5px;
 }
 
@@ -343,7 +336,6 @@ footer {
 
 @media (max-width: 500px) {
     .stat-card {
-        /* Nagyon kicsi kijelzőn minden kártya külön sorba kerül */
         flex: 0 0 100% !important;
     }
 }

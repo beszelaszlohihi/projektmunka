@@ -1,9 +1,22 @@
-﻿.admin-container {
+﻿/* =========================
+   ADMIN OLDAL ALAP LAYOUT
+   =========================
+*/
+
+
+.admin-container {
     padding: 100px 2rem 4rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+
+
+/* =========================
+   PILÓTÁK TÁBLÁZAT STÍLUS
+   =========================
+   Sötét témájú, letisztult admin táblázat
+*/
 .admin-table {
     width: 100%;
     border-collapse: collapse;
@@ -13,19 +26,27 @@
     color: white;
 }
 
-    .admin-table th, .admin-table td {
+/* Táblázat cellák általános formázása */
+.admin-table th, .admin-table td {
         padding: 1rem;
         text-align: left;
         border-bottom: 1px solid #1a2a35;
     }
 
-    .admin-table th {
+
+/* Fejléc kiemelése (F1-es sárga színnel) */
+.admin-table th {
         background: #06131c;
         color: #fcd700;
         text-transform: uppercase;
         font-size: 0.8rem;
     }
 
+/* =========================
+   GOMBOK (ADMIN FUNKCIÓK)
+   ========================= */
+
+/* Szerkesztés gomb (kiemelt, sárga stílus) */
 .edit-btn {
     background: #fcd700;
     color: #06131c;
@@ -36,10 +57,10 @@
     cursor: pointer;
 }
 
-.admin-card {
-    border-left: 5px solid #fcd700; /* Admin színe a sárga */
-}
 
+
+
+/* Új pilóta hozzáadása gomb */
 .add-btn {
     background-color: #28a745;
     margin-bottom: 20px;
@@ -48,16 +69,29 @@
     color: white;
 }
 
-    .add-btn:hover {
-        background-color: #218838;
-    }
+/* Hover effekt a jobb UX érdekében */
+.add-btn:hover {   
+    background-color: #218838;
+}
 
+
+/* Admin kártyák vizuális kiemelése */
+.admin-card {
+    border-left: 5px solid #fcd700; /* Admin színe a sárga */
+}
+
+/* Fejléc (cím + gomb egy sorban) */
 .admin-header {
     display: flex;
     justify-content: space-between; /* Ez eltolja a feliratot balra, a gombot jobbra */
     align-items: center;
     margin-bottom: 20px;
 }
+
+
+/* =========================
+   NAVIGÁCIÓ (VISSZA GOMB)
+   ========================= */
 
 .back-btn {
     background: transparent;
@@ -71,7 +105,8 @@
     transition: 0.3s;
 }
 
-    .back-btn:hover {
+.back-btn:hover {
         background: #ffcc00;
         color: #000;
-    }
+
+}

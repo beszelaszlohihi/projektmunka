@@ -63,6 +63,10 @@
     private string userRole; 
     private string statusMessage = "";
 
+
+    // Az oldal első renderelése után ellenőrizzük a jogosultságot,
+    // majd csak admin esetén töltjük be az adatokat az API-ból
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -70,43 +74,42 @@
             var role = await localStorage.GetItemAsync<string>("userRole");
             if (role != "Admin")
             {
-                NavManager.NavigateTo("/"); // Ha nem admin, takarodó a főoldalra
+                NavManager.NavigateTo("/"); // Ha nem admin, vissza a főoldalra
                 return;
             }
 
-            // Csak ha admin, akkor töltjük be a pilótákat
+            // Admin jogosultság esetén lekérjük a pilóták listáját
             drivers = await Http.GetFromJsonAsync<List<DriverDto>>("api/drivers/admin-list");
             StateHasChanged();
         }
     }
 
+    // A kiválasztott pilóta szerkesztőoldalára navigál
     private void OpenEditModal(DriverDto driver)
     {
-        // Itt navigálhatunk egy külön szerkesztő oldalra, vagy megnyithatunk egy modalt
         NavManager.NavigateTo($"/admin/edit-driver/{driver.driver_id}");
     }
 
+
+    // Törlés előtt megerősítést kér a felhasználótól,
+    // majd siker esetén frissíti a megjelenített listát
     private async Task ConfirmDelete(DriverDto selectedDriver)
     {
-        // Megerősítő kérdés
+        
         bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Biztosan törölni szeretnéd {selectedDriver.driver_name} pilótát?");
 
         if (confirmed)
         {
-            // 1. Felépítjük a DELETE kérést
+            // DELETE kérés összeállítása, a kiválasztott pilóta adatainak elküldésével
             var request = new HttpRequestMessage(HttpMethod.Delete, "api/drivers");
-
-            // 2. Beletesszük a teljes objektumot JSON-ként a Body-ba
-            // Fontos: ellenőrizd, hogy a GenericController DriverDto-t vagy Drivers modellt vár!
-            // Ha DriverDto-t vár, akkor ez jó:
             request.Content = JsonContent.Create(selectedDriver);
 
-            // 3. Elküldjük a kérést
+            // A kérés elküldése a szerver felé
             var response = await Http.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {
-                // Sikerült a törlés, frissítjük a felületet
+                // Sikeres törlés után eltávolítjuk a pilótát a listából
                 drivers = drivers.Where(d => d.driver_id != selectedDriver.driver_id).ToList();
                 statusMessage = "✅ Pilóta törölve!";
                 StateHasChanged();
@@ -115,7 +118,7 @@
             }
             else
             {
-                // Hiba történt (pl. SQL Foreign Key hiba)
+                // Hiba esetén figyelmeztető üzenetet jelenítünk meg
                 await JSRuntime.InvokeVoidAsync("alert", "Hiba történt a törlés során! Lehet, hogy a pilótához más adatok is tartoznak.");
             }
         }

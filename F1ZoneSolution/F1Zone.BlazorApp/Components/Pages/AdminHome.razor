@@ -5,6 +5,7 @@
 
 <div class="admin-page">
 
+    @* Admin navigációs sáv *@
     <nav class="admin-navbar">
         <div class="admin-navbar-left">
             <h2>Admin Panel</h2>
@@ -21,7 +22,7 @@
         <p class="admin-subtitle">
             Itt tudod kiválasztani, hogy melyik pálya és melyik versenyző jelenjen meg a főoldalon.
         </p>
-
+        @* A főoldalon megjelenő legutóbbi futam pályájának kiválasztása *@
         <div class="admin-card">
             <h2>Legutóbbi futam</h2>
             <label for="trackSelect">Válassz pályát:</label>
@@ -34,6 +35,7 @@
             </select>
         </div>
 
+        @* A főoldalon megjelenő "Driver of the Day" kiválasztása *@
         <div class="admin-card">
             <h2>Driver of the Day</h2>
             <label for="driverSelect">Válassz versenyzőt:</label>
@@ -45,9 +47,11 @@
                 }
             </select>
         </div>
-
+        
+        @* A kiválasztott beállítások mentése az adatbázisba *@
         <button class="save-btn" @onclick="SaveHomepageSettings">Mentés</button>
 
+        @* Visszajelző üzenet sikeres mentés vagy hiba esetén *@
         @if (!string.IsNullOrWhiteSpace(message))
         {
             <p class="message">@message</p>
@@ -55,16 +59,24 @@
     </div>
 </div>
 
+
 @code {
+    
+    // A legördülő listákhoz szükséges adatok tárolása
     private List<DriverDto> drivers = new();
     private List<Circuits> circuits = new();
 
+    // A felhasználó által kiválasztott versenyző és pálya azonosítója
     private int selectedDriverId = 0;
     private int selectedCircuitId = 0;
 
+    // Felhasználói visszajelző szöveg és az autentikáció ellenőrzésének állapota
     private string message = "";
     private bool authChecked = false;
 
+
+    // Az oldalra betöltjük a szükséges adatokat az API-ból
+    // versenyzők, pályák és az aktuális főoldali beállítások
     protected override async Task OnInitializedAsync()
     {
         try
@@ -82,10 +94,13 @@
         }
         catch (Exception ex)
         {
+            // Hiba esetén visszajelzést adunk a felhasználónak
             message = $"Hiba történt az adatok betöltésekor: {ex.Message}";
         }
     }
-
+    
+    // Az első renderelés után ellenőrizzük, hogy a felhasználó hitelesített-e.
+    // Ha nem, visszairányítjuk a főoldalra.
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender || authChecked)
@@ -103,12 +118,15 @@
 
         StateHasChanged();
     }
-
+    
+    // Navigáció a főoldalra
     private void GoHome()
     {
         NavManager.NavigateTo("/");
     }
 
+    // Kijelentkezéskor töröljük a helyi tárolóból a bejelentkezési adatokat,
+    // majd újratöltéssel visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.RemoveItemAsync("isAuthenticated");
@@ -116,6 +134,8 @@
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
+
+    // Elmenti a kiválasztott pályát és versenyzőt az adatbázisba
     private async Task SaveHomepageSettings()
     {
         if (selectedCircuitId == 0 || selectedDriverId == 0)
@@ -145,12 +165,15 @@
                 message = $"Mentési hiba: {(int)response.StatusCode} - {errorText}";
             }
         }
+
+        // Sikertelen mentés esetén megjelenítjük a szerver válaszát
         catch (Exception ex)
         {
             message = $"Kivétel mentés közben: {ex.Message}";
         }
     }
 
+    // A főoldali kiemelt tartalmak mentéséhez használt modell
     public class HomepageSettings
     {
         public int Id { get; set; }
@@ -158,6 +181,7 @@
         public int FeaturedDriverId { get; set; }
     }
 
+    // A versenyzők adatainak kezelésére szolgáló DTO
     public class DriverDto
     {
         public int driver_id { get; set; }
@@ -173,6 +197,8 @@
         public string TeamName { get; set; } = "";
     }
 
+
+    // A pályák adatainak kezelésére szolgáló modell
     public class Circuits
     {
         public int circuit_id { get; set; }

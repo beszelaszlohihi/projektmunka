@@ -7,6 +7,8 @@
 
 <div class="drivers-body">
 
+    @* Felső navigációs sáv, amely a bejelentkezési állapot
+       és a szerepkör alapján jelenít meg menüpontokat *@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -22,11 +24,14 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+
+                @* Admin felhasználók számára extra menüpont jelenik meg *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
+                @* Mobilnézetben külön jelennek meg a felhasználói műveletek *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -56,6 +61,7 @@
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
 
+                @* Hamburger menü mobil eszközökhöz *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -70,6 +76,7 @@
         </div>
     </nav>
 
+    @* Az oldal címe és rövid leírása *@
     <section class="hero">
         <h1>Piloták</h1>
         <p>Kattints egy pilotára, hogy többet tudj meg róla</p>
@@ -77,12 +84,14 @@
 
     <div class="container">
 
+        @* Amíg a pilóták nem töltődnek be, betöltési szöveget jelenítünk meg *@
         @if (groupedDrivers == null)
         {
             <p>Adatok betöltése...</p>
         }
         else
         {
+            @* A pilótákat csapatok szerint csoportosítva jelenítjük meg *@
             @foreach (var group in groupedDrivers)
             {
                 <div class="team-section">
@@ -95,10 +104,10 @@
                     <div class="drivers-grid">
                         @foreach (var driver in group)
                         {
-                            @* 1. A kártya fő kerete (ez tartja össze a linket és a szívet) *@
+                           
                             <div class="driver-card-wrapper" style="position: relative;">
 
-                                @* 2. Maga a kattintható kártya *@
+                                @* Maga a kattintható kártya *@
                                 <a class="driver-card" href="/driver/@driver.driver_name.Replace(" ", "-").ToLower()" style="display: block;">
                                     <span class="driver-number-bg" style="color: @driver.teamcolor; opacity: 0.2;">
                                         @(driver.racing_number ?? 0)
@@ -115,7 +124,8 @@
                                     </div>
                                 </a>
 
-                                @* 3. A KEDVENC GOMB (Most már a linken KÍVÜL, de a kártyán BELÜL) *@
+                                @* Bejelentkezett felhasználó esetén lehetőség van
+                                   a pilóta kedvencekhez adására vagy eltávolítására *@
                                 @if (isLoggedIn)
                                 {
                                     <div class="favorite-container" style="position: absolute; top: 15px; right: 15px; z-index: 100;">
@@ -149,6 +159,7 @@
 
 @code {
 
+    // A navigációs menü, bejelentkezés és felhasználói adatok állapotai
     private bool isMenuOpen = false;
     private bool isLoggedIn = false;
     private string userName = "";
@@ -156,13 +167,18 @@
     private List<int> favoriteDriverIds = new();
     private int currentUserId = 1;
 
+    // Menü állapotának kezelése mobilnézetben
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
 
+    // A pilóták csapatok szerinti csoportosított listája
     private IEnumerable<IGrouping<string, DriverDto>> groupedDrivers;
+    
+    // A teljes pilótalista tárolása
     private List<F1ZoneLibrary.Dto.DriverDto> drivers;
 
-    //kedvencek cucc
+    // Egy pilóta kedvenc státuszának váltása:
+    // ha már kedvenc, töröljük; ha még nem, hozzáadjuk
     private async Task ToggleFavorite(int driverId)
     {
         if (!isLoggedIn || currentUserId <= 0) 
@@ -202,6 +218,7 @@
         StateHasChanged(); 
     }
 
+    // A bejelentkezett felhasználó kedvenc pilótáinak lekérése az API-ból
     private async Task LoadFavorites()
     {
         try
@@ -236,11 +253,12 @@
         }
     }
 
-
+    // Ellenőrzi, hogy egy adott pilóta szerepel-e a kedvencek között
     private bool IsFavorite(int driverId) => favoriteDriverIds.Contains(driverId);
 
-    //eddig van a kedvencek
 
+    // Az oldal inicializálásakor betöltjük a pilótákat,
+    // majd csapatnév alapján csoportosítjuk őket
     protected override async Task OnInitializedAsync()
     {
         // Az admin-list-et hívjuk, mert abban benne van a teamname és a bio is
@@ -269,6 +287,8 @@
         }
     }
 
+    // Az első renderelés után kiolvassuk a local storage-ból
+    // a bejelentkezési adatokat és szükség esetén betöltjük a kedvenceket
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -291,7 +311,11 @@
         }
     }
 
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin() => NavManager.NavigateTo("/login");
+    
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.ClearAsync();
