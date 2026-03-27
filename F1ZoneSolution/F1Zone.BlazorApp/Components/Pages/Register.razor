@@ -11,6 +11,7 @@
             <p>Hozd létre a profilod és kövesd az F1 világát!</p>
         </div>
 
+        @* Regisztrációs űrlap, amely sikeres validáció után meghívja a regisztrációs metódust *@
         <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
             <div class="form-group">
                 <label>Felhasználónév</label>
@@ -27,6 +28,7 @@
                 <input type="password" @bind-value="registerModel.Password" placeholder="••••••••" required />
             </div>
 
+            @* Sikertelen regisztráció esetén hibaüzenet megjelenítése *@
             @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="error-msg">@errorMessage</div>
@@ -35,6 +37,7 @@
             <button type="submit" class="hero-btn">REGISZTRÁCIÓ</button>
         </EditForm>
 
+        @* Navigáció a bejelentkezési oldalra meglévő felhasználók számára *@
         <div class="login-footer">
             <p>Van már fiókod? <a href="/login">Bejelentkezés</a></p>
         </div>
@@ -42,9 +45,14 @@
 </div>
 
 @code {
+    // A regisztrációs űrlap adatait tároló modell
     private RegisterDto registerModel = new RegisterDto();
+
+    // Hibaüzenet tárolása sikertelen regisztráció esetére
     private string errorMessage;
 
+    // A regisztrációs folyamat kezelése:
+    // elküldi az adatokat az API-nak, majd siker esetén átirányít a bejelentkezési oldalra
     private async Task HandleRegister()
     {
         errorMessage = null;
@@ -52,11 +60,12 @@
 
         if (response.IsSuccessStatusCode)
         {
-            // Sikeres regisztráció után küldjük át a Loginra
+            // Sikeres regisztráció után átirányítás a login oldalra
             NavManager.NavigateTo("/login");
         }
         else
         {
+            // Sikertelen regisztráció esetén visszajelzés a felhasználónak
             errorMessage = "A regisztráció nem sikerült. Lehet, hogy már létezik ez az email?";
         }
     }

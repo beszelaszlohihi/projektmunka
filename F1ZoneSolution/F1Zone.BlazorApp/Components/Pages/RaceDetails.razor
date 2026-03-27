@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 
 <div class="details-wrapper">
+    @* Navigációs gomb vissza a versenynaptár oldalra *@
     <div class="nav-actions">
         <button class="back-btn" @onclick="GoBack">
             <span class="arrow">←</span> Vissza a versenynaptárhoz
@@ -21,6 +22,7 @@
         }
         else
         {
+            @* A kiválasztott futam részletes adatainak megjelenítése *@
             <h1 class="race-title">@details.RaceName - Részletek</h1>
 
             <div class="details-grid">
@@ -41,14 +43,19 @@
 </div>
 
 @code {
+    // Az URL-ből érkező futamazonosító
     [Parameter] public int Id { get; set; }
+    
+    // A kiválasztott futam részletes adatainak tárolása
     private RaceDto? details;
 
+
+    // Az oldal inicializálásakor lekérjük az adott futam adatait az API-ból
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // Fontos: Itt a saját API-d pontos végpontját használd!
+            
             details = await Http.GetFromJsonAsync<RaceDto>($"api/raceschedules/{Id}");
         }
         catch (Exception ex)
@@ -57,12 +64,13 @@
         }
     }
 
+    // Visszanavigálás a versenynaptár oldalra
     private void GoBack()
     {
         NavManager.NavigateTo("/schedule");
     }
 
-    // Ideiglenes DTO, ha a Library-ből nem húzná be rendesen
+    
     public class RaceDto
     {
         public int Id { get; set; }

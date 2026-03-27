@@ -8,6 +8,8 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="news-page">
+    @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
+       és szerepköre alapján jelenít meg különböző menüpontokat *@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -23,11 +25,13 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+                @* Admin felhasználók számára külön menüpont megjelenítése *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
+                @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -56,6 +60,7 @@
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
 
+                @* Hamburger menü mobil eszközökhöz *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -74,7 +79,9 @@
         <h1>Legfrissebb Hírek</h1>
         <p>Hivatalos F1 hírek magyar nyelven</p>
 
-        @* --- ÚJ: SZŰRŐ GOMB --- *@
+        
+        @* Bejelentkezett felhasználó esetén, ha vannak kedvenc pilóták,
+           megjelenítjük a kedvencek szerinti szűrő kapcsolót *@
         @if (isLoggedIn && favoriteDriverNames.Any())
         {
             <div class="filter-container mt-3">
@@ -86,17 +93,21 @@
     </header>
 
     <div class="container">
+        @* Hiba esetén visszajelző üzenet megjelenítése *@
         @if (!string.IsNullOrEmpty(errorMsg))
         {
             <div class="alert alert-danger">@errorMsg</div>
         }
 
+        @* Betöltés közben tájékoztató szöveg jelenik meg *@
         @if (articles == null)
         {
             <div class="loader-container">
                 <p>Hírek keresése a pályán...</p>
             </div>
         }
+
+        @* Ha nincs megjeleníthető hír, külön üres állapotot mutatunk *@
         else if (DisplayedArticles.Count == 0)
         {
             <div class="empty-news">
@@ -105,7 +116,7 @@
         }
         else
         {
-            @* FONTOS: Most már a DisplayedArticles listán megyünk végig! *@
+            @* A szűrés utáni hírek listájának kártyás megjelenítése *@
             <div class="news-grid">
                 @foreach (var article in DisplayedArticles)
                 {
@@ -141,12 +152,14 @@
 
 @code {
 
+    // A lekért hírek és az esetleges hibaüzenet tárolása
     private List<NewsArticle>? articles;
     private string? errorMsg;
 
-    // az api kulcs amiert regisztralnom kellett
+    // A hírszolgáltató API kulcsa
     private string apiKey = "a1184626f3ff4c4e9cfefdd5ca821261";
 
+    // A navigációs menü, bejelentkezési állapot és felhasználói adatok kezelése
     private bool isMenuOpen = false;
     private bool isLoggedIn = false;
     private string userName = "";
@@ -155,25 +168,29 @@
     private int currentUserId;
     private bool showOnlyFavorites = false;
 
+    // Mobil menü állapotának kezelése
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin() => Nav.NavigateTo("/login");
 
-    // szures
+    // A megjelenítendő hírek listája:
+    // ha nincs szűrés, minden hír látszik;
+    // ha a szűrő aktív, csak a kedvenc pilótákhoz kapcsolódó hírek jelennek meg
     private List<NewsArticle> DisplayedArticles
     {
         get
         {
-            // 1. Ha még töltődnek a hírek, üres listát adunk
+            
             if (articles == null) return new List<NewsArticle>();
 
-            // 2. Ha nincs bekapcsolva a szűrő, minden hírt mutatunk
+            
             if (!showOnlyFavorites) return articles;
 
-            // 3. SZŰRÉS:
+            
             return articles.Where(a =>
             {
-                // Végigmegyünk az összes kedvenc pilótád nevén
+                
                 foreach (var fullName in favoriteDriverNames)
                 {
                     if (string.IsNullOrWhiteSpace(fullName)) continue;
@@ -202,19 +219,20 @@
     }
 
 
-    // ...
+    // A kiválasztott hír megnyitása
     private async Task OpenArticle(string url)
     {
         Nav.NavigateTo(url);
     }
 
     
-
+    // Az oldal inicializálásakor betöltjük a híreket az API-ból
     protected override async Task OnInitializedAsync()
     {
         await FetchNews();
     }
 
+    // Hírek lekérése külső API-ból, majd a használható elemek eltárolása
     private async Task FetchNews()
     {
         try
@@ -238,6 +256,8 @@
     }
 
 
+    // Az első renderelés után betöltjük a local storage-ból
+    // a felhasználói adatokat, majd lekérjük a kedvenc pilóták neveit
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -255,21 +275,23 @@
         }
     }
 
+    // A felhasználó kedvenc pilótáinak neveit lekérjük,
+    // hogy ezek alapján tudjuk szűrni és kiemelni a híreket
     private async Task LoadFavoriteNames()
     {
         try
         {
-            // 1. Lekérjük a kedvenc ID-kat (ezt már tudod hogy kell)
+            // Lekérjük a kedvencek rekordjait
             var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
             var favIds = favs.Where(f => f.UserId == currentUserId && f.ItemType == "Driver").Select(f => f.ItemId).ToList();
 
-            // 2. Lekérjük az összes pilótát az API-tól
+            // Lekérjük az összes pilótát
             var allDrivers = await Http.GetFromJsonAsync<List<F1ZoneLibrary.MODEL.Drivers>>("api/drivers");
 
-            // 3. Kiválogatjuk azoknak a neveit, akik az ID listában benne vannak
+            // Kiválogatjuk a kedvenc pilóták neveit az ID-k alapján
             favoriteDriverNames = allDrivers
                 .Where(d => favIds.Contains(d.driver_id))
-                .Select(d => d.driver_name) // Vagy d.FullName, ahogy nálad van
+                .Select(d => d.driver_name) 
                 .ToList();
         }
         catch (Exception ex)
@@ -282,6 +304,8 @@
         foreach (var n in favoriteDriverNames) Console.WriteLine($"Név a listában: {n}");
     }
 
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.ClearAsync();
@@ -291,7 +315,7 @@
         Nav.NavigateTo("/", forceLoad: true);
     }
 
-    // --- DTO OSZTÁLYOK (Csak egyszer szerepeljenek!) ---
+    // --- DTO OSZTÁLYOK
 
     public class NewsResponse
     {

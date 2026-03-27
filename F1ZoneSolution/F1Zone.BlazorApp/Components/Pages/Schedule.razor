@@ -5,6 +5,8 @@
 @rendermode InteractiveServer
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
+@* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
+   és szerepköre alapján jelenít meg különböző menüpontokat *@
 <nav class="navbar">
     <div class="nav-container">
         <div class="nav-brand">
@@ -20,11 +22,13 @@
             <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
             <li><a href="/strategy">Stratégia</a></li>
 
+            @* Admin felhasználók számára külön menüpont megjelenítése *@
             @if (isLoggedIn && userRole == "Admin")
             {
                 <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
             }
 
+            @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
             <li class="mobile-only">
                 @if (isLoggedIn)
                 {
@@ -54,6 +58,7 @@
                 <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
             }
 
+            @* Hamburger menü mobil eszközökhöz *@
             <button class="burger-btn" @onclick="ToggleMenu">
                 @if (isMenuOpen)
                 {
@@ -69,6 +74,7 @@
 </nav>
 
 <div class="schedule-container">
+    @* A teljes versenynaptár listázása kártyás formában *@
     @foreach (var race in races)
     {
         
@@ -98,50 +104,59 @@
 </div>
 
 @code {
+    // A versenynaptár futamainak listája
     private List<RaceDto> races = new();
 
+    // A navigációs menü állapotának kezelése
     private bool isMenuOpen = false;
 
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
 
+    // A felhasználó bejelentkezési állapotának és adatainak tárolása
     private bool isLoggedIn = false;
     private string userName = "";
     private string userRole = "";
 
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin() => NavManager.NavigateTo("/login");
 
+    // Az oldal inicializálásakor lekérjük a versenynaptár adatait az API-ból
     protected override async Task OnInitializedAsync()
     {
-        // Ha kész az API-d, akkor majd ez kell:
         races = await Http.GetFromJsonAsync<List<RaceDto>>("api/raceschedules");
     }
 
+    // Az első renderelés után kiolvassuk a local storage-ból
+    // a bejelentkezési állapotot és a felhasználói adatokat
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Kiolvassuk, hogy be van-e jelentkezve
+            
             isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
 
             if (isLoggedIn)
             {
-                // Ha igen, beletesszük a dobozokba a nevet és a rangot
+                
                 userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
                 userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
             }
 
-            // Megkérjük a Blazort, hogy rajzolja újra az oldalt a friss adatokkal
             StateHasChanged();
+
         }
     }
     
 
+    // Navigáció a kiválasztott futam részletező oldalára
     private void NavigateToDetails(int raceId)
     {
         NavManager.NavigateTo($"/schedule/details/{raceId}");
     }
 
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.ClearAsync();
@@ -152,7 +167,6 @@
     }
   
 
-    // Segéd osztály, ha még nincs a DTO könyvtáradban
     public class RaceDto
     {
         public int Id { get; set; }

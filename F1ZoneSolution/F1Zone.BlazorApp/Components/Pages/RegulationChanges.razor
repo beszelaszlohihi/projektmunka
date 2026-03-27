@@ -7,6 +7,8 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="f1-body">
+    @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
+       és szerepköre alapján jelenít meg különböző menüpontokat *@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -22,11 +24,13 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+                @* Admin felhasználók számára külön menüpont megjelenítése *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
+                @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -56,6 +60,7 @@
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
 
+                @* Hamburger menü mobil eszközökhöz *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -75,12 +80,14 @@
             <p>Az oldalon az első hivatalos szezontól a mai napig a nagyobb, jelentőségteljesebb szabályváltozásokat gyűjtöttük össze ide.</p>
         </div>
 
+        @* Betöltés közben tájékoztató szöveg jelenik meg *@
         @if (regulations == null)
         {
             <p class="loading">Adatok betöltése a boxutcából...</p>
         }
         else
         {
+            @* A szabályváltozások idővonalas megjelenítése évszám szerint *@
             <div class="timeline">
                 @foreach (var reg in regulations)
                 {
@@ -97,17 +104,25 @@
 </div>
 
 @code {
+    // A lekért szabályváltozások listája
     private List<RegulationDto> regulations; 
 
+    // A navigációs menü és a felhasználói állapot kezeléséhez szükséges változók
     private bool isMenuOpen = false;
     private bool isLoggedIn = false;
     private string userName = "";
     private string userRole = "";
 
+    // Mobil menü állapotának kezelése
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
+    
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin() => NavManager.NavigateTo("/login");
 
+
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.ClearAsync();
@@ -117,25 +132,28 @@
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
+    // Az első renderelés után kiolvassuk a local storage-ból
+    // a bejelentkezési állapotot és a felhasználói adatokat
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Kiolvassuk, hogy be van-e jelentkezve
+            
             isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
 
             if (isLoggedIn)
             {
-                // Ha igen, beletesszük a dobozokba a nevet és a rangot
+                
                 userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
                 userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
             }
 
-            // Megkérjük a Blazort, hogy rajzolja újra az oldalt a friss adatokkal
+            
             StateHasChanged();
         }
     }
 
+    // Az oldal inicializálásakor lekérjük a szabályváltozások adatait az API-ból
     protected override async Task OnInitializedAsync()
     {
         try
@@ -144,7 +162,7 @@
         }
         catch (Exception ex)
         {
-            // Ha hiba van, itt látszódni fog a konzolon 
+            //Hiba üzenet a felhasználónak
             Console.WriteLine($"Hiba történt: {ex.Message}");
         }
     }

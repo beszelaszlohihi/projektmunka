@@ -3,6 +3,9 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject HttpClient Http
 
+
+@* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
+  és szerepköre alapján jelenít meg különböző menüpontokat *@
 <div class="f1-body">
     <nav class="navbar">
         <div class="nav-container">
@@ -19,11 +22,13 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+                @* Admin felhasználók számára extra menüpont megjelenítése *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
 
+                @* Mobilnézetben a felhasználói műveletek külön jelennek meg *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -52,6 +57,7 @@
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
 
+                @* Hamburger menü mobil eszközökhöz *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -72,6 +78,8 @@
         <a href="/tracks" class="hero-btn">Pályák felfedezése</a>
     </section>
 
+
+    @* Ha sikerült lekérni a következő futamot, megjelenítjük a visszaszámlálót *@
     @if (nextRace != null)
     {
         <section class="countdown-section">
@@ -109,7 +117,10 @@
             <h2>Legutóbbi futam</h2>
         </div>
 
+
         <div class="tracks-grid">
+            @* A főoldalra kiemelt pálya megjelenítése.
+                Admin számára kattintható, más felhasználóknál csak információs kártya *@
             <article class="track-card @(isLoggedIn && userRole == "Admin" ? "" : "disabled-card")"
                      @onclick="NavigateToAdmin"
                      style="cursor:@(isLoggedIn && userRole == "Admin" ? "pointer" : "not-allowed");">
@@ -140,6 +151,8 @@
         </div>
 
         <div class="tracks-grid">
+            @* A főoldalra kiemelt versenyző megjelenítése.
+                Admin számára kattintható, más felhasználóknál csak információs kártya *@
             <article class="track-card @(isLoggedIn && userRole == "Admin" ? "" : "disabled-card")"
                      @onclick="NavigateToAdmin"
                      style="cursor:@(isLoggedIn && userRole == "Admin" ? "pointer" : "not-allowed");">
@@ -172,24 +185,32 @@
 </div>
 
 @code {
+
+    // A navigációs menü és a felhasználói állapot kezeléséhez szükséges változók
     private bool isMenuOpen = false;
     private bool isLoggedIn = false;
     private string userName = "";
     private string userRole = "";
 
+    // A főoldalon kiemelt pálya és versenyző adatai
     private Circuits? selectedCircuit;
     private DriverDto? selectedDriver;
 
+    // A következő futam és a visszaszámláló állapotának tárolása
     private RaceSchedule? nextRace;
     private TimeSpan timeLeft;
     private System.Timers.Timer? countdownTimer;
 
+    // Az oldal inicializálásakor betöltjük a főoldali kiemelt elemeket
+    // és a következő futam adatait
     protected override async Task OnInitializedAsync()
     {
         await LoadHomepageSelectionsFromApi();
         await LoadNextRaceAsync();
     }
 
+    // Az első renderelés után kiolvassuk a local storage-ból
+    // a bejelentkezési adatokat és a felhasználó szerepkörét
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
@@ -206,6 +227,7 @@
         StateHasChanged();
     }
 
+    // Az admin által kiválasztott főoldali pálya és versenyző betöltése az API-ból
     private async Task LoadHomepageSelectionsFromApi()
     {
         try
@@ -232,6 +254,7 @@
         }
     }
 
+    // A következő futam adatainak lekérése és a visszaszámláló időzítő elindítása
     private async Task LoadNextRaceAsync()
     {
         try
@@ -257,6 +280,7 @@
         }
     }
 
+    // Kiszámolja, mennyi idő van még hátra a következő futam kezdetéig
     private void UpdateCountdown()
     {
         if (nextRace == null)
@@ -271,6 +295,7 @@
         }
     }
 
+    // Admin jogosultság esetén átnavigál az admin főoldalra
     private async Task NavigateToAdmin()
     {
         var isAuthenticated = await localStorage.GetItemAsync<bool>("isAuthenticated");
@@ -284,21 +309,26 @@
         NavManager.NavigateTo("/admin/home");
     }
 
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin()
     {
         NavManager.NavigateTo("/login");
     }
 
+    // Mobil menü nyitása és zárása
     private void ToggleMenu()
     {
         isMenuOpen = !isMenuOpen;
     }
 
+    // Menü bezárása navigáció után
     private void CloseMenu()
     {
         isMenuOpen = false;
     }
 
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.RemoveItemAsync("isAuthenticated");

@@ -5,6 +5,8 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="f1-body">
+    @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
+       és szerepköre alapján jelenít meg különböző menüpontokat *@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -20,11 +22,13 @@
                 <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
                 <li><a href="/strategy">Stratégia</a></li>
 
+                @* Admin felhasználók számára külön menüpont megjelenítése *@
                 @if (isLoggedIn && userRole == "Admin")
                 {
                     <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
                 }
-
+                
+                @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
                 <li class="mobile-only">
                     @if (isLoggedIn)
                     {
@@ -53,7 +57,8 @@
                 {
                     <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
                 }
-
+                
+                @* Hamburger menü mobil eszközökhöz *@
                 <button class="burger-btn" @onclick="ToggleMenu">
                     @if (isMenuOpen)
                     {
@@ -67,17 +72,21 @@
             </div>
         </div>
     </nav>
+
+    @* Az oldal címe és rövid bemutató szövege *@
     <div class="section-header" style="margin-top: 4rem; text-align: center;">
         <h2>Versenynaptár Pályái</h2>
         <p>Böngészd végig a Forma-1 szezon összes legendás helyszínét!</p>
     </div>
 
+    @* Betöltés közben tájékoztató üzenet jelenik meg *@
     @if (tracks == null)
     {
         <p style="text-align: center;"><em>Pályák betöltése a boxutcából...</em></p>
     }
     else
     {
+        @* A pályák kártyás megjelenítése *@
         <div class="tracks-grid">
             @foreach (var track in tracks)
             {
@@ -101,17 +110,25 @@
 </div>
 
 @code {
+    // A lekért pályák listája
     private List<Track>? tracks;
 
+    // A navigációs menü és a felhasználói állapot kezeléséhez szükséges változók
     private bool isLoggedIn = false;
     private string userName = "";
     private string userRole = "";
     private bool isMenuOpen = false;
 
+    // Mobil menü állapotának kezelése
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
     private void CloseMenu() => isMenuOpen = false;
+    
+    // Navigáció a bejelentkezési oldalra
     private void GoToLogin() => NavManager.NavigateTo("/login");
 
+
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
     private async Task Logout()
     {
         await localStorage.ClearAsync();
@@ -121,12 +138,15 @@
         NavManager.NavigateTo("/", forceLoad: true);
     }
 
+    // Az oldal inicializálásakor lekérjük a pályák adatait az API-ból
     protected override async Task OnInitializedAsync()
     {
 
         tracks = await Http.GetFromJsonAsync<List<Track>>("api/Circuits");
     }
 
+    // Az első renderelés után kiolvassuk a local storage-ból
+    // a bejelentkezési állapotot és a felhasználói adatokat
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

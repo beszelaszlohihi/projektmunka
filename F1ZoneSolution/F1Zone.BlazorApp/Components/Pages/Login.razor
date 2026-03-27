@@ -12,6 +12,7 @@
             <p>Lépj be a profilodba a teljes élményért!</p>
         </div>
 
+        @* Bejelentkezési űrlap, amely sikeres validáció után meghívja a login kezelő metódust *@
         <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
             <div class="form-group">
                 <label>Email cím</label>
@@ -23,6 +24,7 @@
                 <input type="password" @bind-value="loginModel.Password" placeholder="••••••••" required />
             </div>
 
+            @* Sikertelen bejelentkezés esetén hibaüzenet megjelenítése *@
             @if (!string.IsNullOrEmpty(errorMessage))
             {
                 <div class="error-msg">@errorMessage</div>
@@ -31,6 +33,7 @@
             <button type="submit" class="hero-btn">BEJELENTKEZÉS</button>
         </EditForm>
 
+        @* Navigáció a regisztrációs oldalra új felhasználók számára *@
         <div class="login-footer">
             <p>Nincs még fiókod? <a href="/register">Regisztráció</a></p>
         </div>
@@ -39,11 +42,15 @@
 
 @code {
 
+    // A bejelentkezési űrlap adatait tároló modell
     private LoginDto loginModel = new LoginDto();
 
+    // Hibaüzenet tárolása sikertelen bejelentkezés esetére
     private string errorMessage;
 
 
+    // A bejelentkezési folyamat kezelése:
+    // elküldi az adatokat az API-nak, majd siker esetén elmenti a felhasználói adatokat localStorage-ba
     private async Task HandleLogin()
     {
         errorMessage = null;
@@ -62,14 +69,15 @@
                 await localStorage.SetItemAsync("isAuthenticated", true);
                 await localStorage.SetItemAsync("userId", result.Id);
 
-                // Itt a lényeg: Az adatbázisból jövő Role szöveget ("Admin" vagy "User") mentjük el!
+                //Az adatbázisból jövő Role szöveget ("Admin" vagy "User") mentjük el!
                 await localStorage.SetItemAsync("userRole", result.Role);
 
+                // Sikeres bejelentkezés után visszairányítás a főoldalra
                 NavManager.NavigateTo("/", forceLoad: true);
             }
         }
         else
-        {
+        {   // Hibás belépési adatok esetén visszajelzés a felhasználónak
             errorMessage = "Hibás email vagy jelszó!";
         }
     }
