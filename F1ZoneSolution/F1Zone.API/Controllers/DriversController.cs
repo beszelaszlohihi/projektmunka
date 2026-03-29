@@ -1,4 +1,5 @@
 ﻿using F1Zone.API.INTERFACE;
+using F1ZoneLibrary.DATA;
 using F1ZoneLibrary.Dto;
 using F1ZoneLibrary.MODEL;
 using Microsoft.AspNetCore.Http;
@@ -14,22 +15,65 @@ namespace F1Zone.API.Controllers
     {
         private readonly IGenericF1ZoneService<Drivers> _service;
 
-        public DriversController(IGenericF1ZoneService<Drivers> service) : base(service)
+        private readonly F1ZoneDbContext _context;
+
+        public DriversController(IGenericF1ZoneService<Drivers> service, F1ZoneDbContext context) : base(service)
         {
             _service = service;
+            _context = context;
         }
 
-        // ÚJ METÓDUS: Név alapján történő lekérés
-        // Így az elérési útja ez lesz: api/drivers/by-name/Lewis-Hamilton
+        
+
         [HttpGet("{name}")]
-        public async Task<ActionResult<Drivers>> GetDriverByName(string name)
+        public async Task<ActionResult<DriverDto>> GetDriverByName(string name)
         {
             var searchName = name.Replace("-", " ");
-            var drivers = await _service.GetAll();
-            var result = drivers.FirstOrDefault(d => d.driver_name.Equals(searchName, StringComparison.OrdinalIgnoreCase));
 
-            if (result == null) return NotFound();
-            return Ok(result);
+            // EZ AZ IGAZI JOIN: Összekötjük a pilótát a szerződéssel és a motorral
+            var driverData = await _context.Drivers
+                .Where(d => d.driver_name == searchName)
+                .Select(d => new DriverDto
+                {
+                    driver_id = d.driver_id,
+                    driver_name = d.driver_name,
+                    wins = d.wins,
+                    podiums = d.podiums,
+                    fastest_laps = d.fastest_laps,
+                    championships = d.championships,
+                    points = d.points,
+                    biography = d.biography,
+                    nationality = d.nationality,
+                    teamname = d.teamname,
+
+                    // JOIN a driver_contracts táblához
+                    salary_estimate = _context.Driver_contracts
+                        .Where(c => c.driver_id == d.driver_id)
+                        .Select(c => c.salary_estimate)
+                        .FirstOrDefault(),
+
+                    team_sponsors = _context.Team_sponsors
+                        .Where(ts => ts.team_id == _context.Teams
+                            .Where(t => t.team_name == d.teamname)
+                            .Select(t => t.team_id)
+                            .FirstOrDefault())
+                        .Join(_context.Sponsors,
+                              ts => ts.sponsor_id,
+                              s => s.sponsor_id,
+                              (ts, s) => s.sponsor_name)
+                        .ToList(),
+
+                    // JOIN a teams és engines táblákhoz
+                    manufacturer = (from t in _context.Teams
+                                   join e in _context.Engines on t.engine_id equals e.engine_id
+                                   where t.team_name == d.teamname
+                                   select e.manufacturer).FirstOrDefault()
+                })
+                .FirstOrDefaultAsync();
+
+            if (driverData == null) return NotFound();
+
+            return Ok(driverData);
         }
 
 
@@ -38,7 +82,7 @@ namespace F1Zone.API.Controllers
         {
             var drivers = await _service.GetAll();
 
-            // Itt alakítjuk át a nyers adatokat DTO-vá
+            
             var result = drivers.Select(d => new DriverDto
             {
                 driver_id = d.driver_id,
@@ -46,7 +90,6 @@ namespace F1Zone.API.Controllers
                 wins = d.wins,
                 championships = d.championships,
                 points = d.points,
-                // EZEK HIÁNYOZTAK EDDIG:
                 nationality = d.nationality,
                 debut_year = d.debut_year,
                 podiums = d.podiums,
@@ -60,15 +103,15 @@ namespace F1Zone.API.Controllers
             return Ok(result);
         }
 
-        //if (id != driverDto.driver_id) return BadRequest("ID mismatch")
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDriver(int id, [FromBody] DriverDto driverDto)
         {
             var driver = await _service.GetById(id);
             if (driver == null) return NotFound("A pilóta nem található.");
 
-            // Átadjuk az ÖSSZES módosítható adatot
-            driver.driver_name = driverDto.driver_name; // Akár a nevét is módosíthatod
+            
+            driver.driver_name = driverDto.driver_name;
             driver.wins = driverDto.wins;
             driver.championships = driverDto.championships;
             driver.points = driverDto.points;
@@ -96,7 +139,7 @@ namespace F1Zone.API.Controllers
         {
             var allDrivers = await _service.GetAll();
 
-            // Szűrünk azokra, akiknek a TeamName megegyezik (kis-nagybetű nem számít)
+           
             var teamDrivers = allDrivers
                 .Where(d => d.teamname != null && d.teamname.Equals(teamName, StringComparison.OrdinalIgnoreCase))
                 .Select(d => new DriverDto
