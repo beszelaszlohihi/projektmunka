@@ -10,7 +10,7 @@ namespace F1ZoneLibrary.MODEL
     public class Seasons
     {
         [Key]
-        public int season_year { get; set; }
+        public int reg_change_year { get; set; }
         public string technical_regulations { get; set; }
     }
 }

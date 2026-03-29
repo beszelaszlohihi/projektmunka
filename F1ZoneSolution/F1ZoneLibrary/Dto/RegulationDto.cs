@@ -8,7 +8,8 @@ namespace F1ZoneLibrary.Dto
 {
     public class RegulationDto
     {
-        public int Season_year { get; set; }
+        public int reg_change_year { get; set; }
+        
         public string Technical_regulations { get; set; }
     }
 }

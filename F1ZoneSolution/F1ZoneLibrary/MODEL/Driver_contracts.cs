@@ -13,7 +13,7 @@ namespace F1ZoneLibrary.MODEL
         public int contract_id { get; set; }
         public int driver_id { get; set; }
         public int team_id { get; set; }
-        public int season_year{ get; set; }
+        //public int season_year{ get; set; }
         public decimal salary_estimate{ get; set; }
     }
 }

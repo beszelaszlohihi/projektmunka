@@ -27,5 +27,8 @@ namespace F1ZoneLibrary.Dto
         public decimal? points { get; set; }
         public string? teamcolor { get; set; }
         public int? racing_number { get; set; }
+        public decimal? salary_estimate { get; set; }
+        public string manufacturer { get; set; } = string.Empty;
+        public List<string> team_sponsors { get; set; } = new List<string>();
     }
 }

@@ -14,5 +14,7 @@ namespace F1ZoneLibrary.MODEL
         public string TrackName { get; set; }
         public DateTime RaceDate { get; set; }
         public string CountryCode { get; set; }
+        public int circuit_id { get; set; }
+        public int reg_year { get; set; }
     }
 }

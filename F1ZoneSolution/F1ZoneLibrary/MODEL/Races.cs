@@ -11,9 +11,11 @@ namespace F1ZoneLibrary.MODEL
     {
         [Key]
         public int race_id { get; set; }
-        public int season_year { get; set; }
-        public int circuit_id { get; set; }
-        public DateTime race_date { get; set; }
-        public int round_number { get; set; }
+        //public int season_year { get; set; }
+        public int winner_driver_id { get; set; }
+        public TimeSpan fastest_lap_time { get; set; }
+        public int laps_completed { get; set; }
+        public int fastest_lap_driver_id{ get; set; }
+        public int race_time{ get; set; }
     }
 }

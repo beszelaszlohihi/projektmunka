@@ -28,10 +28,6 @@ namespace F1ZoneLibrary.DATA
         public DbSet<Driver_contracts> Driver_contracts { get; set; }
         public DbSet<Drivers> Drivers { get; set; }
         public DbSet<Engines> Engines { get; set; }
-        public DbSet<Fastest_laps> Fastest_laps { get; set; }
-        public DbSet<Pit_stops> Pit_stops { get; set; }
-        public DbSet<Qualifying_results> Qualifying_results { get; set; }
-        public DbSet<Race_results> Race_results { get; set; }
         public DbSet<Races> Races { get; set; }
         public DbSet<Seasons> Seasons { get; set; }
         public DbSet<Sponsors> Sponsors { get; set; }
