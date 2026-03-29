@@ -1,5 +1,4 @@
-﻿/* ALAPBEÁLLÍTÁSOK */
-body, .driver-detail-page {
+﻿body, .driver-detail-page {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #06131c;
     color: #fff;
@@ -7,8 +6,7 @@ body, .driver-detail-page {
     min-height: 100vh;
 }
 
-/* --- TELJES RESET ÉS ALAPOK --- */
-/* --- NAVBAR ALAPOK --- */
+
 .navbar {
     background: #06131c;
     height: 80px;
@@ -27,7 +25,7 @@ body, .driver-detail-page {
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* SZÉTLÖKI BAL-KÖZÉP-JOBB RÉSZRE */
+    justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     height: 100%;
@@ -61,7 +59,7 @@ nav {
     font-weight: 800;
     color: #fcd700;
     text-decoration: none;
-    line-height: 1; /* Ez rántja helyre függőlegesen */
+    line-height: 1; 
     display: flex;
     align-items: center;
 }
@@ -70,7 +68,7 @@ nav {
         color: white;
     }
 
-/* LINKEL ELRENDEZÉSE */
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -91,7 +89,7 @@ nav {
             color: #fcd700;
         }
 
-/* JOBB OLDAL CSOPORT */
+
 .nav-actions {
     display: flex;
     align-items: center;
@@ -152,7 +150,7 @@ nav {
                 width: 100%;
             }
 
-    /* A burger gombot is lökjük középre a sárga vonal és a navbar teteje között */
+    
     .nav-actions {
         display: flex;
         align-items: center;
@@ -191,6 +189,11 @@ nav {
         min-width: 140px !important;
         padding: 1rem !important;
     }
+
+    .technical-details {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 .mobile-only {
@@ -217,7 +220,7 @@ nav {
         
     }
 
-/* HERO */
+
 .hero {
     padding: 140px 20px 40px;
     text-align: center;
@@ -230,7 +233,7 @@ nav {
         margin: 0;
     }
 
-/* TARTALOM */
+
 .container {
     max-width: 1000px;
     margin: 0 auto;
@@ -245,7 +248,7 @@ h2 {
     color: #94a3b8;
 }
 
-/* ÉLETRAJZ KÁRTYA */
+
 .bio-card {
     background: #11222d;
     border: 1px solid rgba(255,255,255,0.05);
@@ -255,7 +258,7 @@ h2 {
     color: #cbd5e0;
 }
 
-/* STATISZTIKA SOR - EGY SORBA KÉNYSZERÍTVE */
+
 .stats-row {
     display: flex !important;
     justify-content: center !important;
@@ -266,7 +269,7 @@ h2 {
 }
 
 .stat-card {
-    /* EZ AZ EREDETI SZÍNED A KÉPRŐL */
+    
     background: #0d1a26;
     border: 1px solid #1c2e3f; 
     border-radius: 12px;
@@ -289,7 +292,7 @@ h2 {
     margin-bottom: 5px;
 }
 
-    /* SÁRGA KIEMELÉS (Csak ha a gold osztály rajta van) */
+    
     .stat-value.gold {
         color: #fcd700 !important;
         text-shadow: 0 0 15px rgba(252, 215, 0, 0.3);
@@ -303,7 +306,7 @@ h2 {
     letter-spacing: 1px;
 }
 
-/* VISSZA GOMB */
+
 .actions {
     text-align: center;
     margin-top: 40px;
@@ -326,7 +329,7 @@ h2 {
         background: rgba(252, 215, 0, 0.05);
     }
 
-/* FOOTER */
+
 footer {
     text-align: center;
     padding: 40px;
@@ -337,5 +340,47 @@ footer {
 @media (max-width: 500px) {
     .stat-card {
         flex: 0 0 100% !important;
+    }
+}
+
+.technical-details {
+    display: flex;
+    gap: 15px; 
+    margin: 30px 0;
+    width: 100%;
+}
+
+.tech-card {
+    flex: 1; 
+    background: #0d1a26;
+    border: 1px solid #1c2e3f;
+    border-radius: 12px;
+    padding: 15px; 
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tech-icon {
+    font-size: 2rem;
+}
+
+.tech-label {
+    display: block;
+    color: #8899a6;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.tech-value {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #fcd700; 
+}
+
+/* MOBIL FIX */
+@media (max-width: 768px) {
+    .technical-details {
+        flex-direction: column; 
     }
 }

@@ -101,6 +101,57 @@
                 }
             </div>
 
+            @if (driver != null)
+            {
+                <div class="technical-details">
+                    <div class="tech-card">
+                    <div class="tech-icon">💰</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Becsült fizetés</span>
+                        <span class="tech-value">@driver.salary_estimate?.ToString("N0") $</span>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">🏎️</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Aktuális csapat</span>
+                        <span class="tech-value">@(driver?.teamname ?? "Nincs adat")</span>
+                    </div>
+                </div>
+
+                    <div class="tech-card">
+                        <div class="tech-icon">🤝</div>
+                        <div class="tech-info">
+                            <span class="tech-label">Csapat fő szponzorai</span>
+                            <span class="tech-value">
+                                @if (driver.team_sponsors != null && driver.team_sponsors.Any())
+                                {
+                                    @string.Join(", ", driver.team_sponsors)
+                                }
+                                else
+                                {
+                                    <span>Nincs adat</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">🏎️</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Motorpartner</span>
+                        <span class="tech-value">@(driver?.manufacturer ?? "Nincs adat")</span>
+                    </div>
+                </div>
+                </div>
+            }
+
+            else
+            {
+                <p>🏎️ Adatok betöltése...</p>
+            }
+
             <h2>Karrier / Szezon statisztika</h2>
             @if (driver != null)
             {
@@ -149,15 +200,15 @@
 
     // Az URL-ből érkező pilótaazonosító
     [Parameter] public string id { get; set; } = string.Empty;
-    
-    
+
+
     // A lekért pilóta adatai
     private DriverDto? driver;
 
 
     // Másodlagos azonosító, amelyet jelenleg a kedvenc ellenőrzéshez kell
     [Parameter] public int masodikid { get; set; }
-    
+
     // Kedvenc állapot és bejelentkezett felhasználó adatai
     private bool isFavorite = false;
     private int currentUserId;
@@ -171,7 +222,7 @@
 
     // Hamburger menü állapotának váltása
     private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-    
+
     // Menü bezárása navigáció után
     private void CloseMenu() => isMenuOpen = false;
 
@@ -182,12 +233,12 @@
     {
         if (firstRender)
         {
-            
+
             currentUserId = await localStorage.GetItemAsync<int>("userId");
 
             if (currentUserId > 0)
             {
-                
+
                 var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
                 if (favs != null)
                 {
@@ -225,7 +276,7 @@
     // majd lekérjük a felhasználó hitelesítési állapotát és szerepkörét
     protected override async Task OnInitializedAsync()
     {
-        
+
         await LoadDriver();
 
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -249,7 +300,7 @@
             userRole = "";
         }
 
-       
+
         StateHasChanged();
     }
 
@@ -284,15 +335,18 @@
     }
 
     // A pilóta részletes adatainak kezelésére szolgáló DTO
-    public class DriverDto
-    {
-        [JsonPropertyName("driver_id")] public int driver_id { get; set; }
-        [JsonPropertyName("driver_name")] public string driver_name { get; set; } = "";
-        [JsonPropertyName("biography")] public string biography { get; set; } = "";
-        [JsonPropertyName("championships")] public int championships { get; set; }
-        [JsonPropertyName("wins")] public int wins { get; set; }
-        [JsonPropertyName("podiums")] public int podiums { get; set; }
-        [JsonPropertyName("fastest_laps")] public int fastest_laps { get; set; }
-        [JsonPropertyName("points")] public decimal points { get; set; }
-    }
+    // public class DriverDto
+    // {
+    //     [JsonPropertyName("driver_id")] public int driver_id { get; set; }
+    //     [JsonPropertyName("driver_name")] public string driver_name { get; set; } = "";
+    //     [JsonPropertyName("biography")] public string biography { get; set; } = "";
+    //     [JsonPropertyName("championships")] public int championships { get; set; }
+    //     [JsonPropertyName("wins")] public int wins { get; set; }
+    //     [JsonPropertyName("podiums")] public int podiums { get; set; }
+    //     [JsonPropertyName("fastest_laps")] public int fastest_laps { get; set; }
+    //     [JsonPropertyName("points")] public decimal points { get; set; }
+    //     [JsonPropertyName("salary_estimate")] public decimal? salary_estimate { get; set; }
+    //     [JsonPropertyName("manufacturer")] public string manufacturer{ get; set; } = "";
+    //     [JsonPropertyName("teamname")] public string teamname { get; set; }
+    // }
 }
