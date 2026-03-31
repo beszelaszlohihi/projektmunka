@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\ev vegi projekt\F1ZoneSolution\F1ZoneLibrary\F1ZoneLibrary.csproj" />
+    
     <ProjectReference Include="..\F1ZoneLibrary\F1ZoneLibrary.csproj" />
 	<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.20" />

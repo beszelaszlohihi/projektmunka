@@ -1,0 +1,234 @@
+﻿@page "/eredmenyek/{RaceId:int}"
+@inject HttpClient Http
+@using F1ZoneLibrary.MODEL
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<div class="race-result-container">
+    <div class="result-card">
+        <div class="card-header">
+            <h3>@FutamNeve EREDMÉNYEK</h3>
+            <div class="f1-line"></div>
+        </div>
+
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <a href="/" class="logo">F1<span>ZONE</span></a>
+                </div>
+
+                <ul class="nav-links @(isMenuOpen ? "active" : "")">
+                    <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+                    <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+                    <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+                    <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+                    <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+                    <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+                    <li><a href="/strategy">Stratégia</a></li>
+
+                    @* Admin felhasználók számára extra menüpont megjelenítése *@
+                    @if (isLoggedIn && userRole == "Admin")
+                    {
+                        <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+                    }
+
+                    @* Mobilnézetben a felhasználói műveletek külön jelennek meg *@
+                    <li class="mobile-only">
+                        @if (isLoggedIn)
+                        {
+                            <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                            <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                        }
+                        else
+                        {
+                            <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                        }
+                    </li>
+                </ul>
+
+                <div class="nav-actions">
+                    @if (isLoggedIn)
+                    {
+                        @if (userRole == "Admin")
+                        {
+                            <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                        }
+                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                        <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+                    }
+                    else
+                    {
+                        <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                    }
+
+                    @* Hamburger menü mobil eszközökhöz *@
+                    <button class="burger-btn" @onclick="ToggleMenu">
+                        @if (isMenuOpen)
+                        {
+                            <span>&times;</span>
+                        }
+                        else
+                        {
+                            <span>&#9776;</span>
+                        }
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        @if (Eredmeny == null)
+        {
+            <div class="loading-spinner">Töltés...</div>
+        }
+        else
+        {
+            <div class="podium-section">
+                <div class="podium-row first-place">
+                    <div class="position-badge gold">1</div>
+                    <div class="driver-info">
+                        <span class="driver-name">@(Gyoztes != null ? Gyoztes.driver_name : "Töltés...")</span>
+                    </div>
+                </div>
+
+                <div class="podium-row">
+                    <div class="position-badge silver">2</div>
+                    <div class="driver-info">
+                        <span class="driver-name">@(Masodik != null ? Masodik.driver_name : "Nincs adat")</span>
+                    </div>
+                </div>
+
+                <div class="podium-row">
+                    <div class="position-badge bronze">3</div>
+                    <div class="driver-info">
+                        <span class="driver-name">@(Harmadik != null ? Harmadik.driver_name : "Nincs adat")</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stat-box">
+                    <span class="stat-label">LEGGYORSABB KÖR</span>
+                    <span class="stat-value highlight">@Eredmeny.fastest_lap_time.ToString(@"mm\:ss\.fff")</span>
+                    <span class="stat-driver">@(Leggyorsabb != null ? Leggyorsabb.driver_name : "Nincs adat")</span>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-label">TELJES VERSENYIDŐ</span>
+                    <span class="stat-value">@Eredmeny.race_time.ToString(@"hh\:mm\:ss\.fff")</span>
+                    <span class="stat-driver">Hivatalos időeredmény</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int RaceId { get; set; }
+
+    private Races Eredmeny;
+
+    // Ide mentjük el a letöltött pilótákat
+    private F1ZoneLibrary.MODEL.Drivers Gyoztes;
+    private F1ZoneLibrary.MODEL.Drivers Masodik;
+    private F1ZoneLibrary.MODEL.Drivers Harmadik;
+    private F1ZoneLibrary.MODEL.Drivers Leggyorsabb;
+    private F1ZoneLibrary.MODEL.Drivers Gyorspilota;
+    private string FutamNeve = "FUTAM";
+
+    //login cuccok
+    private bool isMenuOpen = false;
+    private bool isLoggedIn = false;
+    private string userName = "";
+    private string userRole = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+
+        if (isLoggedIn)
+        {
+            userName = await localStorage.GetItemAsync<string>("userName");
+            userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
+        }
+
+        StateHasChanged();
+    }
+
+    private void GoToLogin()
+    {
+        NavManager.NavigateTo("/login");
+    }
+
+    // Mobil menü nyitása és zárása
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+
+    // Menü bezárása navigáció után
+    private void CloseMenu()
+    {
+        isMenuOpen = false;
+    }
+
+    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
+    // majd visszairányítjuk a felhasználót a főoldalra
+    private async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("isAuthenticated");
+        await localStorage.RemoveItemAsync("userName");
+        await localStorage.RemoveItemAsync("userRole");
+
+        isLoggedIn = false;
+        userName = "";
+        userRole = "";
+
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+
+    // login cuccok VEGE
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Letöltjük a futamot
+            Eredmeny = await Http.GetFromJsonAsync<Races>($"api/pastraces/{RaceId}");
+
+            if (Eredmeny != null)
+            {
+                // Letöltjük a győztest az ID alapján
+                Gyoztes = await Http.GetFromJsonAsync<F1ZoneLibrary.MODEL.Drivers>($"api/drivers/{Eredmeny.winner_driver_id}");
+
+                // 2. helyezett lekérése (Csak akkor, ha ki van töltve az adatbázisban)
+                if (Eredmeny.second_place_driver_id != null)
+                {
+                    Masodik = await Http.GetFromJsonAsync<F1ZoneLibrary.MODEL.Drivers>($"api/drivers/{Eredmeny.second_place_driver_id}");
+                }
+
+                // 3. helyezett lekérése
+                if (Eredmeny.third_place_driver_id != null)
+                {
+                    Harmadik = await Http.GetFromJsonAsync<F1ZoneLibrary.MODEL.Drivers>($"api/drivers/{Eredmeny.third_place_driver_id}");
+                }
+
+                var futamAdat = await Http.GetFromJsonAsync<RaceSchedules>($"api/raceschedules/{RaceId}");
+                if (futamAdat != null)
+                {
+                    FutamNeve = futamAdat.RaceName.ToUpper();
+                }
+
+                //Letöltjük a leggyorsabb körös pilótát az ID alapján
+                Leggyorsabb = await Http.GetFromJsonAsync<F1ZoneLibrary.MODEL.Drivers>($"api/drivers/{Eredmeny.fastest_lap_driver_id}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Hiba: " + ex.Message);
+        }
+    }
+}

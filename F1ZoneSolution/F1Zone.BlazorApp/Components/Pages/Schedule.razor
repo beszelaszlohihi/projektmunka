@@ -92,7 +92,7 @@
             <div class="card-right">
                 @if (race.RaceDate < DateTime.Now)
                 {
-                    <span class="status-badge finished">LEZAJLOTT</span>
+                    <button class="status-badge finished clickable" @onclick="() => Eredmenyek(race.Id)" style="cursor: pointer;">LEZAJLOTT</button>
                 }
                 else
                 {
@@ -125,6 +125,11 @@
     protected override async Task OnInitializedAsync()
     {
         races = await Http.GetFromJsonAsync<List<RaceDto>>("api/raceschedules");
+    }
+
+    private void Eredmenyek(int raceId)
+    {
+        NavManager.NavigateTo($"/eredmenyek/{raceId}");
     }
 
     // Az első renderelés után kiolvassuk a local storage-ból
