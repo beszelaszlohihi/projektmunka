@@ -16,6 +16,8 @@ namespace F1ZoneLibrary.MODEL
         public TimeSpan fastest_lap_time { get; set; }
         public int laps_completed { get; set; }
         public int fastest_lap_driver_id{ get; set; }
-        public int race_time{ get; set; }
+        public TimeSpan race_time{ get; set; }
+        public int? second_place_driver_id { get; set; }
+        public int? third_place_driver_id { get; set; }
     }
 }
