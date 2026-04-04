@@ -44,7 +44,7 @@ namespace F1Zone.API.Controllers
                 Email = model.Email,
                 Username = model.Username,
                 PasswordHash = passwordHash,
-                Role = model.Role // Itt dől el, hogy Admin vagy User
+                Role = model.Role 
             };
 
             // Mentés az adatbázisba
@@ -81,7 +81,7 @@ namespace F1Zone.API.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role) // Ez donti el hogy Admin vagy User
+                new Claim(ClaimTypes.Role, user.Role) 
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
@@ -92,7 +92,7 @@ namespace F1Zone.API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1), // 1 napig érvényes a belépés
+                Expires = DateTime.Now.AddDays(1), 
                 SigningCredentials = creds
             };
 

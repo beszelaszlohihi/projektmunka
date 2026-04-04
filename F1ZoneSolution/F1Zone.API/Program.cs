@@ -19,7 +19,7 @@ builder.Services.AddScoped(typeof(IGenericF1ZoneService<>), typeof(GenericF1Zone
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazor",
-        policy => policy.WithOrigins("https://localhost:7190") // Ide pontosan a Blazor címed kerül!
+        policy => policy.WithOrigins("https://localhost:7190")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });

@@ -30,7 +30,7 @@ namespace F1Zone.API.Controllers
         {
             var searchName = name.Replace("-", " ");
 
-            // EZ AZ IGAZI JOIN: Összekötjük a pilótát a szerződéssel és a motorral
+            //Összekötjük a pilótát a szerződéssel és a motorral
             var driverData = await _context.Drivers
                 .Where(d => d.driver_name == searchName)
                 .Select(d => new DriverDto

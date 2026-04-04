@@ -38,7 +38,7 @@ namespace F1Zone.API.Controllers
             return Ok(created);
         }
 
-        //frissitese
+        //frissites
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] T entity)
         {
@@ -46,7 +46,7 @@ namespace F1Zone.API.Controllers
             return NoContent();
         }
 
-        //torlese
+        //torles
         [HttpDelete]
         public async Task<ActionResult> Delete(T entity)
         {
