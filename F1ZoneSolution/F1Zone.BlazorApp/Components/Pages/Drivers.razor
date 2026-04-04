@@ -6,76 +6,6 @@
 @inject NavigationManager NavManager
 
 <div class="drivers-body">
-
-    @* Felső navigációs sáv, amely a bejelentkezési állapot
-       és a szerepkör alapján jelenít meg menüpontokat *@
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="/" class="logo">F1<span>ZONE</span></a>
-            </div>
-
-            <ul class="nav-links @(isMenuOpen ? "active" : "")">
-                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
-                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
-                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
-                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
-                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
-                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-                <li><a href="/strategy">Stratégia</a></li>
-
-
-                @* Admin felhasználók számára extra menüpont jelenik meg *@
-                @if (isLoggedIn && userRole == "Admin")
-                {
-                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
-                }
-
-                @* Mobilnézetben külön jelennek meg a felhasználói műveletek *@
-                <li class="mobile-only">
-                    @if (isLoggedIn)
-                    {
-                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
-                    }
-                    else
-                    {
-                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                    }
-                </li>
-            </ul>
-
-            <div class="nav-actions">
-                @if (isLoggedIn)
-                {
-
-                    @if (userRole == "Admin")
-                    {
-                        <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
-                    }
-                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
-                }
-                else
-                {
-                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                }
-
-                @* Hamburger menü mobil eszközökhöz *@
-                <button class="burger-btn" @onclick="ToggleMenu">
-                    @if (isMenuOpen)
-                    {
-                        <span>&times;</span>
-                    }
-                    else
-                    {
-                        <span>&#9776;</span>
-                    }
-                </button>
-            </div>
-        </div>
-    </nav>
-
     @* Az oldal címe és rövid leírása *@
     <section class="hero">
         <h1>Piloták</h1>
@@ -160,16 +90,12 @@
 @code {
 
     // A navigációs menü, bejelentkezés és felhasználói adatok állapotai
-    private bool isMenuOpen = false;
+  
     private bool isLoggedIn = false;
-    private string userName = "";
-    private string userRole = "";
     private List<int> favoriteDriverIds = new();
     private int currentUserId = 1;
 
-    // Menü állapotának kezelése mobilnézetben
-    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-    private void CloseMenu() => isMenuOpen = false;
+    
 
     // A pilóták csapatok szerinti csoportosított listája
     private IEnumerable<IGrouping<string, DriverDto>> groupedDrivers;
@@ -297,8 +223,7 @@
 
             if (isLoggedIn)
             {
-                userName = await localStorage.GetItemAsync<string>("userName");
-                userRole = await localStorage.GetItemAsync<string>("userRole");
+                
                 currentUserId = await localStorage.GetItemAsync<int>("userId");
 
                 
@@ -311,16 +236,4 @@
         }
     }
 
-    // Navigáció a bejelentkezési oldalra
-    private void GoToLogin() => NavManager.NavigateTo("/login");
-    
-    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
-    // majd visszairányítjuk a felhasználót a főoldalra
-    private async Task Logout()
-    {
-        await localStorage.ClearAsync();
-        userName = "";
-        userRole = "";
-        NavManager.NavigateTo("/", forceLoad: true);
-    }
 }

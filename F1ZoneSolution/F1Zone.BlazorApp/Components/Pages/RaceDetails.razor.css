@@ -31,6 +31,10 @@
     border-radius: 15px;
     border-left: 8px solid #fcd700;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding-top: 120px; /* 80px a menünek + 40px, hogy szépen nézzen ki */
+    max-width: 800px;
+    margin: 0 auto; /* Ez középre is rendezi a kártyát */
+    padding-bottom: 50px;
 }
 
 .race-title {

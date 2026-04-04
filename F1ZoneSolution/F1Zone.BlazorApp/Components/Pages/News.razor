@@ -10,70 +10,7 @@
 <div class="news-page">
     @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapota
        és szerepköre alapján jelenít meg különböző menüpontokat *@
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="/" class="logo">F1<span>ZONE</span></a>
-            </div>
-
-            <ul class="nav-links @(isMenuOpen ? "active" : "")">
-                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
-                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
-                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
-                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
-                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
-                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-                <li><a href="/strategy">Stratégia</a></li>
-
-                @* Admin felhasználók számára külön menüpont megjelenítése *@
-                @if (isLoggedIn && userRole == "Admin")
-                {
-                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
-                }
-
-                @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
-                <li class="mobile-only">
-                    @if (isLoggedIn)
-                    {
-                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
-                    }
-                    else
-                    {
-                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                    }
-                </li>
-            </ul>
-
-            <div class="nav-actions">
-                @if (isLoggedIn)
-                {
-                    @if (userRole == "Admin")
-                    {
-                        <button class="login-btn desktop-only" @onclick='() => Nav.NavigateTo("/admin/home")'>ADMIN</button>
-                    }
-                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
-                }
-                else
-                {
-                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                }
-
-                @* Hamburger menü mobil eszközökhöz *@
-                <button class="burger-btn" @onclick="ToggleMenu">
-                    @if (isMenuOpen)
-                    {
-                        <span>&times;</span>
-                    }
-                    else
-                    {
-                        <span>&#9776;</span>
-                    }
-                </button>
-            </div>
-        </div>
-    </nav>
+   
 
     <header class="news-header">
         <h1>Legfrissebb Hírek</h1>
@@ -160,19 +97,13 @@
     private string apiKey = "a1184626f3ff4c4e9cfefdd5ca821261";
 
     // A navigációs menü, bejelentkezési állapot és felhasználói adatok kezelése
-    private bool isMenuOpen = false;
+    
     private bool isLoggedIn = false;
-    private string userName = "";
-    private string userRole = "";
+    
     private List<string> favoriteDriverNames = new();
     private int currentUserId;
     private bool showOnlyFavorites = false;
 
-    // Mobil menü állapotának kezelése
-    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-    private void CloseMenu() => isMenuOpen = false;
-    // Navigáció a bejelentkezési oldalra
-    private void GoToLogin() => Nav.NavigateTo("/login");
 
     // A megjelenítendő hírek listája:
     // ha nincs szűrés, minden hír látszik;
@@ -266,9 +197,7 @@
             if (isLoggedIn)
             {
                 currentUserId = await localStorage.GetItemAsync<int>("userId");
-                userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
-                userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
-
+                
                 await LoadFavoriteNames();
             }
             StateHasChanged();
@@ -304,16 +233,7 @@
         foreach (var n in favoriteDriverNames) Console.WriteLine($"Név a listában: {n}");
     }
 
-    // Kijelentkezéskor töröljük a helyi tárolt adatokat,
-    // majd visszairányítjuk a felhasználót a főoldalra
-    private async Task Logout()
-    {
-        await localStorage.ClearAsync();
-        isLoggedIn = false;
-        userName = "";
-        userRole = "";
-        Nav.NavigateTo("/", forceLoad: true);
-    }
+    
 
     // --- DTO OSZTÁLYOK
 

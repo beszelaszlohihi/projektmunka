@@ -6,11 +6,7 @@
 
 <div class="details-wrapper">
     @* Navigációs gomb vissza a versenynaptár oldalra *@
-    <div class="nav-actions">
-        <button class="back-btn" @onclick="GoBack">
-            <span class="arrow">←</span> Vissza a versenynaptárhoz
-        </button>
-    </div>
+    
 
     <div class="details-container">
         @if (details == null)
@@ -37,6 +33,12 @@
                 <div class="info-card extra-info">
                     <p class="status">Státusz: @(details.RaceDate < DateTime.Now ? "Lezajlott" : "Közelgő")</p>
                 </div>
+            </div>
+
+            <div class="nav-actions">
+                <button class="back-btn" @onclick="GoBack">
+                    <span class="arrow">←</span> Vissza a versenynaptárhoz
+                </button>
             </div>
         }
     </div>

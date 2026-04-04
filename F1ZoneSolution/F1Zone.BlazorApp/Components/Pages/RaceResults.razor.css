@@ -335,3 +335,39 @@
         text-align: center;
     }
 }
+
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; 
+    background-color: transparent;
+    color: #fcd700; 
+    border: 1px solid #fcd700;
+    padding: 10px 24px;
+    border-radius: 6px; 
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease; 
+    margin-bottom: 25px; 
+}
+
+    
+    .back-btn:hover {
+        background-color: #fcd700;
+        color: #06131c;
+        transform: translateX(-5px); 
+        box-shadow: 0 4px 15px rgba(252, 215, 0, 0.2); 
+    }
+
+    .back-btn span {
+        font-size: 1.2rem; 
+        transition: transform 0.3s ease;
+    }
+
+   
+    .back-btn:hover span {
+        transform: translateX(-3px);
+    }

@@ -1,29 +1,111 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">F1 Racing Hub</a>
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthStateProvider
+@rendermode InteractiveServer
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-brand">
+            <a href="/" class="logo">F1<span>ZONE</span></a>
+        </div>
+
+        <ul class="nav-links @(isMenuOpen ? "active" : "")">
+            <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
+            <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
+            <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
+            <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
+            <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
+            <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
+            <li><a href="/strategy">Stratégia</a></li>
+
+
+            @* Admin esetén külön admin menüpont megjelenítése *@
+            @if (isLoggedIn && userRole == "Admin")
+            {
+                <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
+            }
+
+            @* Mobilnézetben a felhasználói műveletek külön menüpontban jelennek meg *@
+            <li class="mobile-only">
+                @if (isLoggedIn)
+                {
+                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
+                    <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
+                }
+                else
+                {
+                    <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+                }
+            </li>
+        </ul>
+
+        <div class="nav-actions">
+            @if (isLoggedIn)
+            {
+                @if (userRole == "Admin")
+                {
+                    <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
+                }
+                <span class="user-welcome desktop-only">Üdv, <strong>@userName</strong>!</span>
+                <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
+            }
+            else
+            {
+                <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
+            }
+
+            @* Mobil hamburger menü nyitása és zárása *@
+            <button class="burger-btn" @onclick="ToggleMenu">
+                @if (isMenuOpen)
+                {
+                    <span>&times;</span>
+                }
+                else
+                {
+                    <span>&#9776;</span>
+                }
+            </button>
+        </div>
     </div>
-</div>
+</nav>
 
-<div class="nav-scrollable">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill" aria-hidden="true"></span> Kezdőlap
-            </NavLink>
-        </div>
+@code{
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tracks">
-                <span class="bi bi-map-fill" aria-hidden="true"></span> Pályák
-            </NavLink>
-        </div>
+    private bool isLoggedIn;
+    private string userName = "";
+    private string userRole = "";
+    private bool isMenuOpen = false;
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="drivers">
-                <span class="bi bi-person-badge-fill" aria-hidden="true"></span> Versenyzők
-            </NavLink>
-        </div>
+    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
+    private void CloseMenu() => isMenuOpen = false;
 
-        @* Ide jöhet a többi menüpontod (Hírek, stb.) hasonló formátumban *@
-    </nav>
-</div>
+    private void GoToLogin() => NavManager.NavigateTo("/login");
+
+    private async Task Logout()
+    {
+        await localStorage.ClearAsync();
+        isLoggedIn = false;
+        userName = "";
+        userRole = "";
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var currentUserId = await localStorage.GetItemAsync<int>("userId");
+            if (currentUserId > 0)
+            {
+                isLoggedIn = true;
+                userName = await localStorage.GetItemAsync<string>("userName") ?? "Felhasználó";
+                userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
+            }
+            StateHasChanged();
+        }
+    }
+
+
+
+}

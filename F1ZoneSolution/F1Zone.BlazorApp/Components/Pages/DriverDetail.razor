@@ -11,76 +11,7 @@
 @inject AuthenticationStateProvider AuthStateProvider
 
 <div class="driver-detail-page">
-    @* Felső navigációs sáv, amely a felhasználó bejelentkezési állapotától
-       és szerepkörétől függően jelenít meg opciókat *@
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="/" class="logo">F1<span>ZONE</span></a>
-            </div>
-
-            <ul class="nav-links @(isMenuOpen ? "active" : "")">
-                <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
-                <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
-                <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
-                <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
-                <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
-                <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-                <li><a href="/strategy">Stratégia</a></li>
-
-
-                @* Admin esetén külön admin menüpont megjelenítése *@
-                @if (isLoggedIn && userRole == "Admin")
-                {
-                    <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
-                }
-
-                @* Mobilnézetben a felhasználói műveletek külön menüpontban jelennek meg *@
-                <li class="mobile-only">
-                    @if (isLoggedIn)
-                    {
-                        <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                        <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
-                    }
-                    else
-                    {
-                        <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                    }
-                </li>
-            </ul>
-
-            <div class="nav-actions">
-                @if (isLoggedIn)
-                {
-                    @if (userRole == "Admin")
-                    {
-                        <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
-                    }
-                    <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                    <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
-                }
-                else
-                {
-                    <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                }
-
-                @* Mobil hamburger menü nyitása és zárása *@
-                <button class="burger-btn" @onclick="ToggleMenu">
-                    @if (isMenuOpen)
-                    {
-                        <span>&times;</span>
-                    }
-                    else
-                    {
-                        <span>&#9776;</span>
-                    }
-                </button>
-            </div>
-        </div>
-    </nav>
-
-
-    @* A kiválasztott pilóta neve jelenik meg főcímként *@
+      @* A kiválasztott pilóta neve jelenik meg főcímként *@
     <section class="hero">
         <h1>@(driver?.driver_name ?? id.Replace("-", " ").ToUpper())</h1>
     </section>
@@ -212,19 +143,7 @@
     // Kedvenc állapot és bejelentkezett felhasználó adatai
     private bool isFavorite = false;
     private int currentUserId;
-    private bool isLoggedIn;
-    private string userName = "";
-    private string userRole = "";
-
-
-    // Mobil menü nyitott / zárt állapotának tárolása
-    private bool isMenuOpen = false;
-
-    // Hamburger menü állapotának váltása
-    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-
-    // Menü bezárása navigáció után
-    private void CloseMenu() => isMenuOpen = false;
+    
 
 
     // Az első renderelés után betöltjük a felhasználó azonosítóját
@@ -233,75 +152,31 @@
     {
         if (firstRender)
         {
-
+            
             currentUserId = await localStorage.GetItemAsync<int>("userId");
 
             if (currentUserId > 0)
             {
-
+                               
                 var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
                 if (favs != null)
                 {
                     isFavorite = favs.Any(f => f.UserId == currentUserId && f.ItemId == masodikid);
-                    StateHasChanged(); // Frissítjük a UI-t, hogy megjelenjen a banner
                 }
             }
+            
+
+            
+            StateHasChanged();
         }
     }
 
-
-    // Navigáció a bejelentkezési oldalra
-    private void GoToLogin()
-    {
-        NavManager.NavigateTo("/login");
-    }
-
-
-    // Kijelentkezéskor töröljük a helyi tárolóból a felhasználói adatokat
-    // majd visszairányítjuk a felhasználót a főoldalra
-    private async Task Logout()
-    {
-        await localStorage.RemoveItemAsync("isAuthenticated");
-        await localStorage.RemoveItemAsync("userName");
-        await localStorage.RemoveItemAsync("userRole");
-
-        isLoggedIn = false;
-        userName = "";
-        userRole = "";
-
-        NavManager.NavigateTo("/", forceLoad: true);
-    }
-
+    
     // betöltjük a pilóta adatait
     // majd lekérjük a felhasználó hitelesítési állapotát és szerepkörét
     protected override async Task OnInitializedAsync()
     {
-
-        await LoadDriver();
-
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity != null && user.Identity.IsAuthenticated)
-        {
-            isLoggedIn = true;
-            userName = user.Identity.Name ?? "Felhasználó";
-
-            // A szerepkört először a claim-ekből próbáljuk lekérni,
-            // majd szükség esetén a local storage-ból olvassuk ki
-            userRole = user.FindFirst(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value
-                       ?? await localStorage.GetItemAsync<string>("userRole")
-                       ?? "";
-        }
-        else
-        {
-            isLoggedIn = false;
-            userName = "";
-            userRole = "";
-        }
-
-
-        StateHasChanged();
+        await LoadDriver();              
     }
 
 
@@ -334,19 +209,4 @@
         NavManager.NavigateTo("/drivers");
     }
 
-    // A pilóta részletes adatainak kezelésére szolgáló DTO
-    // public class DriverDto
-    // {
-    //     [JsonPropertyName("driver_id")] public int driver_id { get; set; }
-    //     [JsonPropertyName("driver_name")] public string driver_name { get; set; } = "";
-    //     [JsonPropertyName("biography")] public string biography { get; set; } = "";
-    //     [JsonPropertyName("championships")] public int championships { get; set; }
-    //     [JsonPropertyName("wins")] public int wins { get; set; }
-    //     [JsonPropertyName("podiums")] public int podiums { get; set; }
-    //     [JsonPropertyName("fastest_laps")] public int fastest_laps { get; set; }
-    //     [JsonPropertyName("points")] public decimal points { get; set; }
-    //     [JsonPropertyName("salary_estimate")] public decimal? salary_estimate { get; set; }
-    //     [JsonPropertyName("manufacturer")] public string manufacturer{ get; set; } = "";
-    //     [JsonPropertyName("teamname")] public string teamname { get; set; }
-    // }
 }

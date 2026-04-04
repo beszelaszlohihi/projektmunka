@@ -9,66 +9,7 @@
 {
     <div class="f1-body">
 
-        @* Felső navigációs sáv, amely a felhasználó állapota
-           és szerepköre alapján jelenít meg menüpontokat *@
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="nav-brand">
-                    <a href="/" class="logo">F1<span>ZONE</span></a>
-                </div>
-
-                <ul class="nav-links @(isMenuOpen ? "active" : "")">
-                    <li><a href="/" @onclick="CloseMenu">Kezdőlap</a></li>
-                    <li><a href="/tracks" @onclick="CloseMenu">Pályák</a></li>
-                    <li><a href="/drivers" @onclick="CloseMenu">Versenyzők</a></li>
-                    <li><a href="/schedule" @onclick="CloseMenu">Versenynaptár</a></li>
-                    <li><a href="/News" @onclick="CloseMenu">Hírek</a></li>
-                    <li><a href="/regulation_changes" @onclick="CloseMenu">Szabályok</a></li>
-                    <li><a href="/strategy">Stratégia</a></li>
-
-
-                    @* Admin felhasználók számára külön menüpont megjelenítése *@
-                    @if (isLoggedIn && userRole == "Admin")
-                    {
-                        <li><a href="/admin" @onclick="CloseMenu">Adatok szerkesztése</a></li>
-                    }
-
-                    @* Mobilnézetben a felhasználói műveletek külön blokkban jelennek meg *@
-                    <li class="mobile-only">
-                        @if (isLoggedIn)
-                        {
-                            <span class="user-welcome">Üdv, <strong>@userName</strong>!</span>
-                            <button class="login-btn" @onclick="Logout">KIJELENTKEZÉS</button>
-                        }
-                        else
-                        {
-                            <button class="login-btn" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                        }
-                    </li>
-                </ul>
-
-                <div class="nav-actions">
-                    @if (isLoggedIn)
-                    {
-                        @if (userRole == "Admin")
-                        {
-                            <button class="login-btn desktop-only" @onclick='() => NavManager.NavigateTo("/admin/home")'>ADMIN</button>
-                        }
-                        <span class="user-welcome desktop-only">Üdv, <strong>@userName</strong>!</span>
-                        <button class="login-btn desktop-only" @onclick="Logout">KIJELENTKEZÉS</button>
-                    }
-                    else
-                    {
-                        <button class="login-btn desktop-only" @onclick="GoToLogin">BEJELENTKEZÉS</button>
-                    }
-
-                    @* Hamburger menü mobil eszközökhöz *@
-                    <button class="burger-btn" @onclick="ToggleMenu">
-                        <span>@(isMenuOpen ? "×" : "☰")</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
+        
 
         @* A stratégia szimulátor fő felülete:
            beállítások, grafikon és telemetria egy háromoszlopos elrendezésben *@
@@ -263,28 +204,38 @@ else
     }
 
     //login cuccok
-    private bool isMenuOpen = false;
+    
     private bool isLoggedIn = false;
-    private string userName = "";
-    private string userRole = "";
+    
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!firstRender) return;
 
-        isLoggedIn = await localStorage.GetItemAsync<bool>("isAuthenticated");
+        if (firstRender)
+        {
+           
+            var currentUserId = await localStorage.GetItemAsync<int>("userId");
+            isLoggedIn = (currentUserId > 0);
 
+            
+            if (!isLoggedIn)
+            {
+                NavManager.NavigateTo("/login");
+                return;
+            }
+
+            
+            StateHasChanged();
+        }
+        
         if (!isLoggedIn)
         {
             NavManager.NavigateTo("/login");
             return;
         }
 
-        userName = await localStorage.GetItemAsync<string>("userName");
-        userRole = await localStorage.GetItemAsync<string>("userRole") ?? "User";
-        
-
+       
         //ide van irva a databasebol torteno lekerdezes 
         try
         {
@@ -303,19 +254,6 @@ else
 
         
         StateHasChanged();
-    }
-
-    private void ToggleMenu() => isMenuOpen = !isMenuOpen;
-    private void CloseMenu() => isMenuOpen = false;
-    private void GoToLogin() => NavManager.NavigateTo("/login");
-
-    private async Task Logout()
-    {
-        await localStorage.ClearAsync();
-        isLoggedIn = false;
-        userName = "";
-        userRole = "";
-        NavManager.NavigateTo("/", forceLoad: true);
     }
 
     // login cucccok vege
@@ -466,9 +404,9 @@ else
     {
         return tyreName switch
         {
-            "Soft" => "rgba(255, 24, 1, 1)",   // Piros
-            "Medium" => "rgba(255, 202, 0, 1)", // Sárga
-            "Hard" => "rgba(255, 255, 255, 1)",   // Fehér
+            "Soft" => "rgba(255, 24, 1, 1)",   
+            "Medium" => "rgba(255, 202, 0, 1)",
+            "Hard" => "rgba(255, 255, 255, 1)",  
             _ => "rgba(255, 24, 1, 1)"
         };
     }
