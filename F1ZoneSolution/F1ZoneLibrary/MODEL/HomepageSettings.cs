@@ -11,7 +11,7 @@ namespace F1ZoneLibrary.MODEL
     {
         [Key]
         public int Id { get; set; }
-        public int FeaturedCircuitId { get; set; }
-        public int FeaturedDriverId { get; set; }
+        public int FeaturedCircuitId { get; set; } //fő oldalon a pálya id-jét tárolja
+        public int FeaturedDriverId { get; set; }  //fő oldalon a pilóta id-jét tárolja
     }
 }

@@ -582,23 +582,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\beszel0410\\.nuget\\packages\\": {},
+    "C:\\Users\\RYZEN\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\beszel0410\\Downloads\\projektmunka-main (1)\\projektmunka-main\\F1ZoneSolution\\F1ZoneLibrary\\F1ZoneLibrary.csproj",
+      "projectUniqueName": "C:\\ev vegi projekt\\F1ZoneSolution\\F1ZoneLibrary\\F1ZoneLibrary.csproj",
       "projectName": "F1ZoneLibrary",
-      "projectPath": "C:\\Users\\beszel0410\\Downloads\\projektmunka-main (1)\\projektmunka-main\\F1ZoneSolution\\F1ZoneLibrary\\F1ZoneLibrary.csproj",
-      "packagesPath": "C:\\Users\\beszel0410\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\beszel0410\\Downloads\\projektmunka-main (1)\\projektmunka-main\\F1ZoneSolution\\F1ZoneLibrary\\obj\\",
+      "projectPath": "C:\\ev vegi projekt\\F1ZoneSolution\\F1ZoneLibrary\\F1ZoneLibrary.csproj",
+      "packagesPath": "C:\\Users\\RYZEN\\.nuget\\packages\\",
+      "outputPath": "C:\\ev vegi projekt\\F1ZoneSolution\\F1ZoneLibrary\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\beszel0410\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\RYZEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -607,6 +607,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -652,7 +653,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

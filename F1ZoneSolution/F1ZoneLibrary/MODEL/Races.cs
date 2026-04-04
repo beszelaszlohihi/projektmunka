@@ -11,9 +11,8 @@ namespace F1ZoneLibrary.MODEL
     {
         [Key]
         public int race_id { get; set; }
-        //public int season_year { get; set; }
         public int winner_driver_id { get; set; }
-        public TimeSpan fastest_lap_time { get; set; }
+        public TimeSpan fastest_lap_time { get; set; } // óra:perc:mp:ezredmásodperc
         public int laps_completed { get; set; }
         public int fastest_lap_driver_id{ get; set; }
         public TimeSpan race_time{ get; set; }

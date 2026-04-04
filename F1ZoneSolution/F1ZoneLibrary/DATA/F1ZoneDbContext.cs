@@ -11,19 +11,11 @@ namespace F1ZoneLibrary.DATA
 {
     public class F1ZoneDbContext : DbContext
     {
-        public F1ZoneDbContext(DbContextOptions options) : base(options)
-        {
-            
-        }
+        public F1ZoneDbContext(DbContextOptions options) : base(options){ }
 
-        public F1ZoneDbContext()
-        {
-            
-        }
+        public F1ZoneDbContext(){ }
 
         public DbSet<HomepageSettings> HomepageSettings { get; set; }
-
-
         public DbSet<Circuits> Circuits { get; set; }
         public DbSet<Driver_contracts> Driver_contracts { get; set; }
         public DbSet<Drivers> Drivers { get; set; }
