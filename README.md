@@ -49,3 +49,6 @@ A projekt futtatásához kövesd az alábbi lépéseket:
 -Az adatbázis létrehozása a mellékelt SQL szkript (vagy Entity Framework Migrations) segítségével az SSMS-ben.
 -Az appsettings.json fájlban a DefaultConnection adatbázis-kapcsolati karakterlánc (Connection String) beállítása a helyi SQL szerverhez.
 -A projekt elindítása (F5 / IIS Express / Kestrel).
+
+## Mappa struktúra
+- A mappa struktúra kiegészült egy Teszt projekttel, amit a véglegesítés után kellett hozzáadnunk, ezért nem került bele eredetileg.
