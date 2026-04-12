@@ -44,7 +44,7 @@ A projekt futtatásához kövesd az alábbi lépéseket:
 
 1. **Repository klónozása**
    ```bash
-   git clone https://github.com/beszelaszlohihi/F1ZoneSolution
+   git clone https://github.com/beszelaszlohihi/F1Zone
 -A projekt megnyitása Visual Studio 2022 környezetben.
 -Az adatbázis létrehozása a mellékelt SQL szkript (vagy Entity Framework Migrations) segítségével az SSMS-ben.
 -Az appsettings.json fájlban a DefaultConnection adatbázis-kapcsolati karakterlánc (Connection String) beállítása a helyi SQL szerverhez.
