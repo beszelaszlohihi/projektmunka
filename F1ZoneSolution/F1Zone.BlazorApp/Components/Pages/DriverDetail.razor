@@ -1,0 +1,212 @@
+﻿@page "/driver/{id}"
+@using F1ZoneLibrary.Dto
+@using System.Net.Http.Json
+@using System.Text.Json.Serialization
+@using F1ZoneLibrary.MODEL
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="driver-detail-page">
+      @* A kiválasztott pilóta neve jelenik meg főcímként *@
+    <section class="hero">
+        <h1>@(driver?.driver_name ?? id.Replace("-", " ").ToUpper())</h1>
+    </section>
+
+    <div class="container">
+        <div class="detail-section">
+            <h2>Életrajz</h2>
+            <div class="bio-card">
+                @if (driver == null)
+                {
+                    <div class="loading-box">
+                        <p>🏎️ Adatok betöltése a boxutcából...</p>
+                    </div>
+                }
+                else
+                {
+                    <p>@driver.biography</p>
+                }
+            </div>
+
+            @if (driver != null)
+            {
+                <div class="technical-details">
+                    <div class="tech-card">
+                    <div class="tech-icon">💰</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Becsült fizetés</span>
+                        <span class="tech-value">@driver.salary_estimate?.ToString("N0") $</span>
+                    </div>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">🏎️</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Aktuális csapat</span>
+                        <span class="tech-value">@(driver?.teamname ?? "Nincs adat")</span>
+                    </div>
+                </div>
+
+                    <div class="tech-card">
+                        <div class="tech-icon">🤝</div>
+                        <div class="tech-info">
+                            <span class="tech-label">Csapat fő szponzorai</span>
+                            <span class="tech-value">
+                                @if (driver.team_sponsors != null && driver.team_sponsors.Any())
+                                {
+                                    @string.Join(", ", driver.team_sponsors)
+                                }
+                                else
+                                {
+                                    <span>Nincs adat</span>
+                                }
+                            </span>
+                        </div>
+                    </div>
+
+                <div class="tech-card">
+                    <div class="tech-icon">🏎️</div>
+                    <div class="tech-info">
+                        <span class="tech-label">Motorpartner</span>
+                        <span class="tech-value">@(driver?.manufacturer ?? "Nincs adat")</span>
+                    </div>
+                </div>
+                </div>
+            }
+
+            else
+            {
+                <p>🏎️ Adatok betöltése...</p>
+            }
+
+            <h2>Karrier / Szezon statisztika</h2>
+            @if (driver != null)
+            {
+                @* A pilóta legfontosabb statisztikáinak kártyás megjelenítése *@
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-value @(driver.wins > 0 ? "gold" : "")">@driver.wins</div>
+                        <div class="stat-label">Győzelmek</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.podiums</div>
+                        <div class="stat-label">Pódiumok</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.fastest_laps</div>
+                        <div class="stat-label">Leggyorsabb kör</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value @(driver.championships > 0 ? "gold" : "")">@driver.championships</div>
+                        <div class="stat-label">VB címek</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">@driver.points</div>
+                        <div class="stat-label">Pontok</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <p class="loading-text">Statisztikák betöltése...</p>
+            }
+            
+            @* Navigáció vissza a versenyzők listájához *@
+            <div class="actions">
+                <button class="back-btn" @onclick="BackToDrivers">← Vissza a többi pilótához!</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 F1 Racing Zone</p>
+    </footer>
+</div>
+
+@code {
+
+    // Az URL-ből érkező pilótaazonosító
+    [Parameter] public string id { get; set; } = string.Empty;
+
+
+    // A lekért pilóta adatai
+    private DriverDto? driver;
+
+
+    // Másodlagos azonosító, amelyet jelenleg a kedvenc ellenőrzéshez kell
+    [Parameter] public int masodikid { get; set; }
+
+    // Kedvenc állapot és bejelentkezett felhasználó adatai
+    private bool isFavorite = false;
+    private int currentUserId;
+    
+
+
+    // Az első renderelés után betöltjük a felhasználó azonosítóját
+    // majd ellenőrizzük, hogy az aktuális pilóta szerepel e a kedvencek között
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            
+            currentUserId = await localStorage.GetItemAsync<int>("userId");
+
+            if (currentUserId > 0)
+            {
+                               
+                var favs = await Http.GetFromJsonAsync<List<UserFavorites>>("api/favorites");
+                if (favs != null)
+                {
+                    isFavorite = favs.Any(f => f.UserId == currentUserId && f.ItemId == masodikid);
+                }
+            }
+            
+
+            
+            StateHasChanged();
+        }
+    }
+
+    
+    // betöltjük a pilóta adatait
+    // majd lekérjük a felhasználó hitelesítési állapotát és szerepkörét
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDriver();              
+    }
+
+
+    // Ha az URL paraméter megváltozik, újra betöltjük a pilóta adatait
+    protected override async Task OnParametersSetAsync()
+    {
+        if (driver != null && driver.driver_name.Replace(" ", "-").ToLower() != id.ToLower())
+        {
+            await LoadDriver();
+        }
+    }
+
+    // A kiválasztott pilóta adatainak lekérése az API-ból
+    private async Task LoadDriver()
+    {
+        try
+        {
+            driver = await Http.GetFromJsonAsync<DriverDto>($"api/drivers/{id}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API Hiba: {ex.Message}");
+            driver = null;
+        }
+    }
+
+    // Visszanavigálás a versenyzők listájára
+    private void BackToDrivers()
+    {
+        NavManager.NavigateTo("/drivers");
+    }
+
+}

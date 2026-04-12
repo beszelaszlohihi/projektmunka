@@ -1,0 +1,147 @@
+/* --- ALAP BEÁLLÍTÁSOK (Red Bull Sötétkék) --- */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #06131c !important; /* Red Bull mélykék */
+    color: #fafafa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+#app {
+    background-color: #06131c !important;
+    min-height: 100vh;
+}
+
+.page {
+    margin: 0;
+    padding: 0;
+    background-color: #06131c !important;
+}
+
+/* --- LINKEK ÉS GOMBOK --- */
+a, .btn-link {
+    color: #fcd700; /* Sárga linkek */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+    a:hover {
+        color: #ffffff;
+    }
+
+.btn-primary {
+    color: #06131c;
+    background-color: #fcd700;
+    border-color: #fcd700;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+    .btn-primary:hover {
+        background-color: #e10600; /* Hoverre Red Bull piros */
+        border-color: #e10600;
+        color: white;
+    }
+
+/* --- KÖZÖS NAVIGÁCIÓ (Minden oldalon) --- */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(6, 19, 28, 0.98); /* Red Bull kék, szinte teli */
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #fcd700; /* Sárga alsó csík */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.logo {
+    position: absolute;
+    left: 2rem;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #fcd700; /* Sárga logó */
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .nav-links a {
+        color: #cbd5e0; /* Szürkéskék szöveg */
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+        .nav-links a:hover {
+            color: #fcd700; /* Hoverre sárga */
+        }
+
+.login-btn {
+    position: absolute;
+    right: 2rem;
+    background: #fcd700; /* Sárga gomb */
+    color: #06131c; /* Sötétkék szöveg a sárgán */
+    border: none;
+    padding: 0.6rem 1.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+    .login-btn:hover {
+        background: #e10600; /* Hoverre Red Bull piros */
+        color: white;
+        transform: scale(1.05);
+    }
+
+/* --- HIBAÜZENETEK ÉS VALIDÁCIÓ --- */
+.invalid {
+    outline: 1px solid #e10600;
+}
+
+.validation-message {
+    color: #e10600;
+    font-weight: bold;
+}
+
+.blazor-error-boundary {
+    background: #e10600;
+    padding: 1rem;
+    color: white;
+}
+
+/* --- EGYÉB --- */
+.content {
+    padding-top: 5rem; /* Helyet hagy a fixált menünek */
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Mobilon elrejtjük a linkeket a torlódás ellen */
+    }
+
+    .logo {
+        position: static;
+    }
+}
+
+

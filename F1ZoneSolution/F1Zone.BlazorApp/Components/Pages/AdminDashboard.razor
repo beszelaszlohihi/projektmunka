@@ -1,0 +1,126 @@
+﻿@page "/admin"
+@using F1ZoneLibrary.Dto
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using System.Net.Http.Json
+@inject IJSRuntime JSRuntime
+
+<div class="f1-body admin-container">
+    <button class="back-btn" @onclick='() => NavManager.NavigateTo("/")'>
+        <i class="bi bi-arrow-left"></i> VISSZA A FŐOLDALRA
+    </button>
+    <div class="section-header">
+        <h2>Adminisztrációs Panel</h2>
+        <p>Pilóták statisztikáinak és adatainak kezelése</p>
+    </div>
+
+    <div class="admin-header">
+        <h3>Pilóták statisztikáinak kezelése</h3>
+        <button class="hero-btn add-btn" @onclick='() => NavManager.NavigateTo("/admin/add-driver")'>
+            ➕ ÚJ PILÓTA HOZZÁADÁSA
+        </button>
+    </div>
+
+    @if (drivers == null)
+    {
+        <p class="loading">Adatok betöltése...</p>
+    }
+    else
+    {
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Név</th>
+                    <th>Győzelmek</th>
+                    <th>VB Címek</th>
+                    <th>Műveletek</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var driver in drivers)
+                {
+                    <tr>
+                        <td>@driver.driver_name</td>
+                        <td>@driver.wins</td>
+                        <td>@driver.championships</td>
+                        <td>
+                            <button class="edit-btn" @onclick="() => OpenEditModal(driver)">Szerkesztés</button>
+                            <button class="logout-btn" style="background-color: #dc3545; margin-left: 10px;"
+                                    @onclick="() => ConfirmDelete(driver)">
+                                Törlés
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<DriverDto> drivers;
+    private string userRole; 
+    private string statusMessage = "";
+
+
+    // Az oldal első renderelése után ellenőrizzük a jogosultságot,
+    // majd csak admin esetén töltjük be az adatokat az API-ból
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var role = await localStorage.GetItemAsync<string>("userRole");
+            if (role != "Admin")
+            {
+                NavManager.NavigateTo("/"); // Ha nem admin, vissza a főoldalra
+                return;
+            }
+
+            // Admin jogosultság esetén lekérjük a pilóták listáját
+            drivers = await Http.GetFromJsonAsync<List<DriverDto>>("api/drivers/admin-list");
+            StateHasChanged();
+        }
+    }
+
+    // A kiválasztott pilóta szerkesztőoldalára navigál
+    private void OpenEditModal(DriverDto driver)
+    {
+        NavManager.NavigateTo($"/admin/edit-driver/{driver.driver_id}");
+    }
+
+
+    // Törlés előtt megerősítést kér a felhasználótól,
+    // majd siker esetén frissíti a megjelenített listát
+    private async Task ConfirmDelete(DriverDto selectedDriver)
+    {
+        
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", $"Biztosan törölni szeretnéd {selectedDriver.driver_name} pilótát?");
+
+        if (confirmed)
+        {
+            // DELETE kérés összeállítása, a kiválasztott pilóta adatainak elküldésével
+            var request = new HttpRequestMessage(HttpMethod.Delete, "api/drivers");
+            request.Content = JsonContent.Create(selectedDriver);
+
+            // A kérés elküldése a szerver felé
+            var response = await Http.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Sikeres törlés után eltávolítjuk a pilótát a listából
+                drivers = drivers.Where(d => d.driver_id != selectedDriver.driver_id).ToList();
+                statusMessage = "✅ Pilóta törölve!";
+                StateHasChanged();
+                await Task.Delay(2000);
+                statusMessage = ""; // Eltüntetjük az üzenetet
+            }
+            else
+            {
+                // Hiba esetén figyelmeztető üzenetet jelenítünk meg
+                await JSRuntime.InvokeVoidAsync("alert", "Hiba történt a törlés során! Lehet, hogy a pilótához más adatok is tartoznak.");
+            }
+        }
+    }
+}

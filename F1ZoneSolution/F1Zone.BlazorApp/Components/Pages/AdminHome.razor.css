@@ -1,0 +1,141 @@
+﻿/* =========================
+   ADMIN OLDAL KONTAINER
+   =========================
+   A homepage beállítások középre igazítása és olvasható szélesség korlátozása
+*/
+
+.admin-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    color: white;
+    padding-top: 120px;
+}
+
+.admin-container h1 {
+    color: #fcd700;
+    text-transform: uppercase;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.admin-container p {
+    color: #94a3b8;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+/* =========================
+   KÁRTYÁK (BEÁLLÍTÁSI BLOKKOK)
+   =========================
+*/
+.admin-card {
+    background: #0d1a26;
+    border: 1px solid #1c2e3f;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Kártya cím */
+    .admin-card h2 {
+        color: white;
+        margin-top: 0;
+        font-size: 1.5rem;
+        border-bottom: 2px solid #1c2e3f;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .admin-card label {
+        display: block;
+        color: #cbd5e0;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+.admin-select {
+    width: 100%;
+    padding: 12px 15px;
+    background: #06131c; 
+    color: white; 
+    border: 1px solid #2d3748;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    
+    .admin-select:focus {
+        border-color: #fcd700;
+        box-shadow: 0 0 10px rgba(252, 215, 0, 0.2);
+    }
+
+/* Legördülő lista (select) stílus */
+.admin-card select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+}
+
+
+/* =========================
+   MENTÉS GOMB
+   =========================
+*/
+.save-btn {
+    background: #fcd700;
+    color: #06131c;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+
+    .save-btn:hover {
+        background: white;
+        transform: scale(1.02);
+    }
+
+.message {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   VISSZA GOMB
+   =========================
+   Navigáció a főoldalra
+*/
+
+.back-btn {
+    margin-bottom: 20px;
+    padding: 8px 14px;
+    background: #fcd700;
+    border: 1px solid #ccc;
+    color: black;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Hover állapot */
+    .back-btn:hover {
+        background: red;
+    }

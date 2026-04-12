@@ -1,0 +1,429 @@
+﻿@page "/strategy"
+@using F1ZoneLibrary.MODEL
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+
+@if (isLoggedIn)
+{
+    <div class="f1-body">
+
+        
+
+        @* A stratégia szimulátor fő felülete:
+           beállítások, grafikon és telemetria egy háromoszlopos elrendezésben *@
+        <section class="strategy-section" style="padding: 2rem; color: white; max-width: 1650px; margin: 0 auto;">
+            <h1 style="color: #ff1801; font-family: 'F1-Bold', sans-serif; text-align: center; margin-bottom: 2rem; letter-spacing: 2px; text-transform: uppercase;">
+                Stratégia szimulátor
+            </h1>
+
+
+            <div class="strategy-layout" style="display: grid; grid-template-columns: 330px 1fr 380px; gap: 1.5rem; align-items: start; width: 100%;">
+
+                @* 1. OSZLOP: BEÁLLÍTÁSOK PANEL *@
+                <div class="controls-card" style="background: #111111; border: 1px solid #252525; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); padding: 1.5rem;">
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="color: #888; font-size: 0.8rem; text-transform: uppercase;">Pálya kiválasztása</label>
+                        <select @bind="selectedTrackId" class="form-select" style="width: 100%; padding: 0.6rem; background: #2a2a2a; color: white; border: 1px solid #444; border-radius: 5px;">
+                            @foreach (var track in allCircuits)
+                            {
+                                <option value="@track.circuit_id">@track.circuit_name (@track.country)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 0.5rem;">Első etap gumija</label>
+                        <select @bind="firstStintTyre" class="form-select" style="width: 100%; padding: 0.6rem; background: #2a2a2a; color: white; border: 1px solid @GetTyreColor(); border-radius: 5px; cursor: pointer;">
+                            <option value="Soft">Soft (Piros)</option>
+                            <option value="Medium">Medium (Sárga)</option>
+                            <option value="Hard">Hard (Fehér)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 0.5rem;">Második etap gumija</label>
+                        <select @bind="secondStintTyre" class="form-select" style="width: 100%; padding: 0.6rem; background: #2a2a2a; color: white; border: 1px solid #444; border-radius: 5px; cursor: pointer;">
+                            <option value="Soft">Soft (Piros)</option>
+                            <option value="Medium">Medium (Sárga)</option>
+                            <option value="Hard">Hard (Fehér)</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <label style="color: #888; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 0.5rem;">
+                            Kerékcsere köre: <strong style="color: @GetTyreColor(); font-size: 1.2rem; margin-left: 5px;">@pitStopLap</strong>
+                        </label>
+                        <input type="range" min="1" max="@totalLaps" @bind="pitStopLap" @bind:event="oninput"
+                               style="width: 100%; margin: 10px 0; accent-color: @GetTyreColor(); cursor: pointer;" />
+                    </div>
+
+
+                    <div style="margin: 1rem 0; padding: 10px; border: 1px dashed #444; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" @bind="isTwoStopStrategy" id="twoStop" style="width: 18px; height: 18px; cursor: pointer;" />
+                            <label for="twoStop" style="color: #fcd700; cursor:pointer; font-weight: bold;">+ 2. kiállás (Opcionális)</label>
+                        </div>
+
+                        @if (isTwoStopStrategy)
+                        {
+                            <div style="margin-top: 10px; animation: fadeIn 0.3s;">
+                                <label style="color: #888; font-size: 0.75rem;">3. ETAP GUMIJA</label>
+                                <select @bind="thirdStintTyre" class="form-select" style="width: 100%; padding: 0.4rem; background: #2a2a2a; color: white; border: 1px solid #444; margin-bottom: 0.5rem;">
+                                    <option value="Soft">Soft (Piros)</option>
+                                    <option value="Medium">Medium (Sárga)</option>
+                                    <option value="Hard">Hard (Fehér)</option>
+                                </select>
+
+                                <label style="color: #888; font-size: 0.75rem;">2. CSRE KÖRE: <strong>@secondPitStopLap</strong></label>
+                                <input type="range" min="@(pitStopLap + 1)" max="@totalLaps" @bind="secondPitStopLap" style="width: 100%; accent-color: #ff1801;" />
+                            </div>
+                        }
+                    </div>
+
+                    <button class="hero-btn" @onclick="CalculateStrategy"
+                            style="width: 100%; padding: 1.2rem; cursor: pointer; background: #fcd700; color: #06131c ; font-weight: 800; border: none; border-radius: 8px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        Stratégia Számítása
+                    </button>
+                </div>
+
+                @* 2. OSZLOP: VIZUÁLIS ELEMZÉS *@
+                <div class="analysis-card" style="background: #111111; border: 1px solid #252525; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); padding: 1.5rem;">
+                    <h3 style="margin-top: 0; text-align: center; color: #fff; font-weight: 300; text-transform: uppercase; letter-spacing: 1px;">Teljesítmény Görbe</h3>
+
+
+                    <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 1.5rem;">
+                        <div style="text-align: center;">
+                            <div style="color: #888; font-size: 0.7rem; text-transform: uppercase;">Versenyidő</div>
+                            <div style="color: #ff1801; font-size: 1.2rem; font-weight: bold;">@FormatTime(totalRaceTime)</div>
+                        </div>
+
+                        <div style="text-align: center;">
+                            <div style="color: #888; font-size: 0.7rem; text-transform: uppercase;">Pálya</div>
+                            <div style="color: #fff; font-size: 1.2rem;">@(allCircuits.FirstOrDefault(c => c.circuit_id.ToString() == selectedTrackId)?.circuit_name ?? "-")</div> @*itt modositas volt*@
+                        </div>
+
+
+                        <div style="text-align: center;">
+                            <div style="color: #888; font-size: 0.7rem; text-transform: uppercase;">Átlagidő</div>
+                            <div style="color: #fff; font-size: 1.2rem;">
+                                @(totalRaceTime > 0 ? $"{Math.Round(totalRaceTime / lapTimes.Count, 3)} mp" : "-")
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="chartParent" style="height: 380px; width: 100%; background: #111; padding: 15px; border-radius: 12px; border: 1px solid #333; position: relative;">
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                </div>
+
+                @* 3. OSZLOP: ADATOK *@
+                <div class="data-card" style="background: #111111; border: 1px solid #252525; border-radius: 12px; height: 650px; display: flex; flex-direction: column; padding: 1.5rem;">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem; text-align: center; font-weight: 300;">Telemetria</h3>
+                    <div class="table-container" style="flex-grow: 1; overflow-y: auto; padding-right: 5px;">
+                        <table style="width: 100%; text-align: left; border-collapse: collapse; font-size: 0.85rem;">
+                            <thead style="position: sticky; top: 0; background: #1a1a1a; z-index: 10;">
+                                <tr style="border-bottom: 2px solid #ff1801; color: #666;">
+                                    <th style="padding: 10px 5px;">KÖR</th>
+                                    <th style="padding: 10px 5px;">IDŐ</th>
+                                    <th style="padding: 10px 5px;">ÁLLAPOT</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var lap in lapTimes)
+                                {
+                                    double deg = lap.Time - tyreSpecs[lap.TyreType].baseTime;
+                                    double limit = lap.TyreType == "Soft" ? 2.0 : lap.TyreType == "Hard" ? 3.5 : 2.5;
+                                    bool isDead = deg > limit;
+
+                                    <tr style="border-bottom: 1px solid #2a2a2a; @(isDead ? "background: rgba(255,24,1,0.08);" : "")">
+                                        <td style="padding: 10px 5px;">
+                                            <span style="color: #888;">@lap.Number.</span>
+                                            <b style="color: @lap.TyreColorRgba; margin-left: 5px;">@lap.TyreType[0]</b>
+                                        </td>
+                                        <td style="padding: 10px 5px; @(isDead ? "color:#ff1801; font-weight:bold;" : "color:#eee;")">
+                                            @lap.Time.ToString("F3")
+                                        </td>
+                                        <td style="padding: 10px 5px; color: #ff1801; font-size: 0.7rem; font-style: italic; font-weight: bold;">
+                                            @(isDead ? "⚠️ Bono, we are cooked!" : "")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    @* Amíg ellenőriz a rendszer, egy üres sötét hátter van *@
+    <div style="background-color: #0b0b0b; min-height: 100vh;"></div>
+}
+
+
+@code {
+    private string firstStintTyre = "Soft";
+    private int pitStopLap = 15;
+    private int totalLaps = 50;
+    private double trackMultiplier = 42;
+    private double totalRaceTime = 0;
+    private List<LapData> lapTimes = new();
+    private string selectedTrack = "Hungaroring"; 
+    private string secondStintTyre = "Hard"; 
+    private List<Circuits> allCircuits = new();
+
+    private bool isTwoStopStrategy = false;
+    private int secondPitStopLap = 35;
+    private string thirdStintTyre = "Soft";
+
+    private string _selectedTrackId;
+    private string selectedTrackId
+    {
+        get => _selectedTrackId;
+        set
+        {
+            _selectedTrackId = value;
+            UpdateTotalLaps(); // Amint pálya változás történik, újraszámoljuk a köröket!
+        }
+    }
+
+    private void UpdateTotalLaps()
+    {
+        var track = allCircuits.FirstOrDefault(c => c.circuit_id.ToString() == _selectedTrackId);
+        if (track != null)
+        {
+            totalLaps = (int)Math.Ceiling(305 / (double)track.length_km);
+        }
+    }
+
+    //login cuccok
+    
+    private bool isLoggedIn = false;
+    
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+           
+            var currentUserId = await localStorage.GetItemAsync<int>("userId");
+            isLoggedIn = (currentUserId > 0);
+
+            
+            if (!isLoggedIn)
+            {
+                NavManager.NavigateTo("/login");
+                return;
+            }
+
+            //ide van irva a databasebol torteno lekerdezes
+            try
+            {
+                // Lekérjük a pályákat a saját API-dból
+                allCircuits = await Http.GetFromJsonAsync<List<Circuits>>("http://localhost:5007/api/circuits") ?? new();
+
+                if (allCircuits.Any())
+                {
+                    selectedTrackId = allCircuits.First().circuit_id.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Hiba a pályák betöltésekor: {ex.Message}");
+            }
+
+            
+            StateHasChanged();
+        }
+        
+        if (!isLoggedIn)
+        {
+            NavManager.NavigateTo("/login");
+            return;
+        }
+
+       
+        
+
+        
+        //StateHasChanged();
+    }
+
+    // login cucccok vege
+
+
+    // Szimulált gumi adatok: (Alapidő másodpercben, Körönkénti lassulás másodpercben)
+    private Dictionary<string, (double baseTime, double wear)> tyreSpecs = new()
+    {
+        { "Soft", (80.0, 0.18) },    
+        { "Medium", (81.2, 0.09) },  
+        { "Hard", (82.8, 0.04) }     
+    };
+
+    // Pályák és kopási szorzóik (1.0 = normál, 0.5 = kevésbé kopik, 1.5 = nagyon kopik)
+    private Dictionary<string, double> trackWearMultipliers = new()
+    {
+        { "Hungaroring", 1.1 },
+        { "Monaco", 0.6 },     
+        { "Silverstone", 1.4 }, 
+        { "Spa", 1.3 }
+    };
+
+    private string GetTyreColor()
+    {
+        return firstStintTyre switch
+        {
+            "Soft" => "#ff1801",   
+            "Medium" => "#ffca00", 
+            "Hard" => "#ffffff",   
+            _ => "#ff1801"
+        };
+    }
+
+    private string GetButtonTextColor()
+    {
+        // Ha Hard (fehér) vagy Medium (sárga), a szöveg legyen fekete
+        if (firstStintTyre == "Hard" || firstStintTyre == "Medium")
+        {
+            return "black";
+        }
+        return "white";
+    }
+
+    // Színkezelő: Adja vissza a grafikon vonalának színét RGBA formátumban
+    private string GetChartColorRgba()
+    {
+        return firstStintTyre switch
+        {
+            "Soft" => "rgba(255, 24, 1, 1)",   
+            "Medium" => "rgba(255, 202, 0, 1)", 
+            "Hard" => "rgba(255, 255, 255, 1)",   
+            _ => "rgba(255, 24, 1, 1)"
+        };
+    }
+
+    private async Task CalculateStrategy()
+    {
+        // 1. Pálya adatok lekérése
+        var track = allCircuits.FirstOrDefault(c => c.circuit_id.ToString() == selectedTrackId);
+        if (track == null) return;
+
+        // 2. Alapok resetelése
+        lapTimes.Clear();
+        totalRaceTime = 0;
+        double pitStopPenalty = 24.5;
+
+        // 3. Dinamikus versenytáv és pálya-karakterisztika
+        totalLaps = (int)Math.Ceiling(305 / (double)track.length_km);
+        trackMultiplier = 1.0 + (track.turns * 0.015);
+
+        // --- 1. ETAP (Rajttól az első cseréig) ---
+        AddStint(1, pitStopLap, firstStintTyre, trackMultiplier);
+
+        if (!isTwoStopStrategy)
+        {
+            // HA 1 KIÁLLÁS VAN: Boxkiállás + a maradék körök a végéig
+            totalRaceTime += pitStopPenalty;
+            AddStint(pitStopLap + 1, totalLaps, secondStintTyre, trackMultiplier);
+        }
+        else
+        {
+            // HA 2 KIÁLLÁS VAN:
+            // 2. ETAP (1. csere -> 2. csere)
+            totalRaceTime += pitStopPenalty;
+            AddStint(pitStopLap + 1, secondPitStopLap, secondStintTyre, trackMultiplier);
+
+            // 3. ETAP (2. csere -> Verseny vége)
+            totalRaceTime += pitStopPenalty;
+            AddStint(secondPitStopLap + 1, totalLaps, thirdStintTyre, trackMultiplier);
+        }
+
+        // 4. UI és Grafikon frissítése
+        StateHasChanged();
+        await Task.Delay(150); // Biztonsági delay a Canvas kirajzolásához
+
+        await JSRuntime.InvokeVoidAsync("setupStrategyChart",
+            lapTimes.Select(l => l.Number).ToArray(),
+            lapTimes.Select(l => l.Time).ToArray(),
+            lapTimes.Select(l => l.TyreColorRgba).ToArray());
+    }
+
+    // SEGÉDFÜGGVÉNY: Ez számolja ki a gumikopást és adja hozzá a köröket
+    private void AddStint(int startLap, int endLap, string tyreType, double trackMult)
+    {
+        string color = GetColorRgba(tyreType);
+        int tyreAge = 1; // A gumi kora az etap kezdetekor mindig 1
+
+        for (int i = startLap; i <= endLap; i++)
+        {
+            double wearRate = tyreSpecs[tyreType].wear * trackMult;
+            // A köridő = alapidő + (gumi kora * kopás mértéke)
+            double lapTime = tyreSpecs[tyreType].baseTime + (tyreAge * wearRate);
+
+            lapTimes.Add(new LapData
+            {
+                Number = i,
+                TyreType = tyreType,
+                Time = lapTime,
+                TyreColorRgba = color
+            });
+
+            totalRaceTime += lapTime;
+            tyreAge++; // Minden megtett körrel öregszik a gumi
+        }
+    }
+
+    private void AddStint(int startLap, int endLap, string tyre, double trackMult, int offset)
+    {
+        string color = GetColorRgba(tyre);
+        for (int i = startLap; i <= endLap; i++)
+        {
+            int relativeLap = i - offset; // A gumi kora az etap elejétől számítva
+            double wear = tyreSpecs[tyre].wear * trackMult;
+            double time = tyreSpecs[tyre].baseTime + (relativeLap * wear);
+
+            lapTimes.Add(new LapData
+            {
+                Number = i,
+                TyreType = tyre,
+                Time = time,
+                TyreColorRgba = color
+            });
+            totalRaceTime += time;
+        }
+    }
+
+    private string GetColorRgba(string tyreName)
+    {
+        return tyreName switch
+        {
+            "Soft" => "rgba(255, 24, 1, 1)",   
+            "Medium" => "rgba(255, 202, 0, 1)",
+            "Hard" => "rgba(255, 255, 255, 1)",  
+            _ => "rgba(255, 24, 1, 1)"
+        };
+    }
+
+    private string FormatTime(double seconds)
+    {
+        var time = TimeSpan.FromSeconds(seconds);
+        return $"{(int)time.TotalMinutes}:{time.Seconds:D2}.{time.Milliseconds:D3}";
+    }
+
+    public class LapData
+    {
+        public int Number { get; set; }
+        public string TyreType { get; set; } = "";
+        public double Time { get; set; }
+        public string TyreColorRgba { get; set; } = "";
+    }
+}

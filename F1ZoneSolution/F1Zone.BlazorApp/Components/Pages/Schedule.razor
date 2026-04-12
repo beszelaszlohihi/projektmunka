@@ -1,0 +1,73 @@
+﻿@page "/schedule"
+@using F1ZoneLibrary.Dto
+@inject HttpClient Http
+@inject NavigationManager NavManager
+@rendermode InteractiveServer
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<div class="schedule-container">
+    @* A teljes versenynaptár listázása kártyás formában *@
+    @foreach (var race in races)
+    {
+        
+        <div class="race-card @(race.RaceDate < DateTime.Now ? "past-race" : "")">
+            <div class="round-number">ROUND @(races.IndexOf(race) + 1)</div>
+            <div class="card-left">
+                <img src="https://flagcdn.com/w80/@(race.CountryCode?.ToLower() ?? "un").png" alt="Flag" class="flag" />
+                <div class="race-info">
+                    <span class="race-date">@race.RaceDate.ToString("MMM dd").ToUpper()</span>
+                    <h3 class="race-name">@race.RaceName</h3>
+                    <span class="track-name">@race.TrackName</span>
+                </div>
+            </div>
+
+            <div class="card-right">
+                @if (race.RaceDate < DateTime.Now)
+                {
+                    <button class="status-badge finished clickable" @onclick="() => Eredmenyek(race.Id)" style="cursor: pointer;">LEZAJLOTT</button>
+                }
+                else
+                {
+                    <button class="details-btn" @onclick="() => NavigateToDetails(race.Id)">Részletek <i class="f1-icon-arrow"></i></button>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    // A versenynaptár futamainak listája
+    private List<RaceDto> races = new();
+
+    // Az oldal inicializálásakor lekérjük a versenynaptár adatait az API-ból
+    protected override async Task OnInitializedAsync()
+    {
+        races = await Http.GetFromJsonAsync<List<RaceDto>>("api/raceschedules");
+    }
+
+    private void Eredmenyek(int raceId)
+    {
+        NavManager.NavigateTo($"/eredmenyek/{raceId}");
+    }
+
+   
+    
+
+    // Navigáció a kiválasztott futam részletező oldalára
+    private void NavigateToDetails(int raceId)
+    {
+        NavManager.NavigateTo($"/schedule/details/{raceId}");
+    }
+
+  
+  
+
+    public class RaceDto
+    {
+        public int Id { get; set; }
+        public string RaceName { get; set; } = "";
+        public string TrackName { get; set; } = "";
+        public DateTime RaceDate { get; set; }
+        public string CountryCode { get; set; } = "";
+    }
+}
