@@ -1,5 +1,4 @@
-# 🏎️ F1Zone – Formula–1 Statisztikai és Stratégiai Portál
-
+# 🏎️ F1Zone – Vizsgaremek
 ## 📌 Projektmunka Tagok
 - **Bártfai Levente**
 - **Besze László**
